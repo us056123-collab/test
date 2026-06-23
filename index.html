@@ -6,6 +6,8 @@
   <title>Happy Birthday</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Playfair+Display:ital,wght=0,600;1,400&display=swap" rel="stylesheet">
   
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
   <style>
     /* --- CORE THEME & VARIABLES --- */
     :root {
@@ -147,6 +149,88 @@
       margin-top: 15px;
     }
 
+    /* --- NEW SCREEN: CUTE RED VELVET CAKE CSS --- */
+    .cake-container {
+      position: relative;
+      width: 160px;
+      height: 140px;
+      margin-top: 40px;
+      margin-bottom: 20px;
+    }
+
+    .cake {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 90px;
+      background: #800c22; /* Red velvet sponge colour */
+      border-radius: 10px 10px 4px 4px;
+      box-shadow: inset 0 8px 0 #fff0f3, 0 10px 20px rgba(0,0,0,0.4);
+      border: 1px solid rgba(255, 42, 95, 0.2);
+    }
+
+    .cake::before {
+      content: '';
+      position: absolute;
+      top: 30px;
+      width: 100%;
+      height: 10px;
+      background: #fff0f3; /* Middle cream layer */
+    }
+
+    .candle {
+      position: absolute;
+      bottom: 88px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 12px;
+      height: 45px;
+      background: linear-gradient(to right, #ffb3c1, #fff);
+      border-radius: 3px;
+    }
+
+    .flame {
+      position: absolute;
+      top: -15px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 12px;
+      height: 18px;
+      background: radial-gradient(circle at bottom, #ffea00 20%, #ff5500 70%);
+      border-radius: 50% 50% 20% 20%;
+      box-shadow: 0 0 15px #ff5500, 0 0 25px #ffea00;
+      animation: flicker 0.15s ease-in-out infinite alternate;
+    }
+
+    @keyframes flicker {
+      0% { transform: translateX(-50%) scale(1); opacity: 0.9; }
+      100% { transform: translateX(-50%) scale(1.08) skewX(3deg); opacity: 1; }
+    }
+
+    .instruction-text {
+      font-size: 0.95rem;
+      line-height: 1.5;
+      margin: 15px 10px;
+      opacity: 0.85;
+      animation: pulseText 1.5s infinite alternate;
+    }
+
+    @keyframes pulseText {
+      0% { transform: scale(1); opacity: 0.7; }
+      100% { transform: scale(1.02); opacity: 1; }
+    }
+
+    .mic-btn-fallback {
+      background: rgba(255, 42, 95, 0.15);
+      border: 1px dashed var(--accent-color);
+      padding: 6px 14px;
+      font-size: 0.75rem;
+      border-radius: 20px;
+      color: var(--text-color);
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
     /* --- SCREEN 2: START SCREEN --- */
     .sub-message {
       font-size: 0.9rem;
@@ -196,7 +280,7 @@
 
   <div id="screen-loading" class="screen active">
     <div class="avatar-container">
-      <span class="cat-thought glow-text">hmm...</span>
+      <span class="cat-thought glow-text">hmm...🤭</span>
       <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f63a/512.webp" alt="Cute Waving White Cat">
     </div>
     <h2 class="glow-text loading-status">Loading something special...</h2>
@@ -206,10 +290,33 @@
     <div class="sub-tag">✦ JUST FOR YOU ✦</div>
   </div>
 
+  <div id="screen-cake" class="screen">
+    <h2 class="glow-text" style="font-size: 1.8rem;">Make a Wish! 🎂</h2>
+    
+    <div class="cake-container">
+      <div class="candle">
+        <div id="candle-flame" class="flame"></div>
+      </div>
+      <div class="cake"></div>
+    </div>
+
+    <p id="blow-instruction" class="instruction-text">
+      Bring the phone camera/mic to your mouth and blow on it to blow out the candle.
+    </p>
+
+    <button id="mic-fallback" class="mic-btn-fallback" onclick="triggerCandleBlow()">
+      Can't blow? Tap here to blow it manually! 💨
+    </button>
+
+    <button id="btn-after-cake" class="btn-premium" style="display: none;" onclick="goToStartScreen()">
+      CONTINUE ୨🌸⌁
+    </button>
+  </div>
+
   <div id="screen-start" class="screen">
     <h1 class="glow-text" style="font-size: 2.2rem; margin-bottom: 25px;">It's Your Special Day ୨🌸</h1>
     <div class="avatar-container">
-      <span class="cat-thought glow-text">hmm...</span>
+      <span class="cat-thought glow-text">hmm...🤭</span>
       <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f63a/512.webp" style="transform: rotate(-5deg);" alt="Cute Waving White Cat">
     </div>
     <p class="sub-message">I made something special for you...</p>
@@ -218,7 +325,7 @@
 
   <div id="screen-counter" class="screen">
     <div class="avatar-container">
-      <span class="cat-thought glow-text">hmm...</span>
+      <span class="cat-thought glow-text">hmm...🤭</span>
       <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f63b/512.webp" alt="Happy Loving White Cat">
     </div>
     <h1 class="glow-text birthday-title">Happy Birthday My Girl 🎗️</h1>
@@ -244,10 +351,12 @@
   </div>
 
   <script>
-    // --- Configuration: Updated Birth Date ---
+    // --- Configuration ---
     const BIRTH_DATE = new Date("2008-11-06");
+    let candleBlown = false;
+    let audioContext, analyser, microphone;
 
-    // Global Screen Control Function
+    // Screen Control Function
     function switchScreen(currentId, nextId) {
       const current = document.getElementById(currentId);
       const next = document.getElementById(nextId);
@@ -267,7 +376,9 @@
         if (width >= 100) {
           clearInterval(interval);
           setTimeout(() => {
-            switchScreen('screen-loading', 'screen-start');
+            // Transitions cleanly into the new Candle screen first
+            switchScreen('screen-loading', 'screen-cake');
+            initMicrophone(); // Request microphone right when the cake loads
           }, 400);
         } else {
           width += 1.5;
@@ -277,13 +388,103 @@
       }, 40);
     });
 
-    // 2. Start Button Function
+    // 2. Microphone Audio Stream Detector 
+    function initMicrophone() {
+      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        navigator.mediaDevices.getUserMedia({ audio: true, video: false })
+          .then(function(stream) {
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            analyser = audioContext.createAnalyser();
+            microphone = audioContext.createMediaStreamSource(stream);
+            
+            analyser.fftSize = 256;
+            microphone.connect(analyser);
+            
+            const bufferLength = analyser.frequencyBinCount;
+            const dataArray = new Uint8Array(bufferLength);
+            
+            function checkBlow() {
+              if (candleBlown) return;
+              analyser.getByteFrequencyData(dataArray);
+              
+              // Low frequency index matching wind/blow sounds
+              let lowFrequencySum = 0;
+              for (let i = 0; i < 10; i++) {
+                lowFrequencySum += dataArray[i];
+              }
+              
+              // Threshold checking if user blows forcefully into the mic
+              if (lowFrequencySum > 850) { 
+                triggerCandleBlow();
+                // Stop listening to mic
+                stream.getTracks().forEach(track => track.stop());
+                return;
+              }
+              requestAnimationFrame(checkBlow);
+            }
+            checkBlow();
+          })
+          .catch(function(err) {
+            console.log("Mic access not granted or not supported: ", err);
+          });
+      }
+    }
+
+    // 3. Candle Blow Out Logic
+    function triggerCandleBlow() {
+      if (candleBlown) return;
+      candleBlown = true;
+
+      // Extinguish Flame
+      document.getElementById('candle-flame').style.display = 'none';
+      document.getElementById('mic-fallback').style.display = 'none';
+
+      // Update instructions with your custom string
+      const instructionEl = document.getElementById('blow-instruction');
+      instructionEl.innerHTML = "<span class='glow-text' style='font-size:1.3rem; color:#ff2a5f;'>Congratulations on ur big day! 🎉</span>";
+      instructionEl.style.animation = "none";
+
+      // Trigger High-End Theme Confetti Poppers
+      const duration = 2.5 * 1000;
+      const end = Date.now() + duration;
+
+      (function frame() {
+        confetti({
+          particleCount: 4,
+          angle: 60,
+          spread: 55,
+          origin: { x: 0 },
+          colors: ['#ff2a5f', '#fcd7e0', '#ffea00']
+        });
+        confetti({
+          particleCount: 4,
+          angle: 120,
+          spread: 55,
+          origin: { x: 1 },
+          colors: ['#ff2a5f', '#fcd7e0', '#ffea00']
+        });
+
+        if (Date.now() < end) {
+          requestAnimationFrame(frame);
+        }
+      }());
+
+      // Reveal the premium proceed button
+      document.getElementById('btn-after-cake').style.display = 'inline-block';
+    }
+
+    // Navigation Step After Blowing
+    function goToStartScreen() {
+      switchScreen('screen-cake', 'screen-start');
+    }
+
+    // Start Button Function
     function goToCounterScreen() {
       switchScreen('screen-start', 'screen-counter');
       calculatePreciseAge();
     }
 
-    // 3. Dynamic Precise Age Calculator
+    // Dynamic Precise Age Calculator
     function calculatePreciseAge() {
       const now = new Date();
       
