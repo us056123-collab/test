@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Happy Birthday</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Playfair+Display:ital,wght=0,600;1,400&display=swap" rel="stylesheet">
   
   <style>
     /* --- CORE THEME & VARIABLES --- */
@@ -63,7 +63,7 @@
       text-shadow: 0 0 10px var(--accent-glow), 0 0 25px rgba(255, 42, 95, 0.25);
     }
 
-.avatar-container {
+    .avatar-container {
       position: relative; /* Kept relative to anchor the "hmm..." text */
       width: 110px;
       height: 110px;
@@ -194,7 +194,7 @@
 </head>
 <body>
 
-<div id="screen-loading" class="screen active">
+  <div id="screen-loading" class="screen active">
     <div class="avatar-container">
       <span class="panda-thought glow-text">hmm...</span>
       <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f43c/512.webp" alt="Thinking Panda">
@@ -206,19 +206,19 @@
     <div class="sub-tag">✦ JUST FOR YOU ✦</div>
   </div>
 
-
   <div id="screen-start" class="screen">
     <h1 class="glow-text" style="font-size: 2.2rem; margin-bottom: 25px;">It's Your Special Day ୨🌸</h1>
     <div class="avatar-container">
+      <span class="panda-thought glow-text">hmm...</span>
       <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f43c/512.webp" style="transform: rotate(-10deg);" alt="Sleeping Panda">
     </div>
     <p class="sub-message">I made something special for you...</p>
     <button class="btn-premium" onclick="goToCounterScreen()">START ๑•‿•๑</button>
   </div>
 
-
   <div id="screen-counter" class="screen">
     <div class="avatar-container">
+      <span class="panda-thought glow-text">hmm...</span>
       <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f43c/512.webp" alt="Happy Panda">
     </div>
     <h1 class="glow-text birthday-title">Happy Birthday My Girl 🎗️</h1>
@@ -244,8 +244,8 @@
   </div>
 
   <script>
-    // --- Configuration: Apni Marzi Ki Birthday Date Yahan Set Karo ---
-    const BIRTH_DATE = new Date("2007-06-04"); // Example: 19 Years, 0 Months, 19 Days complete karne ke liye
+    // --- Configuration: Set Birth Date Here ---
+    const BIRTH_DATE = new Date("2007-06-04");
 
     // Global Screen Control Function
     function switchScreen(currentId, nextId) {
@@ -255,7 +255,7 @@
       current.classList.remove('active');
       setTimeout(() => {
         next.classList.add('active');
-      }, 600); // Smooth CSS Fade out ke baad target screen open hogi
+      }, 600);
     }
 
     // 1. Loading Bar Automation
@@ -266,12 +266,11 @@
       const interval = setInterval(() => {
         if (width >= 100) {
           clearInterval(interval);
-          // 100% hone ke baad smoothly screen 2 (Start) par le jao
           setTimeout(() => {
             switchScreen('screen-loading', 'screen-start');
           }, 400);
         } else {
-          width += 1.5; // Smooth progression speed
+          width += 1.5;
           if(width > 100) width = 100;
           progressFill.style.width = width + '%';
         }
@@ -284,7 +283,7 @@
       calculatePreciseAge();
     }
 
-    // 3. Dynamic Precise Age Calculator (Years, Months, Days)
+    // 3. Dynamic Precise Age Calculator
     function calculatePreciseAge() {
       const now = new Date();
       
@@ -292,21 +291,17 @@
       let months = now.getMonth() - BIRTH_DATE.getMonth();
       let days = now.getDate() - BIRTH_DATE.getDate();
 
-      // Agar days current month me abhi tak negative hain
       if (days < 0) {
         months--;
-        // Pichle month ke total din nikalne ke liye logic
         const previousMonth = new Date(now.getFullYear(), now.getMonth(), 0);
         days += previousMonth.getDate();
       }
 
-      // Agar months negative hain
       if (months < 0) {
         years--;
         months += 12;
       }
 
-      // Update values smoothly directly in the DOM
       document.getElementById('years-val').innerText = years;
       document.getElementById('months-val').innerText = months;
       document.getElementById('days-val').innerText = days;
