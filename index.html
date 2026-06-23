@@ -15,13 +15,14 @@
       --accent-color: #ff2a5f;
       --accent-glow: rgba(255, 42, 95, 0.6);
       --text-color: #fcd7e0;
-      --card-bg: rgba(20, 8, 12, 0.75);
+      --card-bg: rgba(20, 8, 12, 0.85);
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+      -webkit-tap-highlight-color: transparent;
     }
 
     body {
@@ -95,7 +96,7 @@
       white-space: nowrap;
     }
 
-    /* --- NEW: CSS ANIMATED FILLING HEART --- */
+    /* --- CLEAN CSS ANIMATED FILLING HEART --- */
     .heart-glowing {
       position: relative;
       width: 40px;
@@ -103,8 +104,9 @@
       background-color: transparent;
       border: 2px solid var(--accent-color);
       transform: rotate(-45deg);
-      box-shadow: 0 0 15px var(--accent-glow);
       animation: heartBeat 1.2s infinite ease-in-out, heartFillUp 3s forwards ease-out;
+      margin-top: 20px;
+      margin-bottom: 20px;
     }
 
     .heart-glowing::before,
@@ -132,7 +134,6 @@
       border-left: none;
     }
 
-    /* Heart Fill and Pulse Animations */
     @keyframes heartBeat {
       0% { transform: rotate(-45deg) scale(0.95); }
       50% { transform: rotate(-45deg) scale(1.05); }
@@ -146,7 +147,7 @@
       }
       100% {
         background-color: var(--accent-color);
-        box-shadow: 0 0 25px var(--accent-color), 0 0 45px var(--accent-glow);
+        box-shadow: 0 0 20px var(--accent-color);
       }
     }
 
@@ -332,90 +333,312 @@
       opacity: 0.4;
       margin-top: 8px;
     }
+
+    /* --- SCREEN 4: 3D PHOTO GALLERY SCREEN --- */
+    .gallery-viewport {
+      perspective: 1000px;
+      width: 100%;
+      height: 240px;
+      margin: 30px auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      cursor: grab;
+    }
+    
+    .gallery-viewport:active {
+      cursor: grabbing;
+    }
+
+    .gallery-container-3d {
+      position: relative;
+      width: 140px;
+      height: 190px;
+      transform-style: preserve-3d;
+      transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+    }
+
+    .gallery-card {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 140px;
+      height: 190px;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 2px solid rgba(255, 42, 95, 0.5);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.5), 0 0 15px rgba(255,42,95,0.2);
+      backface-visibility: hidden;
+      -webkit-box-reflect: bottom 8px linear-gradient(transparent, transparent, rgba(0,0,0,0.1));
+    }
+
+    .gallery-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 15px;
+      margin-top: 15px;
+    }
+
+    /* --- ENVELOPE & GLASS LETTER SYSTEM --- */
+    .main-wrapper-blur {
+      transition: filter 0.5s ease;
+    }
+    
+    body.blurred .main-wrapper-blur {
+      filter: blur(8px);
+      pointer-events: none;
+    }
+
+    .letter-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 999;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      background: rgba(5, 0, 2, 0.4);
+    }
+
+    .envelope-icon {
+      font-size: 5rem;
+      cursor: pointer;
+      display: none;
+      animation: pulseText 1.2s infinite alternate;
+      filter: drop-shadow(0 0 15px var(--accent-color));
+      transition: transform 0.3s;
+    }
+
+    .envelope-icon:hover {
+      transform: scale(1.1);
+    }
+
+    .glass-letter-box {
+      width: 100%;
+      max-width: 360px;
+      background: rgba(25, 10, 16, 0.65);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 42, 95, 0.3);
+      border-radius: 20px;
+      padding: 25px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7), 0 0 30px rgba(255, 42, 95, 0.2);
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      text-align: left;
+      transform: translateY(30px);
+      opacity: 0;
+      transition: transform 0.6s cubic-bezier(0.19, 1, 0.22, 1), opacity 0.6s ease;
+    }
+
+    .glass-letter-box.active {
+      display: flex;
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .glass-letter-box.shake {
+      animation: boxShake 0.5s ease-in-out;
+    }
+
+    @keyframes boxShake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-6px); }
+      40%, 80% { transform: translateX(6px); }
+    }
+
+    .letter-content {
+      font-size: 0.95rem;
+      line-height: 1.7;
+      color: #fcd7e0;
+      min-height: 150px;
+      margin-bottom: 20px;
+      font-style: italic;
+    }
+
+    .letter-footer-text {
+      font-size: 0.85rem;
+      text-align: center;
+      margin-top: 15px;
+      display: none;
+      color: #ffb3c1;
+      line-height: 1.5;
+    }
+
+    .wa-trigger-link {
+      color: var(--accent-color);
+      text-decoration: none;
+      font-weight: 600;
+      cursor: pointer;
+      display: block;
+      margin-top: 10px;
+      text-shadow: 0 0 10px var(--accent-glow);
+      animation: pulseText 1s infinite alternate;
+    }
+    
+    .finish-tag {
+      font-size: 1.1rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      color: var(--accent-color);
+      margin-top: 15px;
+      display: none;
+      text-align: center;
+    }
   </style>
 </head>
 <body>
 
-  <div id="screen-loading" class="screen active">
-    <div class="avatar-container">
-      <span class="cat-thought glow-text">hmm...🤭</span>
-      <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f63a/512.webp" alt="Cute Waving White Cat">
+  <div class="main-wrapper-blur" style="width: 100%; display: flex; justify-content: center;">
+
+    <div id="screen-loading" class="screen active">
+      <div class="avatar-container">
+        <span class="cat-thought glow-text">hmm...🤭</span>
+        <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f63a/512.webp" alt="Cute Waving White Cat">
+      </div>
+      <h2 class="glow-text loading-status">Loading something special...</h2>
+      <div class="progress-bar-container">
+        <div id="progress-fill" class="progress-bar-fill"></div>
+      </div>
+      <div class="sub-tag">✦ JUST FOR YOU ✦</div>
     </div>
-    <h2 class="glow-text loading-status">Loading something special...</h2>
-    <div class="progress-bar-container">
-      <div id="progress-fill" class="progress-bar-fill"></div>
+
+    <div id="screen-cake" class="screen">
+      <h2 class="glow-text" style="font-size: 1.6rem;">Make a Wish! 🌷</h2>
+      
+      <div class="cake-container">
+        <div class="candle">
+          <div id="candle-flame" class="flame"></div>
+        </div>
+        <div class="cake"></div>
+      </div>
+
+      <p id="blow-instruction" class="instruction-text">
+        Bring the phone camera/mic to your mouth and blow on it to blow out the candle.
+      </p>
+
+      <button id="mic-fallback" class="mic-btn-fallback" onclick="triggerCandleBlow()">
+        Can't blow? Tap here to blow it manually! 💨
+      </button>
+
+      <button id="btn-after-cake" class="btn-premium" style="display: none;" onclick="goToStartScreen()">
+        CONTINUE 🌸⌁
+      </button>
     </div>
-    <div class="sub-tag">✦ JUST FOR YOU ✦</div>
+
+    <div id="screen-start" class="screen">
+      <h1 class="glow-text" style="font-size: 1.8rem; margin-bottom: 20px; line-height: 1.3;">It's Your Special Day ✨</h1>
+      <div class="avatar-container">
+        <span class="cat-thought glow-text">hmm...🤭</span>
+        <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f63a/512.webp" style="transform: rotate(-5deg);" alt="Cute Waving White Cat">
+      </div>
+      <p class="sub-message">I made something special for you...</p>
+      <button class="btn-premium" onclick="goToCounterScreen()">START ๑•‿•๑</button>
+    </div>
+
+    <div id="screen-counter" class="screen">
+      <div class="avatar-container" style="border:none; box-shadow:none; background:none; margin-top: 15px;">
+        <span class="cat-thought glow-text" style="top: -25px;">hmm...🤭</span>
+        <div class="heart-glowing"></div>
+      </div>
+      
+      <h1 class="glow-text birthday-title" style="line-height: 1.3;">Happy Birthday Mine Pookie 🧸</h1>
+      
+      <div style="font-size: 0.75rem; font-style: italic; opacity: 0.5; margin-bottom: 5px;">You have completed</div>
+      
+      <div class="counter-grid">
+        <div class="counter-item">
+          <span id="years-val" class="counter-number glow-text">00</span>
+          <span class="counter-label">Years</span>
+        </div>
+        <div class="counter-item">
+          <span id="months-val" class="counter-number glow-text">00</span>
+          <span class="counter-label">Months</span>
+        </div>
+        <div class="counter-item">
+          <span id="days-val" class="counter-number glow-text">00</span>
+          <span class="counter-label">Days</span>
+        </div>
+      </div>
+
+      <button class="btn-premium" onclick="goToGalleryScreen()">NEXT 🌸⌁</button>
+    </div>
+
+    <div id="screen-gallery" class="screen">
+      <h2 class="glow-text" style="font-size: 1.3rem; line-height: 1.4;">on ur 18 birthday i collect ur 18 pics</h2>
+      
+      <div class="gallery-viewport" id="viewport-3d">
+        <div class="gallery-container-3d" id="carousel-3d">
+          </div>
+      </div>
+
+      <p class="sub-message" style="font-size: 1rem; margin-top: 0;">u like it?</p>
+      
+      <div class="btn-group">
+        <button class="btn-premium" style="margin-top:10px; padding: 10px 22px;" onclick="triggerLoveResponse()">Yes</button>
+        <button class="btn-premium" style="margin-top:10px; padding: 10px 22px;" onclick="triggerLoveResponse()">Ofc! Yessss!</button>
+      </div>
+    </div>
+
   </div>
 
-  <div id="screen-cake" class="screen">
-    <h2 class="glow-text" style="font-size: 1.6rem;">Make a Wish! 🌷</h2>
-    
-    <div class="cake-container">
-      <div class="candle">
-        <div id="candle-flame" class="flame"></div>
-      </div>
-      <div class="cake"></div>
-    </div>
+  <div class="letter-overlay" id="overlay-container">
+    <div class="envelope-icon" id="clickable-envelope" onclick="openGlassLetter()">💌</div>
 
-    <p id="blow-instruction" class="instruction-text">
-      Bring the phone camera/mic to your mouth and blow on it to blow out the candle.
-    </p>
-
-    <button id="mic-fallback" class="mic-btn-fallback" onclick="triggerCandleBlow()">
-      Can't blow? Tap here to blow it manually! 💨
-    </button>
-
-    <button id="btn-after-cake" class="btn-premium" style="display: none;" onclick="goToStartScreen()">
-      CONTINUE 🌸⌁
-    </button>
-  </div>
-
-  <div id="screen-start" class="screen">
-    <h1 class="glow-text" style="font-size: 1.8rem; margin-bottom: 20px; line-height: 1.3;">It's Your Special Day ✨</h1>
-    <div class="avatar-container">
-      <span class="cat-thought glow-text">hmm...🤭</span>
-      <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f63a/512.webp" style="transform: rotate(-5deg);" alt="Cute Waving White Cat">
-    </div>
-    <p class="sub-message">I made something special for you...</p>
-    <button class="btn-premium" onclick="goToCounterScreen()">START ๑•‿•๑</button>
-  </div>
-
-  <div id="screen-counter" class="screen">
-    <div class="avatar-container" style="border:none; box-shadow:none; background:none;">
-      <span class="cat-thought glow-text" style="top: -25px;">hmm...🤭</span>
-      <div class="heart-glowing"></div>
-    </div>
-    
-    <h1 class="glow-text birthday-title" style="line-height: 1.3;">Happy Birthday Mine Pookie 🧸</h1>
-    
-    <div style="font-size: 0.75rem; font-style: italic; opacity: 0.5; margin-bottom: 5px;">You have completed</div>
-    
-    <div class="counter-grid">
-      <div class="counter-item">
-        <span id="years-val" class="counter-number glow-text">00</span>
-        <span class="counter-label">Years</span>
-      </div>
-      <div class="counter-item">
-        <span id="months-val" class="counter-number glow-text">00</span>
-        <span class="counter-label">Months</span>
-      </div>
-      <div class="counter-item">
-        <span id="days-val" class="counter-number glow-text">00</span>
-        <span class="counter-label">Days</span>
+    <div class="glass-letter-box" id="letter-card">
+      <div class="letter-content" id="typewriter-content"></div>
+      <div class="finish-tag" id="finish-txt-id">Happy & Finish</div>
+      <div class="letter-footer-text" id="letter-footer">
+        can u honestly tell me which whish u make 👉&zwj;👈? if yes click on it
+        <a class="wa-trigger-link" onclick="redirectToWhatsApp()">Send your wish to me! 💬</a>
       </div>
     </div>
-
-    <button class="btn-premium">NEXT 🌸⌁</button>
   </div>
 
   <script>
-    // --- Configuration ---
+    // --- Global Application Configurations ---
     const BIRTH_DATE = new Date("2008-11-06");
+    const WHATSAPP_NUM = "923XXXXXXXXX"; // <-- REPLACE WITH YOUR PHONE NUMBER IN THIS EXACT FORMAT
+    
+    // 18 Highly Aesthetic/Custom Image URLs Configuration Slot
+    const GALLERY_IMAGES = [
+      "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=400",
+      "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=400",
+      "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400",
+      "https://images.unsplash.com/photo-1494972308805-463bc619d34e?w=400",
+      "https://images.unsplash.com/photo-1507504038482-7621c3c786d7?w=400",
+      "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=400",
+      "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=400",
+      "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400",
+      "https://images.unsplash.com/photo-1494972308805-463bc619d34e?w=400",
+      "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=400",
+      "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=400",
+      "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400",
+      "https://images.unsplash.com/photo-1494972308805-463bc619d34e?w=400",
+      "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=400",
+      "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=400",
+      "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400",
+      "https://images.unsplash.com/photo-1494972308805-463bc619d34e?w=400",
+      "https://images.unsplash.com/photo-1507504038482-7621c3c786d7?w=400"
+    ];
+
+    // Word-by-Word Custom Dua / Wishes Letter Paragraph Array
+    const LETTER_WORDS = "May all your hidden prayers find an immediate response today. I pray that absolute happiness wraps around your heart forever, that you never know a moment of sorrow, and that every step you take brings beautiful success. You deserve the absolute best version of the world. Happy 18th Birthday my absolute favorite person!".split(" ");
+
     let candleBlown = false;
     let audioContext, analyser, microphone, micStream;
 
-    // Fixed Mobile Screen Transition Function
+    // Transition Functions
     function switchScreen(currentId, nextId) {
       const current = document.getElementById(currentId);
       const next = document.getElementById(nextId);
@@ -434,7 +657,7 @@
       }, 500);
     }
 
-    // 1. Loading Bar Automation
+    // 1. Loading Automation
     window.addEventListener('DOMContentLoaded', () => {
       const progressFill = document.getElementById('progress-fill');
       let width = 0;
@@ -458,9 +681,11 @@
           progressFill.style.width = width + '%';
         }
       }, 40);
+
+      build3DCarousel();
     });
 
-    // 2. Microphone Audio Stream Detector
+    // 2. Microphone Detection System
     function initMicrophone() {
       if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
         navigator.mediaDevices.getUserMedia({ audio: true, video: false })
@@ -479,11 +704,8 @@
             function checkBlow() {
               if (candleBlown) return;
               analyser.getByteFrequencyData(dataArray);
-              
               let lowFrequencySum = 0;
-              for (let i = 0; i < 10; i++) {
-                lowFrequencySum += dataArray[i];
-              }
+              for (let i = 0; i < 10; i++) lowFrequencySum += dataArray[i];
               
               if (lowFrequencySum > 800) { 
                 triggerCandleBlow();
@@ -493,9 +715,7 @@
             }
             checkBlow();
           })
-          .catch(function(err) {
-            console.log("Mic access denied or unsupported on device:", err);
-          });
+          .catch(err => console.log("Mic inactive/unsupported:", err));
       }
     }
 
@@ -503,10 +723,7 @@
     function triggerCandleBlow() {
       if (candleBlown) return;
       candleBlown = true;
-
-      if (micStream) {
-        micStream.getTracks().forEach(track => track.stop());
-      }
+      if (micStream) micStream.getTracks().forEach(track => track.stop());
 
       document.getElementById('candle-flame').style.display = 'none';
       document.getElementById('mic-fallback').style.display = 'none';
@@ -517,62 +734,122 @@
 
       const duration = 2 * 1000;
       const end = Date.now() + duration;
-
       (function frame() {
-        confetti({
-          particleCount: 3,
-          angle: 60,
-          spread: 55,
-          origin: { x: 0, y: 0.7 },
-          colors: ['#ff2a5f', '#fcd7e0', '#ffea00']
-        });
-        confetti({
-          particleCount: 3,
-          angle: 120,
-          spread: 55,
-          origin: { x: 1, y: 0.7 },
-          colors: ['#ff2a5f', '#fcd7e0', '#ffea00']
-        });
-
-        if (Date.now() < end) {
-          requestAnimationFrame(frame);
-        }
+        confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0, y: 0.7 }, colors: ['#ff2a5f', '#fcd7e0', '#ffea00'] });
+        confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1, y: 0.7 }, colors: ['#ff2a5f', '#fcd7e0', '#ffea00'] });
+        if (Date.now() < end) requestAnimationFrame(frame);
       }());
 
       document.getElementById('btn-after-cake').style.display = 'inline-block';
     }
 
-    function goToStartScreen() {
-      switchScreen('screen-cake', 'screen-start');
-    }
+    function goToStartScreen() { switchScreen('screen-cake', 'screen-start'); }
+    function goToCounterScreen() { switchScreen('screen-start', 'screen-counter'); calculatePreciseAge(); }
+    function goToGalleryScreen() { switchScreen('screen-counter', 'screen-gallery'); }
 
-    function goToCounterScreen() {
-      switchScreen('screen-start', 'screen-counter');
-      calculatePreciseAge();
-    }
-
-    // Dynamic Precise Age Calculator
     function calculatePreciseAge() {
       const now = new Date();
-      
       let years = now.getFullYear() - BIRTH_DATE.getFullYear();
       let months = now.getMonth() - BIRTH_DATE.getMonth();
       let days = now.getDate() - BIRTH_DATE.getDate();
-
-      if (days < 0) {
-        months--;
-        const previousMonth = new Date(now.getFullYear(), now.getMonth(), 0);
-        days += previousMonth.getDate();
-      }
-
-      if (months < 0) {
-        years--;
-        months += 12;
-      }
-
+      if (days < 0) { months--; const prevMonth = new Date(now.getFullYear(), now.getMonth(), 0); days += prevMonth.getDate(); }
+      if (months < 0) { years--; months += 12; }
       document.getElementById('years-val').innerText = years < 10 ? '0' + years : years;
       document.getElementById('months-val').innerText = months < 10 ? '0' + months : months;
       document.getElementById('days-val').innerText = days < 10 ? '0' + days : days;
+    }
+
+    // --- 4. Premium 3D Touch/Swipe Carousel Generator ---
+    let currentRotationAngle = 0;
+    function build3DCarousel() {
+      const container = document.getElementById('carousel-3d');
+      const totalCards = GALLERY_IMAGES.length;
+      const angleIncrement = 360 / totalCards;
+      const radiusZ = 420; // Controls depth radius of curvature
+
+      GALLERY_IMAGES.forEach((url, index) => {
+        const card = document.createElement('div');
+        card.className = 'gallery-card';
+        card.style.transform = `rotateY(${index * angleIncrement}deg) translateZ(${radiusZ}px)`;
+        
+        const img = document.createElement('img');
+        img.src = url;
+        img.alt = `Gallery Card ${index + 1}`;
+        img.loading = "lazy";
+        
+        card.appendChild(img);
+        container.appendChild(card);
+      });
+
+      // Drag/Swipe Gesture Hookups
+      const viewport = document.getElementById('viewport-3d');
+      let isDragging = false;
+      let startX = 0;
+
+      viewport.addEventListener('mousedown', (e) => { isDragging = true; startX = e.clientX; });
+      window.addEventListener('mouseup', () => isDragging = false);
+      viewport.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        const deltaX = e.clientX - startX;
+        startX = e.clientX;
+        currentRotationAngle += deltaX * 0.25;
+        container.style.transform = `rotateY(${currentRotationAngle}deg)`;
+      });
+
+      // Mobile Touch Gesture Support
+      viewport.addEventListener('touchstart', (e) => { isDragging = true; startX = e.touches[0].clientX; });
+      window.addEventListener('touchend', () => isDragging = false);
+      viewport.addEventListener('touchmove', (e) => {
+        if (!isDragging) return;
+        const deltaX = e.touches[0].clientX - startX;
+        startX = e.touches[0].clientX;
+        currentRotationAngle += deltaX * 0.35;
+        container.style.transform = `rotateY(${currentRotationAngle}deg)`;
+      });
+    }
+
+    // --- 5. Letter Box Overlay Flow ---
+    function triggerLoveResponse() {
+      document.body.classList.add('blurred');
+      const overlay = document.getElementById('overlay-container');
+      overlay.style.display = 'flex';
+      
+      const envelope = document.getElementById('clickable-envelope');
+      envelope.style.display = 'block';
+    }
+
+    function openGlassLetter() {
+      document.getElementById('clickable-envelope').style.display = 'none';
+      const letterCard = document.getElementById('letter-card');
+      letterCard.classList.add('active');
+
+      // Word-By-Word Dynamic Typing Output Engine
+      const contentContainer = document.getElementById('typewriter-content');
+      let currentWordIndex = 0;
+
+      function typeNextWord() {
+        if (currentWordIndex < LETTER_WORDS.length) {
+          contentContainer.innerHTML += LETTER_WORDS[currentWordIndex] + " ";
+          currentWordIndex++;
+          setTimeout(typeNextWord, 160); // Speed modifier per word
+        } else {
+          // Trigger finishing animations and inputs smoothly
+          setTimeout(() => {
+            letterCard.classList.add('shake');
+            document.getElementById('finish-txt-id').style.display = 'block';
+            setTimeout(() => {
+              document.getElementById('letter-footer').style.display = 'block';
+            }, 600);
+          }, 400);
+        }
+      }
+      setTimeout(typeNextWord, 400);
+    }
+
+    function redirectToWhatsApp() {
+      const baseMessage = "Hey! I just opened your card and blew out the candle! Here is the wish I made: 👉👈";
+      const encodedMsg = encodeURIComponent(baseMessage);
+      window.open(`https://wa.me/${WHATSAPP_NUM}?text=${encodedMsg}`, '_blank');
     }
   </script>
 </body>
