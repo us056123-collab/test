@@ -25,7 +25,7 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    /* CRITICAL FIX: Lock vertical scrolling globally on mobile devices */
+    /* Strict Screen Lock to kill vertical mobile scrolling */
     html, body {
       width: 100%;
       height: 100%;
@@ -52,7 +52,7 @@
       padding: 20px 10px;
       flex-direction: column;
       align-items: center;
-      justify-content: space-between; /* Keeps top header, center, and footer balanced perfectly */
+      justify-content: space-between; 
       text-align: center;
       opacity: 0;
       transform: scale(0.95);
@@ -65,12 +65,10 @@
       transform: scale(1);
     }
 
-    /* Flex item groups to keep screens structured without vertical overflow */
     .screen-header { width: 100%; margin-top: auto; }
     .screen-body { width: 100%; margin: auto 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
     .screen-footer { width: 100%; margin-bottom: auto; display: flex; flex-direction: column; align-items: center; }
 
-    /* --- SHADING & LAYOUT EFFECTS --- */
     .glow-text {
       font-family: 'Playfair Display', serif;
       text-shadow: 0 0 10px var(--accent-glow), 0 0 25px rgba(255, 42, 95, 0.25);
@@ -311,29 +309,29 @@
       margin-top: 6px;
     }
 
-    /* --- SCREEN 4: PERFECTED 3D PHOTO GALLERY SCREEN --- */
+    /* --- SCREEN 4: 3D PHOTO GALLERY --- */
     #screen-gallery {
       max-width: 100%;
     }
 
     .gallery-viewport {
-      perspective: 1000px;
+      perspective: 1100px;
       width: 100%;
-      height: 250px; /* Safe fixed height */
+      height: 250px; 
       display: flex;
       justify-content: center;
       align-items: center;
       position: relative;
       cursor: grab;
-      overflow: visible; /* Allows 3D cards to extend naturally back into space */
+      overflow: visible; 
     }
     
     .gallery-viewport:active { cursor: grabbing; }
 
     .gallery-container-3d {
       position: relative;
-      width: 150px; /* Increased card allocation width */
-      height: 200px;
+      width: 135px; /* Perfected aspect box structure */
+      height: 185px;
       transform-style: preserve-3d;
       transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.3, 1);
     }
@@ -342,8 +340,8 @@
       position: absolute;
       top: 0;
       left: 0;
-      width: 150px;
-      height: 200px;
+      width: 135px;
+      height: 185px;
       border-radius: 12px;
       overflow: hidden;
       border: 2px solid rgba(255, 42, 95, 0.6);
@@ -465,7 +463,7 @@
       <div class="screen-body">
         <div class="avatar-container">
           <span class="cat-thought glow-text">hmm...🤭</span>
-          <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f43c/512.webp" alt="Panda">
+          <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f63a/512.webp" alt="Waving Cat">
         </div>
         <h2 class="glow-text loading-status">Loading something special...</h2>
         <div class="progress-bar-container">
@@ -507,7 +505,7 @@
       <div class="screen-body">
         <div class="avatar-container">
           <span class="cat-thought glow-text">hmm...🤭</span>
-          <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f431/512.webp" alt="Cat">
+          <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f63a/512.webp" alt="Cat">
         </div>
         <p class="sub-message">I made something special for you...</p>
       </div>
@@ -663,7 +661,19 @@
       document.getElementById('candle-flame').style.display = 'none';
       document.getElementById('mic-fallback').style.display = 'none';
       document.getElementById('blow-instruction').innerHTML = "<span class='glow-text' style='color:#ff2a5f;'>Congratulations! 🎉</span>";
-      confetti({ particleCount: 40, spread: 60, origin: { y: 0.6 } });
+      
+      // FIXED: Massive dual side-cannon party poppers instead of the tiny center one
+      const duration = 2.5 * 1000;
+      const end = Date.now() + duration;
+
+      (function frame() {
+        confetti({ particleCount: 4, angle: 60, spread: 55, origin: { x: 0, y: 0.75 }, colors: ['#ff2a5f', '#fcd7e0', '#ffea00'] });
+        confetti({ particleCount: 4, angle: 120, spread: 55, origin: { x: 1, y: 0.75 }, colors: ['#ff2a5f', '#fcd7e0', '#ffea00'] });
+        if (Date.now() < end) {
+          requestAnimationFrame(frame);
+        }
+      }());
+
       document.getElementById('btn-after-cake').style.display = 'inline-block';
     }
 
@@ -683,15 +693,15 @@
       document.getElementById('days-val').innerText = days < 10 ? '0' + days : days;
     }
 
-    /* CAROUSEL LOGIC: Increased Radius to spread cards elegantly */
+    /* CAROUSEL LOGIC: Perfectly balanced math layout ring radius */
     let currentRotationAngle = 0;
     function build3DCarousel() {
       const container = document.getElementById('carousel-3d');
       const totalCards = GALLERY_IMAGES.length;
       const angleIncrement = 360 / totalCards;
       
-      // Increased Z depth radius dramatically (from 240px to 460px) to solve desktop bunching up
-      const radiusZ = 460; 
+      // Fixed depth setting (410px) creates clean circular spacing without overlapping shapes
+      const radiusZ = 410; 
 
       GALLERY_IMAGES.forEach((url, index) => {
         const card = document.createElement('div');
