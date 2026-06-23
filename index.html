@@ -63,11 +63,12 @@
       text-shadow: 0 0 10px var(--accent-glow), 0 0 25px rgba(255, 42, 95, 0.25);
     }
 
-    .avatar-container {
-      position: relative;
+.avatar-container {
+      position: relative; /* Kept relative to anchor the "hmm..." text */
       width: 110px;
       height: 110px;
       border-radius: 50%;
+      margin-top: 25px; /* Added slight top margin to make room for the text above */
       margin-bottom: 25px;
       display: flex;
       justify-content: center;
@@ -81,6 +82,16 @@
       width: 85px;
       height: 85px;
       object-fit: contain;
+    }
+
+    /* --- NEW: Floating Panda Speech Text Style --- */
+    .panda-thought {
+      position: absolute;
+      top: -28px; /* Places it perfectly above the panda's head */
+      font-size: 1rem;
+      font-weight: normal;
+      font-style: italic;
+      white-space: nowrap;
     }
 
     /* Standard Button Design */
@@ -183,8 +194,9 @@
 </head>
 <body>
 
-  <div id="screen-loading" class="screen active">
+<div id="screen-loading" class="screen active">
     <div class="avatar-container">
+      <span class="panda-thought glow-text">hmm...</span>
       <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f43c/512.webp" alt="Thinking Panda">
     </div>
     <h2 class="glow-text loading-status">Loading something special...</h2>
