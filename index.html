@@ -64,11 +64,11 @@
     }
 
     .avatar-container {
-      position: relative; /* Kept relative to anchor the "hmm..." text */
+      position: relative;
       width: 110px;
       height: 110px;
       border-radius: 50%;
-      margin-top: 25px; /* Added slight top margin to make room for the text above */
+      margin-top: 25px;
       margin-bottom: 25px;
       display: flex;
       justify-content: center;
@@ -84,10 +84,10 @@
       object-fit: contain;
     }
 
-    /* --- NEW: Floating Panda Speech Text Style --- */
-    .panda-thought {
+    /* Floating Speech Text Style */
+    .cat-thought {
       position: absolute;
-      top: -28px; /* Places it perfectly above the panda's head */
+      top: -28px;
       font-size: 1rem;
       font-weight: normal;
       font-style: italic;
@@ -196,8 +196,8 @@
 
   <div id="screen-loading" class="screen active">
     <div class="avatar-container">
-      <span class="panda-thought glow-text">hmm...</span>
-      <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f43c/512.webp" alt="Thinking Panda">
+      <span class="cat-thought glow-text">hmm...</span>
+      <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f431/512.webp" alt="Cute Cat">
     </div>
     <h2 class="glow-text loading-status">Loading something special...</h2>
     <div class="progress-bar-container">
@@ -209,8 +209,8 @@
   <div id="screen-start" class="screen">
     <h1 class="glow-text" style="font-size: 2.2rem; margin-bottom: 25px;">It's Your Special Day ୨🌸</h1>
     <div class="avatar-container">
-      <span class="panda-thought glow-text">hmm...</span>
-      <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f43c/512.webp" style="transform: rotate(-10deg);" alt="Sleeping Panda">
+      <span class="cat-thought glow-text">hmm...</span>
+      <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f431/512.webp" style="transform: rotate(-10deg);" alt="Cute Cat">
     </div>
     <p class="sub-message">I made something special for you...</p>
     <button class="btn-premium" onclick="goToCounterScreen()">START ๑•‿•๑</button>
@@ -218,8 +218,8 @@
 
   <div id="screen-counter" class="screen">
     <div class="avatar-container">
-      <span class="panda-thought glow-text">hmm...</span>
-      <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f43c/512.webp" alt="Happy Panda">
+      <span class="cat-thought glow-text">hmm...</span>
+      <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f63d/512.webp" alt="Happy Cat">
     </div>
     <h1 class="glow-text birthday-title">Happy Birthday My Girl 🎗️</h1>
     
