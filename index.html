@@ -103,6 +103,36 @@
       white-space: nowrap;
     }
 
+    /* --- LOCKSCREEN INPUT STYLES --- */
+    .lock-input {
+      background: rgba(255, 42, 95, 0.05);
+      border: 1px solid rgba(255, 42, 95, 0.4);
+      padding: 12px 20px;
+      border-radius: 25px;
+      color: var(--text-color);
+      font-family: 'Poppins', sans-serif;
+      text-align: center;
+      font-size: 1rem;
+      width: 85%;
+      outline: none;
+      box-shadow: inset 0 0 10px rgba(255, 42, 95, 0.1);
+      transition: all 0.3s ease;
+      margin-top: 15px;
+    }
+
+    .lock-input:focus {
+      border-color: var(--accent-color);
+      box-shadow: 0 0 15px rgba(255, 42, 95, 0.3), inset 0 0 10px rgba(255, 42, 95, 0.2);
+    }
+
+    .lock-hint-text {
+      font-size: 0.78rem;
+      line-height: 1.5;
+      margin: 15px 10px 0 10px;
+      opacity: 0.75;
+      max-width: 90%;
+    }
+
     /* --- CLEAN CSS ANIMATED FILLING HEART --- */
     .heart-glowing {
       position: relative;
@@ -330,7 +360,7 @@
 
     .gallery-container-3d {
       position: relative;
-      width: 135px; /* Perfected aspect box structure */
+      width: 135px; 
       height: 185px;
       transform-style: preserve-3d;
       transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.3, 1);
@@ -475,6 +505,23 @@
       </div>
     </div>
 
+    <div id="screen-lock" class="screen">
+      <div class="screen-header"></div>
+      <div class="screen-body">
+        <div class="avatar-container">
+          <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f63b/512.webp" alt="Cat with Glasses">
+        </div>
+        <h2 class="glow-text" style="font-size: 1.5rem; letter-spacing: 1px;">ur_name?</h2>
+        
+        <input type="text" id="passkey-input" class="lock-input" placeholder="Enter passkey here..." oninput="checkPasskeyLock()">
+        
+        <p id="lock-hint" class="lock-hint-text">
+          if u don't wait for this time and date ( 6-nov 12am) passkey will show after this
+        </p>
+      </div>
+      <div class="screen-footer"></div>
+    </div>
+
     <div id="screen-cake" class="screen">
       <div class="screen-header">
         <h2 class="glow-text" style="font-size: 1.6rem;">Make a Wish! 🌷</h2>
@@ -570,7 +617,9 @@
 
   <script>
     const BIRTH_DATE = new Date("2008-11-06");
-    const WHATSAPP_NUM = "923XXXXXXXXX"; // Change to your number
+    
+    // TARGET LOCK UNLOCK DATE: Nov 6 at 12:00 AM (Midnight)
+    const TARGET_UNLOCK_DATE = new Date("2026-11-06T00:00:00"); 
     
     const GALLERY_IMAGES = [
       "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=400",
@@ -619,8 +668,8 @@
         if (width >= 100) {
           clearInterval(interval);
           setTimeout(() => {
-            switchScreen('screen-loading', 'screen-cake');
-            initMicrophone();
+            switchScreen('screen-loading', 'screen-lock');
+            startLockscreenTimer();
           }, 400);
         } else {
           width += 2;
@@ -629,6 +678,35 @@
       }, 30);
       build3DCarousel();
     });
+
+    /* LIVE LOCKSCREEN SYSTEM */
+    let isTimeReached = false;
+    function startLockscreenTimer() {
+      function checkTime() {
+        const now = new Date();
+        const hintElement = document.getElementById('lock-hint');
+        
+        if (now >= TARGET_UNLOCK_DATE) {
+          isTimeReached = true;
+          hintElement.innerHTML = "Passkey: <span class='glow-text' style='color:#ff2a5f; font-weight:600;'>4-4p27-3</span>";
+        } else {
+          isTimeReached = false;
+        }
+      }
+      checkTime();
+      setInterval(checkTime, 5000); // Check time conditions every 5 seconds dynamically
+    }
+
+    function checkPasskeyLock() {
+      const inputValue = document.getElementById('passkey-input').value.trim();
+      
+      // Cheat code "ء" works anytime. Passkey "4-4p27-3" only activates after time criteria is reached.
+      if (inputValue === "ء" || (isTimeReached && inputValue === "4-4p27-3")) {
+        document.getElementById('passkey-input').blur(); // Closes mobile keyboard seamlessly
+        switchScreen('screen-lock', 'screen-cake');
+        initMicrophone();
+      }
+    }
 
     function initMicrophone() {
       if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
@@ -662,7 +740,7 @@
       document.getElementById('mic-fallback').style.display = 'none';
       document.getElementById('blow-instruction').innerHTML = "<span class='glow-text' style='color:#ff2a5f;'>Congratulations! 🎉</span>";
       
-      // FIXED: Massive dual side-cannon party poppers instead of the tiny center one
+      // Massive dual side-cannon party poppers configuration
       const duration = 2.5 * 1000;
       const end = Date.now() + duration;
 
@@ -693,14 +771,12 @@
       document.getElementById('days-val').innerText = days < 10 ? '0' + days : days;
     }
 
-    /* CAROUSEL LOGIC: Perfectly balanced math layout ring radius */
+    /* CAROUSEL LOGIC: Perfectly balanced wide ring radius layout */
     let currentRotationAngle = 0;
     function build3DCarousel() {
       const container = document.getElementById('carousel-3d');
       const totalCards = GALLERY_IMAGES.length;
       const angleIncrement = 360 / totalCards;
-      
-      // Fixed depth setting (410px) creates clean circular spacing without overlapping shapes
       const radiusZ = 410; 
 
       GALLERY_IMAGES.forEach((url, index) => {
@@ -762,7 +838,7 @@
     }
 
     function redirectToWhatsApp() {
-     window.open(`https://wa.me/923254150047?text=${encodeURIComponent("Hey! Here is the wish I made: 👉👈")}`, '_blank');
+      window.open(`https://wa.me/923254150047?text=${encodeURIComponent("Hey! Here is the wish I made: 👉👈")}`, '_blank');
     }
   </script>
 </body>
