@@ -33,12 +33,12 @@
       justify-content: center;
       align-items: center;
       overflow-x: hidden;
-      padding: 15px; /* Added padding to prevent elements from touching screen edges */
+      padding: 15px;
     }
 
     /* --- RESPONSIVE SCREEN CONFIGURATION --- */
     .screen {
-      display: none; /* Changed from absolute to hidden/flex system to prevent stacking bugs */
+      display: none; 
       width: 100%;
       max-width: 400px;
       padding: 20px;
@@ -52,7 +52,7 @@
     }
 
     .screen.active {
-      display: flex; /* Displays as flexible column only when active */
+      display: flex; 
       opacity: 1;
       transform: scale(1);
     }
@@ -68,7 +68,7 @@
       width: 105px;
       height: 105px;
       border-radius: 50%;
-      margin-top: 35px; /* Added spacing to safely accommodate the absolute "hmm..." text */
+      margin-top: 35px; 
       margin-bottom: 20px;
       display: flex;
       justify-content: center;
@@ -93,6 +93,61 @@
       font-weight: normal;
       font-style: italic;
       white-space: nowrap;
+    }
+
+    /* --- NEW: CSS ANIMATED FILLING HEART --- */
+    .heart-glowing {
+      position: relative;
+      width: 40px;
+      height: 40px;
+      background-color: transparent;
+      border: 2px solid var(--accent-color);
+      transform: rotate(-45deg);
+      box-shadow: 0 0 15px var(--accent-glow);
+      animation: heartBeat 1.2s infinite ease-in-out, heartFillUp 3s forwards ease-out;
+    }
+
+    .heart-glowing::before,
+    .heart-glowing::after {
+      content: "";
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      background-color: transparent;
+      border: 2px solid var(--accent-color);
+      border-radius: 50%;
+    }
+
+    .heart-glowing::before {
+      top: -20px;
+      left: 0;
+      border-bottom: none;
+      border-right: none;
+    }
+
+    .heart-glowing::after {
+      top: 0;
+      left: 20px;
+      border-bottom: none;
+      border-left: none;
+    }
+
+    /* Heart Fill and Pulse Animations */
+    @keyframes heartBeat {
+      0% { transform: rotate(-45deg) scale(0.95); }
+      50% { transform: rotate(-45deg) scale(1.05); }
+      100% { transform: rotate(-45deg) scale(0.95); }
+    }
+
+    @keyframes heartFillUp {
+      0% {
+        background-color: rgba(255, 42, 95, 0);
+        box-shadow: 0 0 5px var(--accent-glow);
+      }
+      100% {
+        background-color: var(--accent-color);
+        box-shadow: 0 0 25px var(--accent-color), 0 0 45px var(--accent-glow);
+      }
     }
 
     /* Standard Responsive Button Design */
@@ -264,7 +319,7 @@
     }
 
     .counter-number {
-      font-size: 2.4rem; /* Balanced sizing down slightly for smaller screens */
+      font-size: 2.4rem;
       font-weight: 300;
       line-height: 1;
       text-shadow: 0 0 15px var(--accent-glow);
@@ -327,10 +382,11 @@
   </div>
 
   <div id="screen-counter" class="screen">
-    <div class="avatar-container">
-      <span class="cat-thought glow-text">hmm...🤭</span>
-      <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f63b/512.webp" alt="Happy Loving White Cat">
+    <div class="avatar-container" style="border:none; box-shadow:none; background:none;">
+      <span class="cat-thought glow-text" style="top: -25px;">hmm...🤭</span>
+      <div class="heart-glowing"></div>
     </div>
+    
     <h1 class="glow-text birthday-title" style="line-height: 1.3;">Happy Birthday My Girl 🎗️</h1>
     
     <div style="font-size: 0.75rem; font-style: italic; opacity: 0.5; margin-bottom: 5px;">You have completed</div>
@@ -371,7 +427,6 @@
         current.classList.remove('active');
         next.classList.add('active');
         
-        // Force reflow for seamless CSS execution
         navigator.userAgent.match(/Chromium/i) && next.offsetHeight; 
         
         next.style.opacity = '1';
@@ -384,7 +439,6 @@
       const progressFill = document.getElementById('progress-fill');
       let width = 0;
       
-      // Ensure the active screen is visible immediately
       const activeScreen = document.querySelector('.screen.active');
       if (activeScreen) {
         activeScreen.style.opacity = '1';
@@ -450,7 +504,6 @@
       if (candleBlown) return;
       candleBlown = true;
 
-      // Close mic stream gracefully
       if (micStream) {
         micStream.getTracks().forEach(track => track.stop());
       }
@@ -462,7 +515,6 @@
       instructionEl.innerHTML = "<span class='glow-text' style='font-size:1.15rem; color:#ff2a5f; display:block; margin-top:10px;'>Congratulations on ur big day! 🎉</span>";
       instructionEl.style.animation = "none";
 
-      // Premium Screen Confetti Poppers
       const duration = 2 * 1000;
       const end = Date.now() + duration;
 
