@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Birthday</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
+  
+  <style>
+    /* --- CORE THEME & VARIABLES --- */
+    :root {
+      --bg-gradient: radial-gradient(circle at center, #1f030a 0%, #050002 100%);
+      --accent-color: #ff2a5f;
+      --accent-glow: rgba(255, 42, 95, 0.6);
+      --text-color: #fcd7e0;
+      --card-bg: rgba(20, 8, 12, 0.75);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg-gradient);
+      color: var(--text-color);
+      font-family: 'Poppins', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    /* Screen Transitions Setup */
+    .screen {
+      position: absolute;
+      width: 100%;
+      max-width: 420px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      opacity: 0;
+      transform: scale(0.95);
+      pointer-events: none;
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .screen.active {
+      opacity: 1;
+      transform: scale(1);
+      pointer-events: auto;
+      position: relative;
+    }
+
+    /* --- PREMIUM SHADING EFFECTS --- */
+    .glow-text {
+      font-family: 'Playfair Display', serif;
+      text-shadow: 0 0 10px var(--accent-glow), 0 0 25px rgba(255, 42, 95, 0.25);
+    }
+
+    .avatar-container {
+      position: relative;
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      margin-bottom: 25px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 0 20px var(--accent-glow), inset 0 0 15px rgba(255, 42, 95, 0.4);
+      background: rgba(255, 42, 95, 0.05);
+      border: 1px solid rgba(255, 42, 95, 0.3);
+    }
+
+    .avatar-container img {
+      width: 85px;
+      height: 85px;
+      object-fit: contain;
+    }
+
+    /* Standard Button Design */
+    .btn-premium {
+      background: transparent;
+      color: var(--text-color);
+      border: 1px solid rgba(255, 42, 95, 0.4);
+      padding: 12px 35px;
+      border-radius: 30px;
+      font-size: 0.9rem;
+      letter-spacing: 2px;
+      cursor: pointer;
+      box-shadow: 0 0 15px rgba(255, 42, 95, 0.15), inset 0 0 10px rgba(255, 42, 95, 0.1);
+      transition: all 0.3s ease;
+      margin-top: 25px;
+    }
+
+    .btn-premium:hover {
+      box-shadow: 0 0 25px var(--accent-glow);
+      background: rgba(255, 42, 95, 0.1);
+    }
+
+    /* --- SCREEN 1: LOADING SCREEN --- */
+    .loading-status {
+      font-size: 1.1rem;
+      letter-spacing: 1px;
+      margin-top: 15px;
+      margin-bottom: 15px;
+    }
+
+    .progress-bar-container {
+      width: 220px;
+      height: 6px;
+      background: rgba(255, 42, 95, 0.1);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
+    }
+
+    .progress-bar-fill {
+      width: 0%;
+      height: 100%;
+      background: var(--accent-color);
+      box-shadow: 0 0 12px var(--accent-color);
+      border-radius: 10px;
+      transition: width 0.1s linear;
+    }
+
+    .sub-tag {
+      font-size: 0.7rem;
+      letter-spacing: 3px;
+      opacity: 0.5;
+      margin-top: 15px;
+    }
+
+    /* --- SCREEN 2: START SCREEN --- */
+    .sub-message {
+      font-size: 0.9rem;
+      font-style: italic;
+      opacity: 0.7;
+      margin-top: 10px;
+    }
+
+    /* --- SCREEN 3: BIRTHDAY AGE COUNTER --- */
+    .birthday-title {
+      font-size: 1.8rem;
+      margin-bottom: 30px;
+      letter-spacing: 1px;
+    }
+
+    .counter-grid {
+      display: flex;
+      justify-content: space-around;
+      width: 100%;
+      max-width: 340px;
+      margin-top: 20px;
+    }
+
+    .counter-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .counter-number {
+      font-size: 2.8rem;
+      font-weight: 300;
+      line-height: 1;
+      text-shadow: 0 0 15px var(--accent-glow);
+    }
+
+    .counter-label {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      opacity: 0.4;
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="screen-loading" class="screen active">
+    <div class="avatar-container">
+      <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f43c/512.webp" alt="Thinking Panda">
+    </div>
+    <h2 class="glow-text loading-status">Loading something special...</h2>
+    <div class="progress-bar-container">
+      <div id="progress-fill" class="progress-bar-fill"></div>
+    </div>
+    <div class="sub-tag">✦ JUST FOR YOU ✦</div>
+  </div>
+
+
+  <div id="screen-start" class="screen">
+    <h1 class="glow-text" style="font-size: 2.2rem; margin-bottom: 25px;">It's Your Special Day ୨🌸</h1>
+    <div class="avatar-container">
+      <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f43c/512.webp" style="transform: rotate(-10deg);" alt="Sleeping Panda">
+    </div>
+    <p class="sub-message">I made something special for you...</p>
+    <button class="btn-premium" onclick="goToCounterScreen()">START ๑•‿•๑</button>
+  </div>
+
+
+  <div id="screen-counter" class="screen">
+    <div class="avatar-container">
+      <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f43c/512.webp" alt="Happy Panda">
+    </div>
+    <h1 class="glow-text birthday-title">Happy Birthday My Girl 🎗️</h1>
+    
+    <div style="font-size: 0.8rem; font-style: italic; opacity: 0.5; margin-bottom: 5px;">You have completed</div>
+    
+    <div class="counter-grid">
+      <div class="counter-item">
+        <span id="years-val" class="counter-number glow-text">00</span>
+        <span class="counter-label">Years</span>
+      </div>
+      <div class="counter-item">
+        <span id="months-val" class="counter-number glow-text">00</span>
+        <span class="counter-label">Months</span>
+      </div>
+      <div class="counter-item">
+        <span id="days-val" class="counter-number glow-text">00</span>
+        <span class="counter-label">Days</span>
+      </div>
+    </div>
+
+    <button class="btn-premium">NEXT ୨🌸⌁</button>
+  </div>
+
+  <script>
+    // --- Configuration: Apni Marzi Ki Birthday Date Yahan Set Karo ---
+    const BIRTH_DATE = new Date("2007-06-04"); // Example: 19 Years, 0 Months, 19 Days complete karne ke liye
+
+    // Global Screen Control Function
+    function switchScreen(currentId, nextId) {
+      const current = document.getElementById(currentId);
+      const next = document.getElementById(nextId);
+      
+      current.classList.remove('active');
+      setTimeout(() => {
+        next.classList.add('active');
+      }, 600); // Smooth CSS Fade out ke baad target screen open hogi
+    }
+
+    // 1. Loading Bar Automation
+    window.addEventListener('DOMContentLoaded', () => {
+      const progressFill = document.getElementById('progress-fill');
+      let width = 0;
+      
+      const interval = setInterval(() => {
+        if (width >= 100) {
+          clearInterval(interval);
+          // 100% hone ke baad smoothly screen 2 (Start) par le jao
+          setTimeout(() => {
+            switchScreen('screen-loading', 'screen-start');
+          }, 400);
+        } else {
+          width += 1.5; // Smooth progression speed
+          if(width > 100) width = 100;
+          progressFill.style.width = width + '%';
+        }
+      }, 40);
+    });
+
+    // 2. Start Button Function
+    function goToCounterScreen() {
+      switchScreen('screen-start', 'screen-counter');
+      calculatePreciseAge();
+    }
+
+    // 3. Dynamic Precise Age Calculator (Years, Months, Days)
+    function calculatePreciseAge() {
+      const now = new Date();
+      
+      let years = now.getFullYear() - BIRTH_DATE.getFullYear();
+      let months = now.getMonth() - BIRTH_DATE.getMonth();
+      let days = now.getDate() - BIRTH_DATE.getDate();
+
+      // Agar days current month me abhi tak negative hain
+      if (days < 0) {
+        months--;
+        // Pichle month ke total din nikalne ke liye logic
+        const previousMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+        days += previousMonth.getDate();
+      }
+
+      // Agar months negative hain
+      if (months < 0) {
+        years--;
+        months += 12;
+      }
+
+      // Update values smoothly directly in the DOM
+      document.getElementById('years-val').innerText = years;
+      document.getElementById('months-val').innerText = months;
+      document.getElementById('days-val').innerText = days;
+    }
+  </script>
+</body>
+</html>
