@@ -3,396 +3,469 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rawr! Cute Dino World 🦕</title>
+  <title>For My Special Dino 🥀✨</title>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Poppins:wght@400;600&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Poppins:wght@300;400;600;700&display=swap');
 
     :root {
-      --bg-color: #fbf8f3;
-      --primary: #8ac926;
-      --primary-dark: #6a991e;
-      --pink: #ff70a6;
-      --yellow: #ffca3a;
-      --purple: #9b5de5;
-      --card-bg: #ffffff;
-      --text: #2b2d42;
+      --bg-dark: #120307;
+      --maroon-main: #4a0404;
+      --maroon-card: #28080e;
+      --accent-gold: #e5b869;
+      --accent-pink: #ff2a6d;
+      --text-light: #f8edeb;
+      --glow-red: #ff003c;
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Fredoka', sans-serif;
+      font-family: 'Poppins', sans-serif;
     }
 
     body {
-      background-color: var(--bg-color);
-      color: var(--text);
+      background-color: var(--bg-dark);
+      color: var(--text-light);
       display: flex;
-      flex-direction: column;
+      justify-content: center;
       align-items: center;
-      padding: 20px 15px;
       min-height: 100vh;
       overflow-x: hidden;
+      background-image: radial-gradient(circle at center, #2a030b 0%, #0d0104 100%);
     }
 
-    .container {
-      max-width: 500px;
+    .app-container {
+      max-width: 420px;
       width: 100%;
+      min-height: 680px;
+      background: var(--maroon-card);
+      border: 1px solid rgba(229, 184, 105, 0.2);
+      border-radius: 35px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(74, 4, 4, 0.5);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Step Screens Layout */
+    .step-screen {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 30px 20px;
+      height: 100%;
+      width: 100%;
+      animation: fadeIn 0.6s ease-in-out forwards;
       text-align: center;
     }
 
-    /* Floating Cute Dinos Header */
-    .header-box {
-      background: linear-gradient(135deg, #a8ff78 0%, #78ffd6 100%);
-      padding: 25px 20px;
-      border-radius: 30px;
-      box-shadow: 0 10px 25px rgba(138, 201, 38, 0.25);
-      margin-bottom: 25px;
-      position: relative;
+    .step-screen.active {
+      display: flex;
     }
 
-    .senior-badge {
-      position: absolute;
-      top: -12px;
-      right: 20px;
-      background: var(--pink);
-      color: white;
-      font-size: 0.75rem;
-      padding: 4px 12px;
-      border-radius: 20px;
-      font-weight: 700;
-      box-shadow: 0 4px 10px rgba(255, 112, 166, 0.4);
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.96); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    /* Lock Screen Styles */
+    .lock-icon {
+      font-size: 3.5rem;
+      margin-bottom: 15px;
+      filter: drop-shadow(0 0 10px var(--accent-gold));
+    }
+
+    .title-cinzel {
+      font-family: 'Cinzel', serif;
+      color: var(--accent-gold);
+      font-weight: 800;
+      letter-spacing: 2px;
+    }
+
+    .passcode-inputs {
+      display: flex;
+      gap: 12px;
+      margin: 25px 0;
+    }
+
+    .passcode-dot {
+      width: 18px;
+      height: 18px;
+      border: 2px solid var(--accent-gold);
+      border-radius: 50%;
+      transition: all 0.2s;
+    }
+
+    .passcode-dot.filled {
+      background: var(--accent-gold);
+      box-shadow: 0 0 12px var(--accent-gold);
+    }
+
+    .keypad {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      width: 80%;
+      margin-top: 10px;
+    }
+
+    .key-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(229, 184, 105, 0.3);
+      color: var(--text-light);
+      padding: 14px;
+      border-radius: 50%;
+      font-size: 1.2rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .key-btn:active {
+      background: var(--accent-gold);
+      color: var(--bg-dark);
+      transform: scale(0.9);
+    }
+
+    /* Cake & Candle Screen */
+    .cake-container {
+      position: relative;
+      margin: 30px 0;
       cursor: pointer;
     }
 
-    h1 {
-      font-size: 2.2rem;
-      color: #2e4057;
-      margin-bottom: 8px;
+    .cake-svg {
+      width: 160px;
+      filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5));
     }
 
-    p.subtitle {
-      font-size: 1rem;
-      color: #52796f;
+    .candle-flame {
+      width: 16px;
+      height: 26px;
+      background: linear-gradient(to top, #ff2a6d, #ffca3a);
+      border-radius: 50% 50% 20% 20%;
+      position: absolute;
+      top: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      animation: flicker 0.1s infinite alternate;
+      box-shadow: 0 0 20px #ff2a6d, 0 0 40px #ffca3a;
     }
 
-    /* Interactive Cards */
-    .card {
-      background: var(--card-bg);
-      border-radius: 24px;
+    .candle-flame.extinguished {
+      display: none;
+    }
+
+    @keyframes flicker {
+      0% { transform: translateX(-50%) scale(1); }
+      100% { transform: translateX(-50%) scale(1.15) rotate(2deg); }
+    }
+
+    .action-btn {
+      background: linear-gradient(135deg, var(--maroon-main), var(--glow-red));
+      color: white;
+      border: 1px solid var(--accent-gold);
+      padding: 12px 28px;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(255, 0, 60, 0.4);
+      margin-top: 15px;
+      transition: transform 0.2s;
+    }
+
+    .action-btn:active {
+      transform: scale(0.95);
+    }
+
+    /* Anime Experience Screen */
+    .anime-frame {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--accent-gold);
+      border-radius: 20px;
       padding: 20px;
-      margin-bottom: 20px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
-      border: 3px solid #f0f3f4;
-      transition: transform 0.2s ease;
+      width: 100%;
+      margin: 15px 0;
+      position: relative;
     }
 
-    .card:active {
-      transform: scale(0.98);
-    }
-
-    .card-title {
-      font-size: 1.3rem;
-      color: var(--primary-dark);
-      margin-bottom: 12px;
+    .toman-flag {
+      width: 100px;
+      height: 60px;
+      background: #000;
+      border: 2px solid var(--accent-gold);
+      margin: 10px auto;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-    }
-
-    /* Dino Mascot Display */
-    .dino-mascot {
-      font-size: 4rem;
-      animation: bounce 2s infinite ease-in-out;
+      font-family: 'Cinzel', serif;
+      font-weight: 800;
+      color: var(--accent-gold);
+      box-shadow: 0 0 15px rgba(229, 184, 105, 0.3);
       cursor: pointer;
+      transition: transform 0.3s;
     }
 
-    @keyframes bounce {
-      0%, 100% { transform: translateY(0) rotate(0deg); }
-      50% { transform: translateY(-12px) rotate(5deg); }
+    .toman-flag:hover {
+      transform: scale(1.05) rotate(-2deg);
     }
 
-    /* Age Teaser Meter */
-    .age-teaser-box {
-      background: #fff0f5;
-      border: 2px dashed var(--pink);
-      border-radius: 18px;
-      padding: 15px;
-      margin-top: 10px;
+    /* Romantic Age Difference Display */
+    .age-heart-box {
+      background: rgba(74, 4, 4, 0.4);
+      border: 1px dashed var(--accent-gold);
+      border-radius: 20px;
+      padding: 20px;
+      margin: 20px 0;
     }
 
-    .age-stat {
-      font-size: 1.8rem;
+    .age-badge {
+      font-size: 1.6rem;
+      color: var(--accent-gold);
       font-weight: 700;
-      color: var(--pink);
+      margin-bottom: 6px;
     }
 
-    /* Anime & Mikey Special Section */
-    .anime-card {
-      background: linear-gradient(135deg, #2b2d42 0%, #1d3557 100%);
-      color: white;
-      border: none;
-    }
-
-    .anime-card .card-title {
-      color: var(--yellow);
-    }
-
-    .btn {
-      background: var(--primary);
-      color: white;
-      border: none;
-      padding: 12px 24px;
-      border-radius: 50px;
-      font-size: 1rem;
-      font-weight: 700;
-      cursor: pointer;
-      box-shadow: 0 6px 15px rgba(138, 201, 38, 0.4);
-      transition: all 0.2s;
-      margin-top: 10px;
-      display: inline-block;
-    }
-
-    .btn:hover {
-      background: var(--primary-dark);
-      transform: translateY(-2deg);
-    }
-
-    .btn-anime {
-      background: var(--pink);
-      box-shadow: 0 6px 15px rgba(255, 112, 166, 0.4);
-    }
-
-    /* Dino Types Grid */
-    .dino-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-top: 10px;
-    }
-
-    .dino-item {
-      background: #f8f9fa;
-      padding: 12px;
-      border-radius: 16px;
-      border: 2px solid #e9ecef;
-      cursor: pointer;
-    }
-
-    .dino-item span {
-      font-size: 2.2rem;
-      display: block;
-    }
-
-    .dino-item p {
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: #495057;
-      margin-top: 4px;
-    }
-
-    /* Final Cute Dino Reassurance Note */
-    .reassurance-note {
-      background: #fffbeb;
-      border: 2px solid var(--yellow);
-      border-radius: 24px;
-      padding: 22px;
+    /* Note Card */
+    .dino-note-card {
+      background: linear-gradient(180deg, rgba(74, 4, 4, 0.8) 0%, rgba(20, 2, 6, 0.9) 100%);
+      border: 1px solid var(--accent-gold);
+      border-radius: 20px;
+      padding: 20px;
       text-align: left;
-      margin-top: 10px;
-      box-shadow: 0 8px 20px rgba(255, 202, 58, 0.15);
-      position: relative;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: #f1dca7;
+      max-height: 380px;
+      overflow-y: auto;
     }
 
-    .reassurance-note h3 {
-      color: #d97706;
-      font-size: 1.2rem;
-      margin-bottom: 10px;
+    /* Progress Dots */
+    .step-indicator {
+      position: absolute;
+      bottom: 15px;
       display: flex;
-      align-items: center;
       gap: 8px;
     }
 
-    .reassurance-note p {
-      font-family: 'Poppins', sans-serif;
-      font-size: 0.92rem;
-      line-height: 1.6;
-      color: #4b5563;
-      margin-bottom: 10px;
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.2);
     }
 
-    /* Modal / Popup styling */
-    .toast {
+    .dot.active {
+      background: var(--accent-gold);
+      width: 20px;
+      border-radius: 10px;
+    }
+
+    /* Domain Expansion Visual Effect */
+    .domain-overlay {
       position: fixed;
-      bottom: 30px;
-      left: 50%;
-      transform: translateX(-50%) translateY(100px);
-      background: #2b2d42;
-      color: white;
-      padding: 12px 24px;
-      border-radius: 50px;
-      font-size: 0.95rem;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-      opacity: 0;
-      transition: all 0.4s ease;
-      z-index: 100;
+      inset: 0;
+      background: radial-gradient(circle, #40001a 0%, #000000 100%);
+      z-index: 999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      animation: expandDomain 0.8s ease-out forwards;
     }
 
-    .toast.show {
-      transform: translateX(-50%) translateY(0);
-      opacity: 1;
+    @keyframes expandDomain {
+      0% { clip-path: circle(0% at 50% 50%); }
+      100% { clip-path: circle(150% at 50% 50%); }
     }
   </style>
 </head>
 <body>
 
-  <div class="container">
-    
-    <!-- Header -->
-    <div class="header-box">
-      <div class="senior-badge" onclick="showTeaseToast()">👑 Senior's Authority</div>
-      <div class="dino-mascot" onclick="makeDinoSound()">🦕</div>
-      <h1>Hey Little Dino! 🦖</h1>
-      <p class="subtitle">A cute, mini interactive universe curated just for you!</p>
+  <div class="app-container">
+
+    <!-- SCREEN 1: LOCK SCREEN -->
+    <div class="step-screen active" id="screen1">
+      <div class="lock-icon">🔒</div>
+      <h2 class="title-cinzel">SECRET ACCESS</h2>
+      <p style="font-size: 0.85rem; color: #d3a373; margin-top: 5px;">Enter the 4-digit Passcode<br><small>(Hint: Tokyo Revengers Mikey's Toman Year - 2003 or 1234)</small></p>
+
+      <div class="passcode-inputs">
+        <div class="passcode-dot" id="dot0"></div>
+        <div class="passcode-dot" id="dot1"></div>
+        <div class="passcode-dot" id="dot2"></div>
+        <div class="passcode-dot" id="dot3"></div>
+      </div>
+
+      <div class="keypad">
+        <button class="key-btn" onclick="pressKey('1')">1</button>
+        <button class="key-btn" onclick="pressKey('2')">2</button>
+        <button class="key-btn" onclick="pressKey('3')">3</button>
+        <button class="key-btn" onclick="pressKey('4')">4</button>
+        <button class="key-btn" onclick="pressKey('0')">0</button>
+        <button class="key-btn" onclick="pressKey('5')">5</button>
+      </div>
     </div>
 
-    <!-- Age Teaser Card (6 Months Younger Dynamic) -->
-    <div class="card">
-      <div class="card-title">
-        <span>⏰</span> The Seniority Counter
+    <!-- SCREEN 2: PHONK & CAKE CANDLE BLEW -->
+    <div class="step-screen" id="screen2">
+      <h2 class="title-cinzel" style="font-size: 1.4rem;">MAKE A WISH 🕯️</h2>
+      <p style="font-size: 0.85rem; color: #e5b869;">Tap the candle or press the Phonk Speaker button to blow out the candle flame!</p>
+
+      <div class="cake-container" onclick="blowCandle()">
+        <div class="candle-flame" id="flame"></div>
+        <svg class="cake-svg" viewBox="0 0 100 100">
+          <path d="M20,60 L80,60 L80,85 C80,90 75,95 70,95 L30,95 C25,95 20,90 20,85 Z" fill="#4a0404" stroke="#e5b869" stroke-width="2"/>
+          <path d="M15,40 L85,40 L85,60 L15,60 Z" fill="#28080e" stroke="#e5b869" stroke-width="2"/>
+          <rect x="47" y="25" width="6" height="15" fill="#e5b869" />
+        </svg>
       </div>
-      <p style="font-size: 0.9rem; color: #6c757d;">Since you are exactly <strong>6 months younger</strong> than me...</p>
+
+      <button class="action-btn" onclick="blowCandle()">🔊 Activate Speaker Blow Sound</button>
+      <button class="action-btn" id="nextTo3" style="display:none; background: var(--accent-gold); color:#120307;" onclick="nextScreen(3)">Enter Anime Universe ➔</button>
+    </div>
+
+    <!-- SCREEN 3: HIGHLY INTERACTIVE ANIME EXPERIENCE -->
+    <div class="step-screen" id="screen3">
+      <h2 class="title-cinzel" style="font-size: 1.3rem;">TOMAN x JJK ZONE ⚡</h2>
       
-      <div class="age-teaser-box">
-        <div class="age-stat" id="daysCount">182.5 Days</div>
-        <p style="font-size: 0.85rem; color: #e63946; font-weight: 600; margin-top: 4px;">
-          You are officially 100% younger, smaller, & extra trainable! 🤏
+      <div class="anime-frame">
+        <p style="font-size: 0.85rem; color: #e5b869; margin-bottom: 8px;"><strong>1. Tokyo Revengers Oath:</strong><br>Tap Mikey's Toman Flag to pledge protection!</p>
+        <div class="toman-flag" onclick="saluteMikey()">
+          東卍 <br><span style="font-size: 0.6rem;">TOMAN</span>
+        </div>
+      </div>
+
+      <div class="anime-frame">
+        <p style="font-size: 0.85rem; color: #ff2a6d; margin-bottom: 10px;"><strong>2. Gojo's Secret Move:</strong></p>
+        <button class="action-btn" style="background: #9b5de5;" onclick="triggerDomainOverlay()">
+          🤞 Domain Expansion: Infinite Love
+        </button>
+      </div>
+
+      <button class="action-btn" style="margin-top: 10px;" onclick="nextScreen(4)">Go To Age Special ➔</button>
+    </div>
+
+    <!-- SCREEN 4: 6 MONTHS & 8 DAYS AGE SPECIAL -->
+    <div class="step-screen" id="screen4">
+      <h2 class="title-cinzel" style="font-size: 1.3rem;">THE SPECIAL GAP ⏳</h2>
+      
+      <div class="age-heart-box">
+        <div class="age-badge">6 Months & 8 Days</div>
+        <p style="font-size: 0.88rem; color: #f8edeb;">You are exactly <strong>6 months & 8 days younger</strong> than me.</p>
+        <p style="font-size: 0.82rem; color: #e5b869; margin-top: 8px; font-style: italic;">
+          "I might be older by a few months, but you will always be the one who rules my entire heart!" 👑
         </p>
       </div>
 
-      <button class="btn" onclick="generateJuniorTask()">Claim Your "Kiddo" Task 📜</button>
+      <button class="action-btn" onclick="nextScreen(5)">Read Dino Secret Note 📜</button>
     </div>
 
-    <!-- Dino Avatars / Personalities -->
-    <div class="card">
-      <div class="card-title">
-        <span>🦖</span> Which Dino Are You Today?
-      </div>
-      <p style="font-size: 0.85rem; color: #6c757d; margin-bottom: 10px;">Tap to select your inner cute dino mood:</p>
+    <!-- SCREEN 5: REASSURANCE NOTE -->
+    <div class="step-screen" id="screen5">
+      <h3 class="title-cinzel" style="font-size: 1.2rem; color: var(--accent-gold); margin-bottom: 12px;">🦕 Why My "Dino"?</h3>
       
-      <div class="dino-grid">
-        <div class="dino-item" onclick="selectDino('Baby T-Rex', 'Small arms, HUGE attitude! 🦖')">
-          <span>🦖</span>
-          <p>Baby T-Rex</p>
-        </div>
-        <div class="dino-item" onclick="selectDino('Sleepy Brachio', 'Always tall, always daydreaming 🦕')">
-          <span>🦕</span>
-          <p>Sleepy Brachio</p>
-        </div>
-        <div class="dino-item" onclick="selectDino('Pterodactyl Kid', 'Flies around making dramatic noises 🦅')">
-          <span>🐣</span>
-          <p>Cute Hatchling</p>
-        </div>
-        <div class="dino-item" onclick="selectDino('Angry Stego', 'Pouts when they don\'t get snacks 🦴')">
-          <span>🐊</span>
-          <p>Spiky Chibi</p>
-        </div>
+      <div class="dino-note-card">
+        <p>Suno! Agar main tumhein <strong>"Dino"</strong> bolti hoon, toh yeh koi teasing insult nahi hai... ❤️</p><br>
+        <p>Mere liye Dino ka matlab ek aisi cute, powerful aur slightly dramatic personality hai jo dikhne mein fearless ho (just like Mikey) par andar se ekdum precious aur soft baby dino ho! 🦖✨</p><br>
+        <p>Haan, main tumse <strong>6 months aur 8 days bari hu</strong>, par iska matlab bas itna hai ke mujhe tumhein thoda zyada pamper karne aur tumhara khayal rakhne ka haq mila hai. Today is your day—make it legendary! 🖤</p>
       </div>
+
+      <button class="action-btn" style="margin-top: 15px;" onclick="nextScreen(1)">Replay Experience 🔄</button>
     </div>
 
-    <!-- Tokyo Revengers / JJK Anime Zone -->
-    <div class="card anime-card">
-      <div class="card-title">
-        <span>💥</span> Anime & Mikey Zone
-      </div>
-      <p style="font-size: 0.9rem; margin-bottom: 15px; color: #e0e1dd;">
-        Even Invincible Mikey (Toman leader) knows who the real boss is here! 😎
-      </p>
-
-      <button class="btn btn-anime" onclick="triggerDomainExpansion()">
-        🤞 Domain Expansion: Dino Cuteness!
-      </button>
-
-      <button class="btn" style="background: var(--yellow); color: #2b2d42; margin-top: 8px;" onclick="feedMikeyDorayaki()">
-        🍡 Give Mikey Dorayaki
-      </button>
-    </div>
-
-    <!-- Dino Secret Note / Why I Call You Dino -->
-    <div class="reassurance-note">
-      <h3><span>🦕</span> A Small Secret Note For You...</h3>
-      <p>
-        Jab main tumhein <strong>"Dino"</strong> kehta/kehti hoon, toh iska matlab yeh hargiz nahi ke tum purane ho ya violent ho! 💖
-      </p>
-      <p>
-        Mere liye "Dino" ka matlab hai **unbelievably cute, slightly dramatic, extra precious, aur thoda sa chota baby dinosaur** jo jab gussa hota hai toh aur zyada cute lagta hai! 🦖✨
-      </p>
-      <p>
-        Plus, tum mujhse **6 months chote** ho, toh yeh haq mera pakka hai ke main tumhein tease karoon, chota samjhoon, aur dher sara pamper karoon! 😊
-      </p>
+    <!-- Progress Indicator Dots -->
+    <div class="step-indicator">
+      <div class="dot active" id="dotS1"></div>
+      <div class="dot" id="dotS2"></div>
+      <div class="dot" id="dotS3"></div>
+      <div class="dot" id="dotS4"></div>
+      <div class="dot" id="dotS5"></div>
     </div>
 
   </div>
 
-  <!-- Dynamic Toast Notification -->
-  <div class="toast" id="toastBox">Rawr! 🦖</div>
+  <!-- Domain Expansion Fullscreen Overlay -->
+  <div class="domain-overlay" id="domainOverlay" onclick="closeDomain()">
+    <h1 class="title-cinzel" style="font-size: 2rem; color: #ff2a6d; text-shadow: 0 0 20px #ff2a6d;">無量空処</h1>
+    <h3 style="color: var(--accent-gold); margin-top: 10px;">Domain Expansion: Infinite Devotion</h3>
+    <p style="font-size: 0.85rem; color: #fff; margin-top: 15px;">(Tap anywhere to break domain)</p>
+  </div>
 
   <script>
-    // Teasing Quotes Array for the 6-Month Age Gap
-    const juniorTasks = [
-      "Task #1: Respect your senior & offer a free glass of water! 💧",
-      "Task #2: Admit that 6 months older = 100% wiser! 🧠",
-      "Task #3: Give a cute 'Rawr' sound right now! 🦖",
-      "Task #4: Accept that you will always be the 'Lil Kiddo' here! 👶",
-      "Task #5: Send me a cute anime meme immediately! 📱"
-    ];
+    let enteredPin = "";
+    const correctPin = "2003"; // Default Mikey Toman year passcode, accepts 1234 as well
 
-    function showToast(message) {
-      const toastBox = document.getElementById('toastBox');
-      toastBox.innerText = message;
-      toastBox.classList.add('show');
-      setTimeout(() => {
-        toastBox.classList.remove('show');
-      }, 3000);
+    function pressKey(num) {
+      if (enteredPin.length < 4) {
+        enteredPin += num;
+        updateDots();
+      }
+      if (enteredPin.length === 4) {
+        setTimeout(() => {
+          if (enteredPin === "2003" || enteredPin === "1234") {
+            nextScreen(2);
+          } else {
+            alert("Wrong Secret Code! Try 2003 or 1234");
+            enteredPin = "";
+            updateDots();
+          }
+        }, 200);
+      }
     }
 
-    function makeDinoSound() {
-      const sounds = ["RAWR!! 🦖", "Cute Squeak~ 🦕", "Chibi Roar! 🐾", "Mikey-Approved Rawr! 💥"];
-      const randomSound = sounds[Math.floor(Math.random() * sounds.length)];
-      showToast(randomSound);
-      confetti({ particleCount: 25, spread: 50, origin: { y: 0.3 } });
+    function updateDots() {
+      for (let i = 0; i < 4; i++) {
+        const dot = document.getElementById(`dot${i}`);
+        if (i < enteredPin.length) {
+          dot.classList.add('filled');
+        } else {
+          dot.classList.remove('filled');
+        }
+      }
     }
 
-    function showTeaseToast() {
-      showToast("👑 Senior Rule #1: Elder ALWAYS wins the argument!");
+    function nextScreen(screenNum) {
+      document.querySelectorAll('.step-screen').forEach(s => s.classList.remove('active'));
+      document.getElementById(`screen${screenNum}`).classList.add('active');
+
+      // Update dots
+      for(let i=1; i<=5; i++) {
+        document.getElementById(`dotS${i}`).classList.remove('active');
+      }
+      document.getElementById(`dotS${screenNum}`).classList.add('active');
     }
 
-    function generateJuniorTask() {
-      const randomTask = juniorTasks[Math.floor(Math.random() * juniorTasks.length)];
-      showToast(randomTask);
-      confetti({ particleCount: 30, spread: 60, origin: { y: 0.5 } });
-    }
+    function blowCandle() {
+      const flame = document.getElementById('flame');
+      flame.classList.add('extinguished');
+      document.getElementById('nextTo3').style.display = "inline-block";
 
-    function selectDino(name, desc) {
-      showToast(`${name}: ${desc}`);
-    }
-
-    function triggerDomainExpansion() {
-      showToast("🤞 Domain Expansion: Infinite Dino Hugs!");
-      
-      // Heart/Sparkle Confetti explosion
       confetti({
-        particleCount: 100,
-        spread: 100,
-        origin: { y: 0.6 },
-        colors: ['#ff70a6', '#8ac926', '#ffca3a', '#9b5de5']
+        particleCount: 120,
+        spread: 80,
+        origin: { y: 0.5 },
+        colors: ['#e5b869', '#ff2a6d', '#4a0404']
       });
     }
 
-    function feedMikeyDorayaki() {
-      showToast("🍡 Mikey accepted your Dorayaki! He promised not to kick you today.");
+    function saluteMikey() {
+      alert("👊 Toman Salute! Mikey approves your loyalty & charisma!");
+      confetti({ particleCount: 50, spread: 60 });
+    }
+
+    function triggerDomainOverlay() {
+      document.getElementById('domainOverlay').style.display = 'flex';
+      confetti({ particleCount: 150, spread: 120, colors: ['#9b5de5', '#ff2a6d'] });
+    }
+
+    function closeDomain() {
+      document.getElementById('domainOverlay').style.display = 'none';
     }
   </script>
 </body>
