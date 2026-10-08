@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>For My Special Dino 🥀✨</title>
+  <title>For My Cute Dino 🦖🥀</title>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Poppins:wght@300;400;600;700&display=swap');
@@ -15,7 +15,6 @@
       --accent-gold: #e5b869;
       --accent-pink: #ff2a6d;
       --text-light: #f8edeb;
-      --glow-red: #ff003c;
     }
 
     * {
@@ -50,7 +49,6 @@
       flex-direction: column;
     }
 
-    /* Step Screens Layout */
     .step-screen {
       display: none;
       flex-direction: column;
@@ -72,7 +70,7 @@
       to { opacity: 1; transform: scale(1); }
     }
 
-    /* Lock Screen Styles */
+    /* Lock Screen */
     .lock-icon {
       font-size: 3.5rem;
       margin-bottom: 15px;
@@ -131,7 +129,7 @@
       transform: scale(0.9);
     }
 
-    /* Cake & Candle Screen */
+    /* Cake Screen */
     .cake-container {
       position: relative;
       margin: 30px 0;
@@ -166,7 +164,7 @@
     }
 
     .action-btn {
-      background: linear-gradient(135deg, var(--maroon-main), var(--glow-red));
+      background: linear-gradient(135deg, var(--maroon-main), var(--accent-pink));
       color: white;
       border: 1px solid var(--accent-gold);
       padding: 12px 28px;
@@ -174,7 +172,7 @@
       font-weight: 600;
       font-size: 0.95rem;
       cursor: pointer;
-      box-shadow: 0 8px 20px rgba(255, 0, 60, 0.4);
+      box-shadow: 0 8px 20px rgba(255, 42, 109, 0.4);
       margin-top: 15px;
       transition: transform 0.2s;
     }
@@ -183,39 +181,18 @@
       transform: scale(0.95);
     }
 
-    /* Anime Experience Screen */
-    .anime-frame {
+    /* Birthday Memory Cards */
+    .card-box {
       background: rgba(0, 0, 0, 0.4);
       border: 1px solid var(--accent-gold);
       border-radius: 20px;
-      padding: 20px;
+      padding: 18px;
       width: 100%;
-      margin: 15px 0;
-      position: relative;
+      margin: 12px 0;
+      text-align: left;
     }
 
-    .toman-flag {
-      width: 100px;
-      height: 60px;
-      background: #000;
-      border: 2px solid var(--accent-gold);
-      margin: 10px auto;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Cinzel', serif;
-      font-weight: 800;
-      color: var(--accent-gold);
-      box-shadow: 0 0 15px rgba(229, 184, 105, 0.3);
-      cursor: pointer;
-      transition: transform 0.3s;
-    }
-
-    .toman-flag:hover {
-      transform: scale(1.05) rotate(-2deg);
-    }
-
-    /* Romantic Age Difference Display */
+    /* Age Box */
     .age-heart-box {
       background: rgba(74, 4, 4, 0.4);
       border: 1px dashed var(--accent-gold);
@@ -225,24 +202,75 @@
     }
 
     .age-badge {
-      font-size: 1.6rem;
+      font-size: 1.5rem;
       color: var(--accent-gold);
       font-weight: 700;
       margin-bottom: 6px;
     }
 
-    /* Note Card */
+    /* Envelope & Modal Blur Effect */
+    .modal-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(18, 3, 7, 0.85);
+      backdrop-filter: blur(10px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 25px;
+      z-index: 10;
+    }
+
+    .envelope {
+      width: 140px;
+      height: 95px;
+      background: var(--accent-gold);
+      border-radius: 12px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 2.8rem;
+      cursor: pointer;
+      box-shadow: 0 10px 30px rgba(229, 184, 105, 0.4);
+      animation: pulse 1.5s infinite ease-in-out;
+      border: 2px solid #fff;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+    }
+
+    /* Note Card with Typewriter */
     .dino-note-card {
-      background: linear-gradient(180deg, rgba(74, 4, 4, 0.8) 0%, rgba(20, 2, 6, 0.9) 100%);
+      background: linear-gradient(180deg, rgba(74, 4, 4, 0.95) 0%, rgba(20, 2, 6, 0.98) 100%);
       border: 1px solid var(--accent-gold);
       border-radius: 20px;
-      padding: 20px;
+      padding: 22px;
       text-align: left;
-      font-size: 0.9rem;
+      font-size: 0.92rem;
       line-height: 1.6;
       color: #f1dca7;
-      max-height: 380px;
+      width: 100%;
+      max-height: 480px;
       overflow-y: auto;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7);
+    }
+
+    .whatsapp-btn {
+      background: #25d366;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: none;
+      margin-top: 15px;
+      width: 100%;
+      box-shadow: 0 8px 20px rgba(37, 211, 102, 0.4);
     }
 
     /* Progress Dots */
@@ -265,35 +293,17 @@
       width: 20px;
       border-radius: 10px;
     }
-
-    /* Domain Expansion Visual Effect */
-    .domain-overlay {
-      position: fixed;
-      inset: 0;
-      background: radial-gradient(circle, #40001a 0%, #000000 100%);
-      z-index: 999;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      animation: expandDomain 0.8s ease-out forwards;
-    }
-
-    @keyframes expandDomain {
-      0% { clip-path: circle(0% at 50% 50%); }
-      100% { clip-path: circle(150% at 50% 50%); }
-    }
   </style>
 </head>
 <body>
 
   <div class="app-container">
 
-    <!-- SCREEN 1: LOCK SCREEN -->
+    <!-- SCREEN 1: LOCK SCREEN (PASSCODE: 0404) -->
     <div class="step-screen active" id="screen1">
       <div class="lock-icon">🔒</div>
-      <h2 class="title-cinzel">SECRET ACCESS</h2>
-      <p style="font-size: 0.85rem; color: #d3a373; margin-top: 5px;">Enter the 4-digit Passcode<br><small>(Hint: Tokyo Revengers Mikey's Toman Year - 2003 or 1234)</small></p>
+      <h2 class="title-cinzel">OUR SPECIAL DATE</h2>
+      <p style="font-size: 0.85rem; color: #d3a373; margin-top: 5px;">Enter the 4-digit Passcode<br><small>(Hint: The date when we met first time - 0404)</small></p>
 
       <div class="passcode-inputs">
         <div class="passcode-dot" id="dot0"></div>
@@ -315,7 +325,7 @@
     <!-- SCREEN 2: PHONK & CAKE CANDLE BLEW -->
     <div class="step-screen" id="screen2">
       <h2 class="title-cinzel" style="font-size: 1.4rem;">MAKE A WISH 🕯️</h2>
-      <p style="font-size: 0.85rem; color: #e5b869;">Tap the candle or press the Phonk Speaker button to blow out the candle flame!</p>
+      <p style="font-size: 0.85rem; color: #e5b869;">Close your eyes, make a secret wish, then tap the candle or press the button to blow it out!</p>
 
       <div class="cake-container" onclick="blowCandle()">
         <div class="candle-flame" id="flame"></div>
@@ -326,57 +336,59 @@
         </svg>
       </div>
 
-      <button class="action-btn" onclick="blowCandle()">🔊 Activate Speaker Blow Sound</button>
-      <button class="action-btn" id="nextTo3" style="display:none; background: var(--accent-gold); color:#120307;" onclick="nextScreen(3)">Enter Anime Universe ➔</button>
+      <button class="action-btn" onclick="blowCandle()">🔊 Blow Candle Out</button>
+      <button class="action-btn" id="nextTo3" style="display:none; background: var(--accent-gold); color:#120307;" onclick="nextScreen(3)">Next Magic ➔</button>
     </div>
 
-    <!-- SCREEN 3: HIGHLY INTERACTIVE ANIME EXPERIENCE -->
+    <!-- SCREEN 3: SWEET BIRTHDAY SURPRISE CARDS -->
     <div class="step-screen" id="screen3">
-      <h2 class="title-cinzel" style="font-size: 1.3rem;">TOMAN x JJK ZONE ⚡</h2>
+      <h2 class="title-cinzel" style="font-size: 1.3rem;">BIRTHDAY ESSENTIALS 🎈</h2>
       
-      <div class="anime-frame">
-        <p style="font-size: 0.85rem; color: #e5b869; margin-bottom: 8px;"><strong>1. Tokyo Revengers Oath:</strong><br>Tap Mikey's Toman Flag to pledge protection!</p>
-        <div class="toman-flag" onclick="saluteMikey()">
-          東卍 <br><span style="font-size: 0.6rem;">TOMAN</span>
-        </div>
+      <div class="card-box">
+        <p style="font-size: 0.85rem; color: var(--accent-gold);"><strong>✨ Premium Birthday Vibe:</strong></p>
+        <p style="font-size: 0.82rem; color: #f8edeb; margin-top: 4px;">Today is entirely yours. A special day filled with smiles, happiness, and endless warm moments.</p>
       </div>
 
-      <div class="anime-frame">
-        <p style="font-size: 0.85rem; color: #ff2a6d; margin-bottom: 10px;"><strong>2. Gojo's Secret Move:</strong></p>
-        <button class="action-btn" style="background: #9b5de5;" onclick="triggerDomainOverlay()">
-          🤞 Domain Expansion: Infinite Love
-        </button>
+      <div class="card-box">
+        <p style="font-size: 0.85rem; color: var(--accent-pink);"><strong>🦖 The Cute Dino Energy:</strong></p>
+        <p style="font-size: 0.82rem; color: #f8edeb; margin-top: 4px;">Small, dramatic, adorable, and always holding the most special place!</p>
       </div>
 
-      <button class="action-btn" style="margin-top: 10px;" onclick="nextScreen(4)">Go To Age Special ➔</button>
+      <button class="action-btn" style="margin-top: 10px;" onclick="nextScreen(4)">Continue ➔</button>
     </div>
 
-    <!-- SCREEN 4: 6 MONTHS & 8 DAYS AGE SPECIAL -->
+    <!-- SCREEN 4: AGE DIFFERENCE SECTION -->
     <div class="step-screen" id="screen4">
-      <h2 class="title-cinzel" style="font-size: 1.3rem;">THE SPECIAL GAP ⏳</h2>
+      <h2 class="title-cinzel" style="font-size: 1.3rem;">THE TIME GAP ⏳</h2>
       
       <div class="age-heart-box">
         <div class="age-badge">6 Months & 8 Days</div>
         <p style="font-size: 0.88rem; color: #f8edeb;">You are exactly <strong>6 months & 8 days younger</strong> than me.</p>
-        <p style="font-size: 0.82rem; color: #e5b869; margin-top: 8px; font-style: italic;">
-          "I might be older by a few months, but you will always be the one who rules my entire heart!" 👑
+        <p style="font-size: 0.82rem; color: #e5b869; margin-top: 10px; font-style: italic;">
+          "This small gap just means I get to care for you a little extra, always." ✨
         </p>
       </div>
 
-      <button class="action-btn" onclick="nextScreen(5)">Read Dino Secret Note 📜</button>
+      <button class="action-btn" onclick="nextScreen(5)">Open Special Envelope ✉️</button>
     </div>
 
-    <!-- SCREEN 5: REASSURANCE NOTE -->
-    <div class="step-screen" id="screen5">
-      <h3 class="title-cinzel" style="font-size: 1.2rem; color: var(--accent-gold); margin-bottom: 12px;">🦕 Why My "Dino"?</h3>
+    <!-- SCREEN 5: ENVELOPE & TYPEWRITER NOTE -->
+    <div class="step-screen" id="screen5" style="position: relative;">
       
-      <div class="dino-note-card">
-        <p>Suno! Agar main tumhein <strong>"Dino"</strong> bolti hoon, toh yeh koi teasing insult nahi hai... ❤️</p><br>
-        <p>Mere liye Dino ka matlab ek aisi cute, powerful aur slightly dramatic personality hai jo dikhne mein fearless ho (just like Mikey) par andar se ekdum precious aur soft baby dino ho! 🦖✨</p><br>
-        <p>Haan, main tumse <strong>6 months aur 8 days bari hu</strong>, par iska matlab bas itna hai ke mujhe tumhein thoda zyada pamper karne aur tumhara khayal rakhne ka haq mila hai. Today is your day—make it legendary! 🖤</p>
+      <!-- Envelope Overlay with Blur Background -->
+      <div class="modal-overlay" id="envelopeModal">
+        <p style="font-size: 0.9rem; color: var(--accent-gold); margin-bottom: 15px;">Tap the envelope to open your letter!</p>
+        <div class="envelope" onclick="openEnvelope()">✉️</div>
       </div>
 
-      <button class="action-btn" style="margin-top: 15px;" onclick="nextScreen(1)">Replay Experience 🔄</button>
+      <!-- Typewriter Letter Output -->
+      <div class="dino-note-card">
+        <div id="typewriterText"></div>
+        <button class="whatsapp-btn" id="waBtn" onclick="sendWishToWhatsApp()">
+          💬 Tell Me Your Birthday Wish Now!
+        </button>
+      </div>
+
     </div>
 
     <!-- Progress Indicator Dots -->
@@ -390,16 +402,11 @@
 
   </div>
 
-  <!-- Domain Expansion Fullscreen Overlay -->
-  <div class="domain-overlay" id="domainOverlay" onclick="closeDomain()">
-    <h1 class="title-cinzel" style="font-size: 2rem; color: #ff2a6d; text-shadow: 0 0 20px #ff2a6d;">無量空処</h1>
-    <h3 style="color: var(--accent-gold); margin-top: 10px;">Domain Expansion: Infinite Devotion</h3>
-    <p style="font-size: 0.85rem; color: #fff; margin-top: 15px;">(Tap anywhere to break domain)</p>
-  </div>
-
   <script>
     let enteredPin = "";
-    const correctPin = "2003"; // Default Mikey Toman year passcode, accepts 1234 as well
+    const correctPin = "0404"; // 4 April
+
+    const noteContent = `Suno! 🦕\n\nAgar main tumhein bar bar "Dino" bolti hoon, toh iska matlab yeh bilkul nahi hai ke yeh koi bura word hai ya main tumhein tease kar rahi hoon...\n\nMere liye "Dino" ka matlab ek bohot hi cute, precious, aur thoda sa dramatic baby dinosaur hai jo jab gussa ya excited hota hai toh aur bhi zyada pyara lagta hai! 🦖✨\n\nHaan, main tumse 6 months aur 8 days bari hoon, lekin yeh chota sa gap sirf is liye hai taake main tumhara thoda zyada khayal rakh sakoon aur tumhein pamper kar sakoon.\n\nWaise... Kya tum mujhe apni woh birthday wish batana pasand karoge jo tumne start mein candle blow karte waqt ki thi? Ek aisi wish jo main abhi poori kar sakoon! 💭✨`;
 
     function pressKey(num) {
       if (enteredPin.length < 4) {
@@ -408,10 +415,10 @@
       }
       if (enteredPin.length === 4) {
         setTimeout(() => {
-          if (enteredPin === "2003" || enteredPin === "1234") {
+          if (enteredPin === correctPin) {
             nextScreen(2);
           } else {
-            alert("Wrong Secret Code! Try 2003 or 1234");
+            alert("Incorrect Date Passcode! (Hint: 0404 for 4th April)");
             enteredPin = "";
             updateDots();
           }
@@ -434,7 +441,6 @@
       document.querySelectorAll('.step-screen').forEach(s => s.classList.remove('active'));
       document.getElementById(`screen${screenNum}`).classList.add('active');
 
-      // Update dots
       for(let i=1; i<=5; i++) {
         document.getElementById(`dotS${i}`).classList.remove('active');
       }
@@ -454,18 +460,38 @@
       });
     }
 
-    function saluteMikey() {
-      alert("👊 Toman Salute! Mikey approves your loyalty & charisma!");
-      confetti({ particleCount: 50, spread: 60 });
+    function openEnvelope() {
+      document.getElementById('envelopeModal').style.display = 'none';
+      startTypewriter();
     }
 
-    function triggerDomainOverlay() {
-      document.getElementById('domainOverlay').style.display = 'flex';
-      confetti({ particleCount: 150, spread: 120, colors: ['#9b5de5', '#ff2a6d'] });
+    function startTypewriter() {
+      const container = document.getElementById('typewriterText');
+      container.innerHTML = "";
+      let index = 0;
+
+      function type() {
+        if (index < noteContent.length) {
+          let char = noteContent.charAt(index);
+          if (char === '\n') {
+            container.innerHTML += '<br>';
+          } else {
+            container.innerHTML += char;
+          }
+          index++;
+          setTimeout(type, 35);
+        } else {
+          document.getElementById('waBtn').style.display = 'block';
+          confetti({ particleCount: 80, spread: 70 });
+        }
+      }
+      type();
     }
 
-    function closeDomain() {
-      document.getElementById('domainOverlay').style.display = 'none';
+    function sendWishToWhatsApp() {
+      const myNum = "966557349396";
+      const message = encodeURIComponent("Hey! Here is the birthday wish I made at the start that I want you to fulfill right now: ");
+      window.open(`https://wa.me/${myNum}?text=${message}`, '_blank');
     }
   </script>
 </body>
