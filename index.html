@@ -3,16 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>For Mine Cute Dino🦕✨</title>
+  <title>For My Cute Dino 🦖✨</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Poppins:wght@300;400;600;700&family=Cinzel:wght@600;800&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Cinzel:wght@600;800&display=swap');
 
     :root {
-      --bg-peach: #2d0c13;
-      --cherry-red: #9b2226;
-      --cherry-card: #3f0d16;
+      --peach-bg: #ffb5a7;
+      --cherry-red: #d90429;
+      --cherry-card: rgba(155, 34, 38, 0.85);
       --accent-gold: #ffb703;
       --accent-pink: #ff5964;
       --text-light: #fff0f3;
@@ -21,19 +21,17 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
     
     html, body {
-      width: 100%;
-      height: 100%;
-      background: var(--bg-peach);
+      width: 100vw;
+      height: 100vh;
+      background: radial-gradient(circle at center, #ff99c8 0%, #d90429 100%);
       color: var(--text-light);
       overflow: hidden;
       position: fixed;
     }
 
-    /* FULL SCREEN MOBILE-FRIENDLY VIEWPORT */
     .app-viewport {
       width: 100vw;
       height: 100vh;
-      background: linear-gradient(135deg, #2d0c13 0%, #1a0508 100%);
       position: relative;
       overflow: hidden;
       display: flex;
@@ -49,58 +47,78 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 30px 20px;
+      padding: 25px 20px;
       text-align: center;
       transition: opacity 0.5s ease;
     }
     .section.active { display: flex; opacity: 1; }
 
-    .title-gold { font-family: 'Cinzel', serif; color: var(--accent-gold); font-weight: 800; letter-spacing: 1.5px; font-size: 1.6rem; margin-bottom: 10px; }
+    .title-gold { font-family: 'Cinzel', serif; color: var(--accent-gold); font-weight: 800; font-size: 1.8rem; margin-bottom: 12px; text-shadow: 0 2px 10px rgba(0,0,0,0.3); }
 
-    /* Terminal Lock Screen */
-    .terminal-box { background: rgba(0,0,0,0.5); border: 2px solid var(--accent-gold); border-radius: 20px; padding: 20px; width: 90%; max-width: 350px; font-family: 'Fira Code', monospace; color: var(--accent-gold); text-align: left; margin: 15px 0; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-    .keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; width: 85%; max-width: 300px; margin-top: 15px; }
-    .key-btn { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,183,3,0.4); color: var(--text-light); padding: 16px; border-radius: 50%; font-size: 1.3rem; cursor: pointer; transition: 0.2s; }
-    .key-btn:active { background: var(--accent-gold); color: #000; transform: scale(0.92); }
+    /* Terminal Lock */
+    .terminal-box { background: rgba(0,0,0,0.4); border: 2px solid var(--accent-gold); border-radius: 20px; padding: 20px; width: 90%; max-width: 340px; color: var(--accent-gold); text-align: left; margin: 15px 0; box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
+    .keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; width: 85%; max-width: 280px; margin-top: 15px; }
+    .key-btn { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,183,3,0.5); color: var(--text-light); padding: 15px; border-radius: 50%; font-size: 1.2rem; cursor: pointer; transition: 0.2s; }
+    .key-btn:active { background: var(--accent-gold); color: #000; transform: scale(0.9); }
 
-    /* Matrix Rain & Cloud Canvas */
+    /* Matrix Rain & Cloud */
     #matrixCanvas { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
-    .cloud-container { position: relative; z-index: 2; margin: 20px 0; cursor: pointer; }
-    .cloud-shape { width: 180px; height: 70px; background: #ffffff; border-radius: 50px; box-shadow: 0 0 30px rgba(255,255,255,0.6); position: relative; display: flex; align-items: center; justify-content: center; animation: floatCloud 3s ease-in-out infinite; }
-    .cloud-shape::before { content: ''; position: absolute; top: -30px; left: 30px; width: 70px; height: 70px; background: #ffffff; border-radius: 50%; }
-    .cloud-shape::after { content: ''; position: absolute; top: -20px; right: 35px; width: 60px; height: 60px; background: #ffffff; border-radius: 50%; }
+    .cloud-container { position: relative; z-index: 2; margin: 25px 0; cursor: pointer; }
+    .cloud-shape { width: 170px; height: 65px; background: #fff; border-radius: 50px; box-shadow: 0 0 30px rgba(255,255,255,0.8); position: relative; display: flex; align-items: center; justify-content: center; font-size: 2rem; animation: floatCloud 3s ease-in-out infinite; }
+    .cloud-shape::before { content: ''; position: absolute; top: -25px; left: 25px; width: 60px; height: 60px; background: #fff; border-radius: 50%; }
+    .cloud-shape::after { content: ''; position: absolute; top: -20px; right: 30px; width: 50px; height: 50px; background: #fff; border-radius: 50%; }
     @keyframes floatCloud { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
 
     /* Big Cake Section */
-    .big-cake-box { position: relative; font-size: 7rem; margin: 15px 0; filter: drop-shadow(0 15px 25px rgba(0,0,0,0.6)); cursor: pointer; animation: pulseCake 2s infinite; }
-    @keyframes pulseCake { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
-    .candles-row { display: flex; gap: 10px; justify-content: center; margin-top: -15px; margin-bottom: 10px; }
-    .candle-flame { font-size: 2rem; animation: flicker 0.2s infinite alternate; }
-    @keyframes flicker { 0% { opacity: 0.8; transform: scale(1); } 100% { opacity: 1; transform: scale(1.15) rotate(3deg); } }
+    .cake-wrapper { position: relative; z-index: 2; margin: 20px 0; display: flex; flex-direction: column; align-items: center; }
+    .candles-row { display: flex; gap: 12px; margin-bottom: -10px; z-index: 3; }
+    .candle { font-size: 1.8rem; animation: flicker 0.2s infinite alternate; }
+    @keyframes flicker { 0% { opacity: 0.8; transform: scale(1); } 100% { opacity: 1; transform: scale(1.15) rotate(2deg); } }
+    .big-cake { font-size: 6.5rem; filter: drop-shadow(0 15px 25px rgba(0,0,0,0.5)); cursor: pointer; }
 
-    /* Compliment Rain */
-    .heart-element { font-size: 5rem; cursor: pointer; filter: drop-shadow(0 0 25px var(--accent-pink)); transition: transform 0.2s; margin: 20px 0; }
-    .heart-element:active { transform: scale(1.25); }
-    .compliment-bubble { position: absolute; background: rgba(155, 34, 38, 0.9); border: 1px solid var(--accent-gold); color: #fff; padding: 8px 16px; border-radius: 20px; font-size: 0.85rem; pointer-events: none; z-index: 10; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+    /* Heart & Scattered Compliments */
+    .heart-container { position: relative; z-index: 2; margin: 20px 0; }
+    .heart-element { font-size: 5.5rem; cursor: pointer; filter: drop-shadow(0 0 25px var(--cherry-red)); transition: transform 0.2s; animation: pulseHeart 1.2s infinite; }
+    @keyframes pulseHeart { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+    .heart-element:active { transform: scale(0.9); }
+    
+    .compliment-bubble {
+      position: absolute;
+      background: rgba(217, 4, 41, 0.95);
+      border: 1.5px solid var(--accent-gold);
+      color: #fff;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      pointer-events: none;
+      z-index: 10;
+      white-space: nowrap;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+    }
 
     /* 18 Photo Grid */
-    .gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 92%; max-width: 400px; max-height: 55vh; overflow-y: auto; padding: 10px; background: rgba(0,0,0,0.4); border-radius: 20px; border: 1px solid rgba(255,183,3,0.3); z-index: 2; }
+    .gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 92%; max-width: 400px; max-height: 55vh; overflow-y: auto; padding: 10px; background: rgba(0,0,0,0.3); border-radius: 20px; border: 1px solid rgba(255,183,3,0.4); z-index: 2; }
     .gallery-item { position: relative; width: 100%; padding-top: 100%; border-radius: 12px; overflow: hidden; border: 1.5px solid rgba(255,183,3,0.4); }
     .gallery-item img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 
-    /* Anime Teaser Box */
-    .anime-dialogue { background: rgba(63, 13, 22, 0.85); border: 2px solid var(--accent-gold); border-radius: 25px; padding: 22px; width: 90%; max-width: 360px; text-align: left; box-shadow: 0 10px 30px rgba(0,0,0,0.5); position: relative; margin: 15px 0; }
-    .anime-tag { background: var(--accent-pink); color: #fff; font-size: 0.7rem; padding: 3px 10px; border-radius: 10px; font-weight: 700; text-transform: uppercase; display: inline-block; margin-bottom: 8px; }
+    /* Anime Teaser Box with Characters */
+    .anime-box { background: rgba(155, 34, 38, 0.85); border: 2px solid var(--accent-gold); border-radius: 25px; padding: 20px; width: 90%; max-width: 360px; text-align: left; box-shadow: 0 10px 30px rgba(0,0,0,0.5); z-index: 2; position: relative; }
+    .anime-chars { display: flex; justify-content: space-around; margin-bottom: 12px; }
+    .anime-chars img { width: 75px; height: 75px; border-radius: 50%; border: 2px solid var(--accent-gold); object-fit: cover; box-shadow: 0 0 15px rgba(255,183,3,0.5); }
 
     /* Glassmorphism Envelope & Letter */
-    .modal-blur { position: absolute; inset: 0; background: rgba(45, 12, 19, 0.85); backdrop-filter: blur(15px); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 10; }
-    .envelope-box { width: 150px; height: 100px; background: var(--accent-gold); border-radius: 15px; display: flex; justify-content: center; align-items: center; font-size: 3rem; cursor: pointer; box-shadow: 0 10px 30px rgba(255,183,3,0.5); animation: bounceEnv 1.5s infinite; border: 2px solid #fff; }
+    .modal-blur { position: absolute; inset: 0; background: rgba(217, 4, 41, 0.75); backdrop-filter: blur(15px); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 10; }
+    .envelope-box { width: 140px; height: 95px; background: var(--accent-gold); border-radius: 15px; display: flex; justify-content: center; align-items: center; font-size: 3rem; cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.5); animation: bounceEnv 1.5s infinite; border: 2px solid #fff; }
     @keyframes bounceEnv { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 
-    .glass-letter-card { background: rgba(63, 13, 22, 0.75); backdrop-filter: blur(20px); border: 1.5px solid rgba(255,183,3,0.5); border-radius: 25px; padding: 22px; text-align: left; font-size: 0.9rem; line-height: 1.7; color: #fff0f3; width: 90%; max-width: 380px; max-height: 75vh; overflow-y: auto; box-shadow: 0 20px 50px rgba(0,0,0,0.8); z-index: 5; }
+    .glass-letter-card { background: rgba(155, 34, 38, 0.65); backdrop-filter: blur(25px); border: 1.5px solid rgba(255,183,3,0.6); border-radius: 25px; padding: 22px; text-align: left; font-size: 0.9rem; line-height: 1.7; color: #fff0f3; width: 90%; max-width: 380px; max-height: 75vh; overflow-y: auto; box-shadow: 0 20px 50px rgba(0,0,0,0.8); z-index: 5; }
+
+    /* Falling Flowers Canvas */
+    #flowerCanvas { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
 
     /* Buttons */
-    .btn-action { background: linear-gradient(135deg, var(--cherry-red), var(--accent-pink)); color: #fff; border: 1.5px solid var(--accent-gold); padding: 12px 30px; border-radius: 50px; font-weight: 600; font-size: 0.95rem; cursor: pointer; margin-top: 15px; box-shadow: 0 8px 20px rgba(155,34,38,0.5); z-index: 2; }
+    .btn-action { background: linear-gradient(135deg, #d90429, #ff5964); color: #fff; border: 1.5px solid var(--accent-gold); padding: 12px 35px; border-radius: 50px; font-weight: 600; font-size: 0.95rem; cursor: pointer; margin-top: 15px; box-shadow: 0 8px 20px rgba(0,0,0,0.4); z-index: 2; transition: 0.2s; }
+    .btn-action:active { transform: scale(0.95); }
     .btn-wa { background: #25d366; color: white; border: none; padding: 12px 20px; border-radius: 50px; font-weight: 700; width: 100%; display: none; margin-top: 15px; cursor: pointer; box-shadow: 0 8px 20px rgba(37,211,102,0.4); }
   </style>
 </head>
@@ -113,7 +131,7 @@
     <h2 class="title-gold">CYBER ACCESS</h2>
     <div class="terminal-box">
       <p>> System Locked.</p>
-      <p>> Enter Passcode (First Met Date - 0404):</p>
+      <p>> Enter Passcode (0404):</p>
       <p id="passDisplay" style="color:var(--accent-gold); font-size:1.5rem; margin-top:10px; letter-spacing:3px;">_ _ _ _</p>
     </div>
     <div class="keypad">
@@ -126,68 +144,73 @@
     </div>
   </div>
 
-  <!-- SCREEN 1: CLOUD & AUTO COLOR-CHANGING MATRIX RAIN -->
+  <!-- SCREEN 1: CLOUD & RAIN -->
   <div class="section" id="sec1">
     <canvas id="matrixCanvas"></canvas>
     <h3 class="title-gold" style="z-index:2;">MATRIX CLOUD</h3>
-    <p style="font-size:0.8rem; z-index:2; color:var(--accent-gold); margin-bottom:5px;">Rain color shifts automatically & on cloud tap!</p>
-    
     <div class="cloud-container" onclick="triggerCloudRain()">
       <div class="cloud-shape">☁️</div>
     </div>
-
-    <button class="btn-action" onclick="nextSec(2)">Go to Cake Ceremony ➔</button>
+    <button class="btn-action" onclick="nextSec(2)">Next ➔</button>
   </div>
 
-  <!-- SCREEN 2: BIG CAKE & BOTTOM CANDLES -->
+  <!-- SCREEN 2: BIG CAKE & CANDLES -->
   <div class="section" id="sec2">
     <h2 class="title-gold">MAKE A WISH 🎂</h2>
-    <p style="font-size:0.85rem; color:var(--accent-gold);">Blow out candles or tap cake!</p>
     
-    <div class="candles-row">
-      <span class="candle-flame">🕯️</span>
-      <span class="candle-flame">🕯️</span>
-      <span class="candle-flame">🕯️</span>
+    <div class="cake-wrapper">
+      <div class="candles-row">
+        <span class="candle">🕯️</span>
+        <span class="candle">🕯️</span>
+        <span class="candle">🕯️</span>
+      </div>
+      <div class="big-cake" onclick="blowCandles()">🎂</div>
     </div>
-    
-    <div class="big-cake-box" onclick="blowCandles()">🎂</div>
 
-    <button class="btn-action" onclick="nextSec(3)">Heart Compliments ➔</button>
+    <button class="btn-action" onclick="nextSec(3)">Next ➔</button>
   </div>
 
-  <!-- SCREEN 3: HEART & COMPLIMENT RAIN -->
+  <!-- SCREEN 3: HEART & SCATTERED COMPLIMENTS -->
   <div class="section" id="sec3">
     <h2 class="title-gold">COMPLIMENT RAIN 💖</h2>
-    <p style="font-size:0.8rem; color:var(--accent-gold);">Tap the glowing heart repeatedly!</p>
-    <div class="heart-element" onclick="spawnCompliment(event)">💖</div>
-    <button class="btn-action" onclick="nextSec(4)">View 18 Memories 📸 ➔</button>
+    <div class="heart-container" onclick="spawnCompliment(event)">
+      <div class="heart-element">💖</div>
+    </div>
+    <button class="btn-action" onclick="nextSec(4)">Next ➔</button>
   </div>
 
   <!-- SCREEN 4: 18 PHOTO GALLERY -->
   <div class="section" id="sec4">
-    <h2 class="title-gold">18 MEMORIES 📸</h2>
+    <h2 class="title-gold">OUR MEMORIES 📸</h2>
     <div class="gallery-grid" id="photoGrid"></div>
-    <button class="btn-action" onclick="nextSec(5)">Age Difference & Note ➔</button>
+    <button class="btn-action" onclick="nextSec(5)">Next ➔</button>
   </div>
 
-  <!-- SCREEN 5: ANIME STYLE AGE TEASER (ANYA / JJK STYLE) -->
+  <!-- SCREEN 5: ANIME CHARACTERS AGE TEASER -->
   <div class="section" id="sec5">
     <h2 class="title-gold">THE TIME GAP ⏳</h2>
     
-    <div class="anime-dialogue">
-      <span class="anime-tag">Anya & Gojo Style ⚡</span>
-      <p style="font-size: 0.88rem; line-height: 1.6; margin-top: 5px;">
-        "Hehehe! 🥷✨ Did you know? You are officially <strong>6 months & 8 days younger</strong> than me! That means supreme senior privileges belong to me forever! But don't worry, your favorite partner-in-crime will still protect you!" 😎💖
+    <div class="anime-box">
+      <div class="anime-chars">
+        <!-- Anya Forger Sticker/GIF -->
+        <img src="https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3ZrbnZkZmV6bnN3bWZicDZwODV0bmd1NHAzdHN1NnlnenJtOWlnNyZlcD12MV9pbngr</i></i>gif&ct=g/3o7TKSjRrfIH_iBlE4/giphy.gif" alt="Anya">
+        <!-- Satoru Gojo Sticker/GIF -->
+        <img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqbjdrNGpqZTNxdTJqNXVpNHoxYm1lOWpzaW0yb2VlMmQ1Z3B5eiZlcD12MV9pbngr</i></i>gif&ct=g/10WxZ8tq6q150K/giphy.gif" alt="Gojo">
+      </div>
+      <p style="font-size: 0.85rem; line-height: 1.6; text-align: center;">
+        "Hehehe! Waku Waku! 🥜✨ Did you know? You are officially <strong>6 months & 8 days younger</strong> than me! That means supreme senior privileges belong to me forever! 😎💖"
       </p>
     </div>
 
-    <button class="btn-action" onclick="nextSec(6)">Open Special Envelope ✉️</button>
+    <button class="btn-action" onclick="nextSec(6)">Next ➔</button>
   </div>
 
-  <!-- SCREEN 6: GLASSMORPHISM ENVELOPE & TYPEWRITER LETTER -->
+  <!-- SCREEN 6: GLASSMORPHISM ENVELOPE & FALLING FLOWERS -->
   <div class="section" id="sec6">
+    <canvas id="flowerCanvas"></canvas>
+    
     <div class="modal-blur" id="envelopeModal">
-      <p style="color:var(--accent-gold); margin-bottom:15px; font-size: 0.95rem;">Tap the envelope to open your letter!</p>
+      <p style="color:var(--accent-gold); margin-bottom:15px; font-size: 1rem; font-weight: 600;">Tap the envelope to open!</p>
       <div class="envelope-box" onclick="openLetter()">✉️</div>
     </div>
 
@@ -220,9 +243,10 @@
     document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
     document.getElementById(`sec${secNum}`).classList.add('active');
     if(secNum === 1) initMatrixRain();
+    if(secNum === 6) initFlowerRain();
   }
 
-  /* Auto & Interactive Matrix Rain */
+  /* Matrix Rain */
   let matrixInterval;
   function initMatrixRain() {
     const canvas = document.getElementById('matrixCanvas');
@@ -236,26 +260,10 @@
     const drops = [];
     for(let i=0; i<columns; i++) drops[i] = 1;
 
-    let rainColor = '#ff5964';
-    const colorsList = ['#ff5964', '#ffb703', '#00ffcc', '#9b2226', '#ffffff'];
-    let colorIdx = 0;
-
-    // Auto color change every 4 seconds
-    clearInterval(matrixInterval);
-    matrixInterval = setInterval(() => {
-      colorIdx = (colorIdx + 1) % colorsList.length;
-      rainColor = colorsList[colorIdx];
-    }, 4000);
-
-    window.rainClickAction = () => {
-      colorIdx = (colorIdx + 1) % colorsList.length;
-      rainColor = colorsList[colorIdx];
-    };
-
     function draw() {
-      ctx.fillStyle = 'rgba(45, 12, 19, 0.15)';
+      ctx.fillStyle = 'rgba(217, 4, 41, 0.12)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = rainColor;
+      ctx.fillStyle = '#ffb703';
       ctx.font = fontSize + 'px Fira Code';
 
       for(let i=0; i<drops.length; i++) {
@@ -265,31 +273,41 @@
         drops[i]++;
       }
     }
-    window.matrixAnim = setInterval(draw, 33);
+    clearInterval(matrixInterval);
+    matrixInterval = setInterval(draw, 33);
   }
 
   function triggerCloudRain() {
-    if(window.rainClickAction) window.rainClickAction();
-    confetti({ particleCount: 30, spread: 50, origin: { y: 0.4 } });
+    confetti({ particleCount: 35, spread: 60, origin: { y: 0.4 } });
   }
 
-  /* Blow Candles */
   function blowCandles() {
-    document.querySelectorAll('.candle-flame').forEach(f => f.innerText = '💨');
-    confetti({ particleCount: 100, spread: 80, origin: { y: 0.6 } });
+    document.querySelectorAll('.candle').forEach(c => c.innerText = '💨');
+    confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
   }
 
-  /* Compliment Spawn */
+  /* Scattered Compliments around Heart */
   function spawnCompliment(e) {
     const bubble = document.createElement('div');
     bubble.className = 'compliment-bubble';
     bubble.innerText = compliments[Math.floor(Math.random()*compliments.length)];
-    bubble.style.left = `${Math.min(e.clientX - 40, window.innerWidth - 150)}px`;
-    bubble.style.top = `${e.clientY - 30}px`;
+    
+    // Random offset scattering around the heart center (left, right, top, down)
+    const offsetX = (Math.random() - 0.5) * 180;
+    const offsetY = (Math.random() - 0.5) * 140;
+
+    const rect = e.currentTarget.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+
+    bubble.style.left = `${centerX + offsetX}px`;
+    bubble.style.top = `${centerY + offsetY}px`;
     document.body.appendChild(bubble);
 
-    gsap.to(bubble, { y: -80, opacity: 0, duration: 2, onComplete: () => bubble.remove() });
-    confetti({ particleCount: 15, spread: 40 });
+    gsap.fromTo(bubble, { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.3 });
+    gsap.to(bubble, { y: offsetY > 0 ? 40 : -40, opacity: 0, duration: 2.5, delay: 0.8, onComplete: () => bubble.remove() });
+
+    confetti({ particleCount: 12, spread: 35, origin: { x: centerX/window.innerWidth, y: centerY/window.innerHeight } });
   }
 
   /* Populate 18 Photos */
@@ -302,6 +320,54 @@
       grid.appendChild(item);
     }
   });
+
+  /* Falling Flowers for Letter Screen */
+  function initFlowerRain() {
+    const canvas = document.getElementById('flowerCanvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const flowers = [];
+    for(let i=0; i<30; i++) {
+      flowers.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 6 + 4,
+        d: Math.random() * 20,
+        color: ['#ffb703', '#ff5964', '#ffffff', '#ff99c8'][Math.floor(Math.random()*4)]
+      });
+    }
+
+    function drawFlowers() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = "rgba(255, 183, 3, 0.7)";
+      ctx.beginPath();
+      for(let i=0; i<flowers.length; i++) {
+        let f = flowers[i];
+        ctx.fillStyle = f.color;
+        ctx.beginPath();
+        ctx.arc(f.x, f.y, f.r, 0, Math.PI*2, true);
+        ctx.fill();
+      }
+      updateFlowers();
+    }
+
+    let angle = 0;
+    function updateFlowers() {
+      angle += 0.01;
+      for(let i=0; i<flowers.length; i++) {
+        let f = flowers[i];
+        f.y += Math.cos(angle+f.d) + 1 + f.r/2;
+        f.x += Math.sin(angle) * 1.5;
+        if(f.x > canvas.width + 5 || f.x < -5 || f.y > canvas.height) {
+          f.x = Math.random() * canvas.width;
+          f.y = -10;
+        }
+      }
+    }
+    setInterval(drawFlowers, 25);
+  }
 
   /* Envelope & Typewriter */
   function openLetter() {
