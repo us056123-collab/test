@@ -13,7 +13,7 @@
       --peach-bg: #ff99c8;
       --cherry-red: #d90429;
       --cherry-card: rgba(155, 34, 38, 0.85);
-      --accent-main: #d90429; /* Replaced gold with Cherry Red */
+      --accent-main: #d90429;
       --accent-pink: #ff5964;
       --text-light: #fff0f3;
     }
@@ -29,6 +29,14 @@
       position: fixed;
     }
 
+    /* Ambient Background Animated Stars */
+    .bg-anim-canvas {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
     .app-viewport {
       width: 100vw;
       height: 100vh;
@@ -37,6 +45,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      z-index: 1;
     }
 
     .section {
@@ -50,16 +59,42 @@
       padding: 25px 20px;
       text-align: center;
       transition: opacity 0.5s ease;
+      z-index: 2;
     }
     .section.active { display: flex; opacity: 1; }
 
-    .title-main { font-family: 'Cinzel', serif; color: #fff; font-weight: 800; font-size: 1.8rem; margin-bottom: 12px; text-shadow: 0 2px 10px rgba(217,4,41,0.5); }
+    .title-main { 
+      font-family: 'Cinzel', serif; 
+      color: #fff; 
+      font-weight: 800; 
+      font-size: 1.6rem; 
+      margin-bottom: 12px; 
+      text-shadow: 0 2px 10px rgba(217,4,41,0.6); 
+    }
 
     /* Terminal Lock */
     .terminal-box { background: rgba(155,34,38,0.7); border: 2px solid var(--accent-main); border-radius: 20px; padding: 20px; width: 90%; max-width: 340px; color: #ffe6e8; text-align: left; margin: 15px 0; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
     .keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; width: 85%; max-width: 280px; margin-top: 15px; }
     .key-btn { background: rgba(255,255,255,0.2); border: 1.5px solid var(--accent-main); color: var(--text-light); padding: 15px; border-radius: 50%; font-size: 1.2rem; cursor: pointer; transition: 0.2s; }
     .key-btn:active { background: var(--accent-main); color: #fff; transform: scale(0.9); }
+
+    /* Spider Clock Visual Element */
+    .spider-clock-container {
+      position: relative;
+      width: 160px;
+      height: 160px;
+      border: 3px solid var(--accent-main);
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.4);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 20px 0;
+      box-shadow: 0 0 25px rgba(217, 4, 41, 0.5);
+    }
+    .spider-icon { font-size: 3.5rem; animation: pulseSpider 1.5s infinite alternate; }
+    @keyframes pulseSpider { 0% { transform: scale(0.9); } 100% { transform: scale(1.1); } }
+    .clock-time { font-family: 'Cinzel', serif; font-size: 1.3rem; color: #fff; margin-top: 10px; font-weight: 700; }
 
     /* Matrix Rain & Cloud */
     #matrixCanvas { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
@@ -76,8 +111,13 @@
     @keyframes flicker { 0% { opacity: 0.8; transform: scale(1); } 100% { opacity: 1; transform: scale(1.15) rotate(2deg); } }
     .big-cake { font-size: 6.5rem; filter: drop-shadow(0 15px 25px rgba(0,0,0,0.4)); cursor: pointer; }
 
+    /* Floating Balloons Overlay */
+    .balloon-container { position: fixed; inset: 0; pointer-events: none; z-index: 20; overflow: hidden; }
+    .balloon { position: absolute; bottom: -100px; font-size: 3rem; animation: floatUp 4s linear forwards; }
+    @keyframes floatUp { 0% { transform: translateY(0) rotate(0deg); opacity: 1; } 100% { transform: translateY(-110vh) rotate(20deg); opacity: 0; } }
+
     /* Heart & Scattered Compliments */
-    .heart-container { position: relative; z-index: 2; margin: 20px 0; }
+    .heart-container { position: relative; z-index: 2; margin: 15px 0; }
     .heart-element { font-size: 5.5rem; cursor: pointer; filter: drop-shadow(0 0 25px var(--accent-main)); transition: transform 0.2s; animation: pulseHeart 1.2s infinite; }
     @keyframes pulseHeart { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
     .heart-element:active { transform: scale(0.9); }
@@ -101,19 +141,18 @@
     .gallery-item { position: relative; width: 100%; padding-top: 100%; border-radius: 12px; overflow: hidden; border: 1.5px solid var(--accent-main); }
     .gallery-item img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 
-    /* Anime Teaser Box with Characters */
+    /* Anime Teaser Box */
     .anime-box { background: rgba(155, 34, 38, 0.85); border: 2px solid var(--accent-main); border-radius: 25px; padding: 20px; width: 90%; max-width: 360px; text-align: left; box-shadow: 0 10px 30px rgba(0,0,0,0.4); z-index: 2; position: relative; }
     .anime-chars { display: flex; justify-content: space-around; margin-bottom: 12px; }
     .anime-chars img { width: 75px; height: 75px; border-radius: 50%; border: 2px solid var(--accent-main); object-fit: cover; box-shadow: 0 0 15px rgba(217,4,41,0.6); }
 
-    /* Glassmorphism Envelope & Letter */
+    /* Glassmorphism Letter */
     .modal-blur { position: absolute; inset: 0; background: rgba(217, 4, 41, 0.75); backdrop-filter: blur(15px); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 10; }
     .envelope-box { width: 140px; height: 95px; background: var(--accent-main); border-radius: 15px; display: flex; justify-content: center; align-items: center; font-size: 3rem; cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.4); animation: bounceEnv 1.5s infinite; border: 2px solid #fff; }
     @keyframes bounceEnv { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 
     .glass-letter-card { background: rgba(155, 34, 38, 0.7); backdrop-filter: blur(25px); border: 1.5px solid var(--accent-main); border-radius: 25px; padding: 22px; text-align: left; font-size: 0.9rem; line-height: 1.7; color: #fff0f3; width: 90%; max-width: 380px; max-height: 75vh; overflow-y: auto; box-shadow: 0 20px 50px rgba(0,0,0,0.8); z-index: 5; }
 
-    /* Falling Flowers Canvas */
     #flowerCanvas { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
 
     /* Buttons */
@@ -123,6 +162,9 @@
   </style>
 </head>
 <body>
+
+<canvas class="bg-anim-canvas" id="bgCanvas"></canvas>
+<div class="balloon-container" id="balloonBox"></div>
 
 <div class="app-viewport">
 
@@ -144,17 +186,17 @@
     </div>
   </div>
 
-  <!-- SCREEN 1: CLOUD & RAIN -->
+  <!-- SCREEN 1: SPIDER CLOCK (12:00 AM MIDNIGHT FIREWORKS) -->
   <div class="section" id="sec1">
-    <canvas id="matrixCanvas"></canvas>
-    <h3 class="title-main" style="z-index:2;">MATRIX CLOUD</h3>
-    <div class="cloud-container" onclick="triggerCloudRain()">
-      <div class="cloud-shape">☁️</div>
+    <h2 class="title-main">MIDNIGHT COUNTDOWN 🕷️</h2>
+    <div class="spider-clock-container">
+      <div class="spider-icon">🕷️</div>
     </div>
-    <button class="btn-action" onclick="nextSec(2)">Next ➔</button>
+    <div class="clock-time">12:00 AM ✨</div>
+    <button class="btn-action" onclick="strikeMidnight()">Celebrate Midnight 🎆</button>
   </div>
 
-  <!-- SCREEN 2: BIG CAKE & CANDLES -->
+  <!-- SCREEN 2: BIG CAKE & BALLOON POP -->
   <div class="section" id="sec2">
     <h2 class="title-main">MAKE A WISH 🎂</h2>
     
@@ -170,25 +212,38 @@
     <button class="btn-action" onclick="nextSec(3)">Next ➔</button>
   </div>
 
-  <!-- SCREEN 3: HEART & SCATTERED COMPLIMENTS -->
+  <!-- SCREEN 3: CLOUD & MATRIX RAIN -->
   <div class="section" id="sec3">
-    <h2 class="title-main">COMPLIMENT RAIN 💖</h2>
-    <div class="heart-container" onclick="spawnCompliment(event)">
-      <div class="heart-element">💖</div>
+    <canvas id="matrixCanvas"></canvas>
+    <h3 class="title-main" style="z-index:2;">MATRIX CLOUD</h3>
+    <div class="cloud-container" onclick="triggerCloudRain()">
+      <div class="cloud-shape">☁️</div>
     </div>
     <button class="btn-action" onclick="nextSec(4)">Next ➔</button>
   </div>
 
-  <!-- SCREEN 4: 18 PHOTO GALLERY -->
+  <!-- SCREEN 4: HEART & SCATTERED COMPLIMENTS WITH TEXT PROMPT -->
   <div class="section" id="sec4">
-    <h2 class="title-main">OUR MEMORIES 📸</h2>
-    <div class="gallery-grid" id="photoGrid"></div>
+    <h2 class="title-main">COMPLIMENT RAIN 💖</h2>
+    <p style="font-size:0.85rem; color:#ffe6e8; margin-bottom:10px; padding:0 15px;">
+      Do you wanna know what I think about you? If yes, tap again and again on the heart! 💖
+    </p>
+    <div class="heart-container" onclick="spawnCompliment(event)">
+      <div class="heart-element">💖</div>
+    </div>
     <button class="btn-action" onclick="nextSec(5)">Next ➔</button>
   </div>
 
-  <!-- SCREEN 5: ANIME CHARACTERS AGE TEASER -->
+  <!-- SCREEN 5: 18 PHOTO GALLERY -->
   <div class="section" id="sec5">
-    <h2 class="title-main">THE TIME GAP ⏳</h2>
+    <h2 class="title-main">OUR MEMORIES 📸</h2>
+    <div class="gallery-grid" id="photoGrid"></div>
+    <button class="btn-action" onclick="nextSec(6)">Next ➔</button>
+  </div>
+
+  <!-- SCREEN 6: ANIME TEASER (A SOFT REMINDER I'M ELDER THAN YOU) -->
+  <div class="section" id="sec6">
+    <h2 class="title-main">A SOFT REMINDER I'M ELDER THAN YOU 😉</h2>
     
     <div class="anime-box">
       <div class="anime-chars">
@@ -200,11 +255,11 @@
       </p>
     </div>
 
-    <button class="btn-action" onclick="nextSec(6)">Next ➔</button>
+    <button class="btn-action" onclick="nextSec(7)">Next ➔</button>
   </div>
 
-  <!-- SCREEN 6: GLASSMORPHISM ENVELOPE & FALLING FLOWERS -->
-  <div class="section" id="sec6">
+  <!-- SCREEN 7: GLASSMORPHISM ENVELOPE & FALLING FLOWERS -->
+  <div class="section" id="sec7">
     <canvas id="flowerCanvas"></canvas>
     
     <div class="modal-blur" id="envelopeModal">
@@ -226,6 +281,43 @@
   const compliments = ["Pro Coder! 💻", "Super Smart! 🧠", "Most Special Cousin! 🌟", "Dino Power! 🦖", "Unmatched Charm! ✨", "Pure Heart! 💖"];
   const noteText = "Suno! 🦕\n\nAgar main tumhein bar bar 'Dino' bolti hoon, toh iska matlab yeh bilkul nahi hai ke yeh koi bura word hai...\n\nMere liye 'Dino' ka matlab ek bohot hi cute, precious, aur thoda sa dramatic baby dinosaur hai! 🦖✨\n\nHaan, main tumse 6 months aur 8 days bari hoon, lekin yeh gap sirf is liye hai taake main tumhara zyada khayal rakh sakoon.\n\nWaise... Kya tum mujhe apni woh birthday wish batana pasand karoge jo tumne start mein candle blow karte waqt ki thi? Jo main abhi poori kar sakoon! 💭✨";
 
+  // Ambient Star Field Animation for Background
+  window.addEventListener('DOMContentLoaded', () => {
+    initBgStars();
+  });
+
+  function initBgStars() {
+    const canvas = document.getElementById('bgCanvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const stars = [];
+    for(let i=0; i<45; i++) {
+      stars.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 2 + 1,
+        alpha: Math.random()
+      });
+    }
+
+    function renderStars() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for(let s of stars) {
+        ctx.fillStyle = `rgba(255, 255, 255, ${s.alpha})`;
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.fill();
+        s.alpha += (Math.random() - 0.5) * 0.05;
+        if(s.alpha < 0.2) s.alpha = 0.2;
+        if(s.alpha > 0.9) s.alpha = 0.9;
+      }
+      requestAnimationFrame(renderStars);
+    }
+    renderStars();
+  }
+
   function pressKey(num) {
     if(pin.length < 4) pin += num;
     document.getElementById('passDisplay').innerText = pin.padEnd(4, '_').split('').join(' ');
@@ -240,8 +332,36 @@
   function nextSec(secNum) {
     document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
     document.getElementById(`sec${secNum}`).classList.add('active');
-    if(secNum === 1) initMatrixRain();
-    if(secNum === 6) initFlowerRain();
+    if(secNum === 3) initMatrixRain();
+    if(secNum === 7) initFlowerRain();
+  }
+
+  /* Spider Clock Strike Midnight */
+  function strikeMidnight() {
+    confetti({ particleCount: 150, spread: 100, origin: { y: 0.5 } });
+    setTimeout(() => {
+      nextSec(2);
+    }, 1200);
+  }
+
+  /* Blow Candles & Pop Floating Balloons */
+  function blowCandles() {
+    document.querySelectorAll('.candle').forEach(c => c.innerText = '💨');
+    confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
+    
+    // Spawn Balloons
+    const box = document.getElementById('balloonBox');
+    const balloonEmojis = ['🎈', '🎈', '🎉', '✨', '🎈'];
+    for(let i=0; i<15; i++) {
+      setTimeout(() => {
+        const b = document.createElement('div');
+        b.className = 'balloon';
+        b.innerText = balloonEmojis[Math.floor(Math.random() * balloonEmojis.length)];
+        b.style.left = `${Math.random() * 85 + 5}%`;
+        box.appendChild(b);
+        setTimeout(() => b.remove(), 4000);
+      }, i * 200);
+    }
   }
 
   /* Matrix Rain */
@@ -277,11 +397,6 @@
 
   function triggerCloudRain() {
     confetti({ particleCount: 35, spread: 60, origin: { y: 0.4 } });
-  }
-
-  function blowCandles() {
-    document.querySelectorAll('.candle').forEach(c => c.innerText = '💨');
-    confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
   }
 
   /* Scattered Compliments around Heart */
