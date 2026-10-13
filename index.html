@@ -3,17 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>For My Cute Dino 🦖✨</title>
+  <title>For Mine Cute Dino 🦖✨</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Cinzel:wght@600;800&display=swap');
 
     :root {
-      --peach-bg: #ffb5a7;
+      --peach-bg: #ff99c8;
       --cherry-red: #d90429;
       --cherry-card: rgba(155, 34, 38, 0.85);
-      --accent-gold: #ffb703;
+      --accent-main: #d90429; /* Replaced gold with Cherry Red */
       --accent-pink: #ff5964;
       --text-light: #fff0f3;
     }
@@ -23,7 +23,7 @@
     html, body {
       width: 100vw;
       height: 100vh;
-      background: radial-gradient(circle at center, #ff99c8 0%, #d90429 100%);
+      background: radial-gradient(circle at center, #ffb5a7 0%, #ff6f59 50%, #d90429 100%);
       color: var(--text-light);
       overflow: hidden;
       position: fixed;
@@ -53,13 +53,13 @@
     }
     .section.active { display: flex; opacity: 1; }
 
-    .title-gold { font-family: 'Cinzel', serif; color: var(--accent-gold); font-weight: 800; font-size: 1.8rem; margin-bottom: 12px; text-shadow: 0 2px 10px rgba(0,0,0,0.3); }
+    .title-main { font-family: 'Cinzel', serif; color: #fff; font-weight: 800; font-size: 1.8rem; margin-bottom: 12px; text-shadow: 0 2px 10px rgba(217,4,41,0.5); }
 
     /* Terminal Lock */
-    .terminal-box { background: rgba(0,0,0,0.4); border: 2px solid var(--accent-gold); border-radius: 20px; padding: 20px; width: 90%; max-width: 340px; color: var(--accent-gold); text-align: left; margin: 15px 0; box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
+    .terminal-box { background: rgba(155,34,38,0.7); border: 2px solid var(--accent-main); border-radius: 20px; padding: 20px; width: 90%; max-width: 340px; color: #ffe6e8; text-align: left; margin: 15px 0; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
     .keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; width: 85%; max-width: 280px; margin-top: 15px; }
-    .key-btn { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,183,3,0.5); color: var(--text-light); padding: 15px; border-radius: 50%; font-size: 1.2rem; cursor: pointer; transition: 0.2s; }
-    .key-btn:active { background: var(--accent-gold); color: #000; transform: scale(0.9); }
+    .key-btn { background: rgba(255,255,255,0.2); border: 1.5px solid var(--accent-main); color: var(--text-light); padding: 15px; border-radius: 50%; font-size: 1.2rem; cursor: pointer; transition: 0.2s; }
+    .key-btn:active { background: var(--accent-main); color: #fff; transform: scale(0.9); }
 
     /* Matrix Rain & Cloud */
     #matrixCanvas { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
@@ -74,18 +74,18 @@
     .candles-row { display: flex; gap: 12px; margin-bottom: -10px; z-index: 3; }
     .candle { font-size: 1.8rem; animation: flicker 0.2s infinite alternate; }
     @keyframes flicker { 0% { opacity: 0.8; transform: scale(1); } 100% { opacity: 1; transform: scale(1.15) rotate(2deg); } }
-    .big-cake { font-size: 6.5rem; filter: drop-shadow(0 15px 25px rgba(0,0,0,0.5)); cursor: pointer; }
+    .big-cake { font-size: 6.5rem; filter: drop-shadow(0 15px 25px rgba(0,0,0,0.4)); cursor: pointer; }
 
     /* Heart & Scattered Compliments */
     .heart-container { position: relative; z-index: 2; margin: 20px 0; }
-    .heart-element { font-size: 5.5rem; cursor: pointer; filter: drop-shadow(0 0 25px var(--cherry-red)); transition: transform 0.2s; animation: pulseHeart 1.2s infinite; }
+    .heart-element { font-size: 5.5rem; cursor: pointer; filter: drop-shadow(0 0 25px var(--accent-main)); transition: transform 0.2s; animation: pulseHeart 1.2s infinite; }
     @keyframes pulseHeart { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
     .heart-element:active { transform: scale(0.9); }
     
     .compliment-bubble {
       position: absolute;
       background: rgba(217, 4, 41, 0.95);
-      border: 1.5px solid var(--accent-gold);
+      border: 1.5px solid #fff;
       color: #fff;
       padding: 6px 14px;
       border-radius: 20px;
@@ -97,27 +97,27 @@
     }
 
     /* 18 Photo Grid */
-    .gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 92%; max-width: 400px; max-height: 55vh; overflow-y: auto; padding: 10px; background: rgba(0,0,0,0.3); border-radius: 20px; border: 1px solid rgba(255,183,3,0.4); z-index: 2; }
-    .gallery-item { position: relative; width: 100%; padding-top: 100%; border-radius: 12px; overflow: hidden; border: 1.5px solid rgba(255,183,3,0.4); }
+    .gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 92%; max-width: 400px; max-height: 55vh; overflow-y: auto; padding: 10px; background: rgba(155,34,38,0.3); border-radius: 20px; border: 1.5px solid var(--accent-main); z-index: 2; }
+    .gallery-item { position: relative; width: 100%; padding-top: 100%; border-radius: 12px; overflow: hidden; border: 1.5px solid var(--accent-main); }
     .gallery-item img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 
     /* Anime Teaser Box with Characters */
-    .anime-box { background: rgba(155, 34, 38, 0.85); border: 2px solid var(--accent-gold); border-radius: 25px; padding: 20px; width: 90%; max-width: 360px; text-align: left; box-shadow: 0 10px 30px rgba(0,0,0,0.5); z-index: 2; position: relative; }
+    .anime-box { background: rgba(155, 34, 38, 0.85); border: 2px solid var(--accent-main); border-radius: 25px; padding: 20px; width: 90%; max-width: 360px; text-align: left; box-shadow: 0 10px 30px rgba(0,0,0,0.4); z-index: 2; position: relative; }
     .anime-chars { display: flex; justify-content: space-around; margin-bottom: 12px; }
-    .anime-chars img { width: 75px; height: 75px; border-radius: 50%; border: 2px solid var(--accent-gold); object-fit: cover; box-shadow: 0 0 15px rgba(255,183,3,0.5); }
+    .anime-chars img { width: 75px; height: 75px; border-radius: 50%; border: 2px solid var(--accent-main); object-fit: cover; box-shadow: 0 0 15px rgba(217,4,41,0.6); }
 
     /* Glassmorphism Envelope & Letter */
     .modal-blur { position: absolute; inset: 0; background: rgba(217, 4, 41, 0.75); backdrop-filter: blur(15px); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 10; }
-    .envelope-box { width: 140px; height: 95px; background: var(--accent-gold); border-radius: 15px; display: flex; justify-content: center; align-items: center; font-size: 3rem; cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.5); animation: bounceEnv 1.5s infinite; border: 2px solid #fff; }
+    .envelope-box { width: 140px; height: 95px; background: var(--accent-main); border-radius: 15px; display: flex; justify-content: center; align-items: center; font-size: 3rem; cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.4); animation: bounceEnv 1.5s infinite; border: 2px solid #fff; }
     @keyframes bounceEnv { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 
-    .glass-letter-card { background: rgba(155, 34, 38, 0.65); backdrop-filter: blur(25px); border: 1.5px solid rgba(255,183,3,0.6); border-radius: 25px; padding: 22px; text-align: left; font-size: 0.9rem; line-height: 1.7; color: #fff0f3; width: 90%; max-width: 380px; max-height: 75vh; overflow-y: auto; box-shadow: 0 20px 50px rgba(0,0,0,0.8); z-index: 5; }
+    .glass-letter-card { background: rgba(155, 34, 38, 0.7); backdrop-filter: blur(25px); border: 1.5px solid var(--accent-main); border-radius: 25px; padding: 22px; text-align: left; font-size: 0.9rem; line-height: 1.7; color: #fff0f3; width: 90%; max-width: 380px; max-height: 75vh; overflow-y: auto; box-shadow: 0 20px 50px rgba(0,0,0,0.8); z-index: 5; }
 
     /* Falling Flowers Canvas */
     #flowerCanvas { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
 
     /* Buttons */
-    .btn-action { background: linear-gradient(135deg, #d90429, #ff5964); color: #fff; border: 1.5px solid var(--accent-gold); padding: 12px 35px; border-radius: 50px; font-weight: 600; font-size: 0.95rem; cursor: pointer; margin-top: 15px; box-shadow: 0 8px 20px rgba(0,0,0,0.4); z-index: 2; transition: 0.2s; }
+    .btn-action { background: linear-gradient(135deg, #d90429, #ff5964); color: #fff; border: 1.5px solid #fff; padding: 12px 35px; border-radius: 50px; font-weight: 600; font-size: 0.95rem; cursor: pointer; margin-top: 15px; box-shadow: 0 8px 20px rgba(0,0,0,0.4); z-index: 2; transition: 0.2s; }
     .btn-action:active { transform: scale(0.95); }
     .btn-wa { background: #25d366; color: white; border: none; padding: 12px 20px; border-radius: 50px; font-weight: 700; width: 100%; display: none; margin-top: 15px; cursor: pointer; box-shadow: 0 8px 20px rgba(37,211,102,0.4); }
   </style>
@@ -128,11 +128,11 @@
 
   <!-- SCREEN 0: TERMINAL LOCK -->
   <div class="section active" id="sec0">
-    <h2 class="title-gold">For Mine Cute Dino 🦕 </h2>
+    <h2 class="title-main">FOR MINE CUTE DINO 🦕</h2>
     <div class="terminal-box">
       <p>> System Locked.</p>
       <p>> Enter Passcode (0404):</p>
-      <p id="passDisplay" style="color:var(--accent-gold); font-size:1.5rem; margin-top:10px; letter-spacing:3px;">_ _ _ _</p>
+      <p id="passDisplay" style="color:#ffccd2; font-size:1.5rem; margin-top:10px; letter-spacing:3px;">_ _ _ _</p>
     </div>
     <div class="keypad">
       <button class="key-btn" onclick="pressKey('0')">0</button>
@@ -147,7 +147,7 @@
   <!-- SCREEN 1: CLOUD & RAIN -->
   <div class="section" id="sec1">
     <canvas id="matrixCanvas"></canvas>
-    <h3 class="title-gold" style="z-index:2;">"عيناكِ أرض لا خائن فيها، كلاهما وطني."</h3>
+    <h3 class="title-main" style="z-index:2;">MATRIX CLOUD</h3>
     <div class="cloud-container" onclick="triggerCloudRain()">
       <div class="cloud-shape">☁️</div>
     </div>
@@ -156,7 +156,7 @@
 
   <!-- SCREEN 2: BIG CAKE & CANDLES -->
   <div class="section" id="sec2">
-    <h2 class="title-gold">MAKE A WISH 🎂</h2>
+    <h2 class="title-main">MAKE A WISH 🎂</h2>
     
     <div class="cake-wrapper">
       <div class="candles-row">
@@ -172,7 +172,7 @@
 
   <!-- SCREEN 3: HEART & SCATTERED COMPLIMENTS -->
   <div class="section" id="sec3">
-    <h2 class="title-gold">COMPLIMENT RAIN 💖</h2>
+    <h2 class="title-main">COMPLIMENT RAIN 💖</h2>
     <div class="heart-container" onclick="spawnCompliment(event)">
       <div class="heart-element">💖</div>
     </div>
@@ -181,25 +181,22 @@
 
   <!-- SCREEN 4: 18 PHOTO GALLERY -->
   <div class="section" id="sec4">
-    <h2 class="title-gold"> Humans Like Collecting The Things That They Like So ... 👉🏻👈🏻
-      I Just Collect Ur 18 pics At ur 18bd📸</h2>
+    <h2 class="title-main">OUR MEMORIES 📸</h2>
     <div class="gallery-grid" id="photoGrid"></div>
     <button class="btn-action" onclick="nextSec(5)">Next ➔</button>
   </div>
 
   <!-- SCREEN 5: ANIME CHARACTERS AGE TEASER -->
   <div class="section" id="sec5">
-    <h2 class="title-gold">a soft reminder I'm elder 😉⏳</h2>
+    <h2 class="title-main">THE TIME GAP ⏳</h2>
     
     <div class="anime-box">
       <div class="anime-chars">
-        <!-- Anya Forger Sticker/GIF -->
-        <img src="https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3ZrbnZkZmV6bnN3bWZicDZwODV0bmd1NHAzdHN1NnlnenJtOWlnNyZlcD12MV9pbngr</i></i>gif&ct=g/3o7TKSjRrfIH_iBlE4/giphy.gif" alt="Anya">
-        <!-- Satoru Gojo Sticker/GIF -->
-        <img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqbjdrNGpqZTNxdTJqNXVpNHoxYm1lOWpzaW0yb2VlMmQ1Z3B5eiZlcD12MV9pbngr</i></i>gif&ct=g/10WxZ8tq6q150K/giphy.gif" alt="Gojo">
+        <img src="https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3ZrbnZkZmV6bnN3bWZicDZwODV0bmd1NHAzdHN1NnlnenJtOWlnNyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3o7TKSjRrfIH_iBlE4/giphy.gif" alt="Anya">
+        <img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqbjdrNGpqZTNxdTJqNXVpNHoxYm1lOWpzaW0yb2VlMmQ1Z3B5eiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/10WxZ8tq6q150K/giphy.gif" alt="Gojo">
       </div>
-      <p style="font-size: 0.85rem; line-height: 1.6; text-align: center;">
-        " You are officially <strong>6 months & 8 days younger</strong> than me! That means supreme senior privileges belong to me forever! 😎💖"
+      <p style="font-size: 0.85rem; line-height: 1.6; text-align: center; color: #ffe6e8;">
+        "Hehehe! Waku Waku! 🥜✨ Did you know? You are officially <strong>6 months & 8 days younger</strong> than me! That means supreme senior privileges belong to me forever! 😎💖"
       </p>
     </div>
 
@@ -211,7 +208,7 @@
     <canvas id="flowerCanvas"></canvas>
     
     <div class="modal-blur" id="envelopeModal">
-      <p style="color:var(--accent-gold); margin-bottom:15px; font-size: 1rem; font-weight: 600;">Tap the envelope to open!</p>
+      <p style="color:#fff; margin-bottom:15px; font-size: 1rem; font-weight: 600;">Tap the envelope to open!</p>
       <div class="envelope-box" onclick="openLetter()">✉️</div>
     </div>
 
@@ -226,8 +223,8 @@
 <script>
   let pin = "";
   const correctPin = "0404";
-  const compliments = [""عيناكِ أرض لا خائن فيها، كلاهما وطني."", ""كل عام وأنت بخير، أتمنى لك سنة حلوة وموفقة."", "A Special Person! 🌟", "Dino Power! 🦖", "Unmatched Charm! ✨", "Pure Heart! 💖"];
-  const noteText = "Suno! 🦕\n\nAgar main tumhein bar bar 'Dino' bolti hoon, toh iska matlab yeh bilkul nahi hai ke yeh koi bura word hai...\n\nMere liye 'Dino' ka matlab ek bohot hi cute, precious, aur thoda sa dramatic hona hai! 🦖✨\n\nHappy birthday! Al-Shafii says: According to ones struggle, excellence is achieved.You are a hard-working person with a good heart, and I wish you a year full of success and the realization of your dreams. Thank you always for your kindness and grace.\n\nWaise...👉🏻👈🏻 Kya tum mujhe apni woh birthday wish batana pasand karoge jo tumne start mein candle blow karte waqt ki thi..? Jo main abhi poori kar sakoon! 💭✨";
+  const compliments = ["Pro Coder! 💻", "Super Smart! 🧠", "Most Special Cousin! 🌟", "Dino Power! 🦖", "Unmatched Charm! ✨", "Pure Heart! 💖"];
+  const noteText = "Suno! 🦕\n\nAgar main tumhein bar bar 'Dino' bolti hoon, toh iska matlab yeh bilkul nahi hai ke yeh koi bura word hai...\n\nMere liye 'Dino' ka matlab ek bohot hi cute, precious, aur thoda sa dramatic baby dinosaur hai! 🦖✨\n\nHaan, main tumse 6 months aur 8 days bari hoon, lekin yeh gap sirf is liye hai taake main tumhara zyada khayal rakh sakoon.\n\nWaise... Kya tum mujhe apni woh birthday wish batana pasand karoge jo tumne start mein candle blow karte waqt ki thi? Jo main abhi poori kar sakoon! 💭✨";
 
   function pressKey(num) {
     if(pin.length < 4) pin += num;
@@ -264,7 +261,7 @@
     function draw() {
       ctx.fillStyle = 'rgba(217, 4, 41, 0.12)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = '#ffb703';
+      ctx.fillStyle = '#ffccd2';
       ctx.font = fontSize + 'px Fira Code';
 
       for(let i=0; i<drops.length; i++) {
@@ -293,7 +290,6 @@
     bubble.className = 'compliment-bubble';
     bubble.innerText = compliments[Math.floor(Math.random()*compliments.length)];
     
-    // Random offset scattering around the heart center (left, right, top, down)
     const offsetX = (Math.random() - 0.5) * 180;
     const offsetY = (Math.random() - 0.5) * 140;
 
@@ -336,14 +332,12 @@
         y: Math.random() * canvas.height,
         r: Math.random() * 6 + 4,
         d: Math.random() * 20,
-        color: ['#ffb703', '#ff5964', '#ffffff', '#ff99c8'][Math.floor(Math.random()*4)]
+        color: ['#ffffff', '#ffccd2', '#ff8fa3', '#ffb5a7'][Math.floor(Math.random()*4)]
       });
     }
 
     function drawFlowers() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = "rgba(255, 183, 3, 0.7)";
-      ctx.beginPath();
       for(let i=0; i<flowers.length; i++) {
         let f = flowers[i];
         ctx.fillStyle = f.color;
