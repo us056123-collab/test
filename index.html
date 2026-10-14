@@ -2,613 +2,516 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title> DINO B'DAY EXPANSION 🦖✨</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>For Mine Cute Dino 🦖✨</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Poppins:wght@400;600;700&family=Cinzel:wght@600;800&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Cinzel:wght@600;800&display=swap');
 
     :root {
-      --bg-dark: #0a0103;
-      --maroon-dark: #1b0206;
-      --navy-blue: #05051a;
-      --maroon-card: #2c0812;
-      --accent-gold: #e5b869;
-      --accent-pink: #ff2a6d;
-      --text-light: #fce4ec;
+      --cherry-red: #d90429;
+      --accent-main: #d90429;
+      --accent-pink: #ff5964;
+      --text-light: #fff0f3;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
     
-    body {
-      background-color: var(--bg-dark);
+    html, body {
+      width: 100vw;
+      height: 100vh;
       color: var(--text-light);
+      overflow: hidden;
+      position: fixed;
+      background: #100205;
+    }
+
+    /* Full-Screen Animated Dynamic Gradient Background */
+    .animated-bg {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(135deg, #2b020b, #4a0414, #d90429, #1b0106);
+      background-size: 400% 400%;
+      animation: gradientShift 12s ease infinite;
+      z-index: 0;
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .bg-anim-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* FULL SCREEN VIEWPORT CONTAINER */
+    .app-viewport {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      min-height: 100vh;
-      overflow-x: hidden;
-      background-image: radial-gradient(circle at center, #2a030b 0%, #0d0104 100%);
+      z-index: 2;
     }
 
-    .app-viewport {
-      width: 100%;
-      max-width: 420px;
-      min-height: 680px;
-      background: var(--maroon-card);
-      border: 1px solid rgba(229, 184, 105, 0.2);
-      border-radius: 35px;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(74, 4, 4, 0.5);
-      position: relative;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-    }
-
-    /* Screen Management Layout */
-    .step-screen {
+    .section {
+      position: absolute;
+      inset: 0;
       display: none;
+      opacity: 0;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       padding: 30px 20px;
-      height: 100%;
-      width: 100%;
-      animation: fadeIn 0.6s ease-in-out forwards;
       text-align: center;
+      transition: opacity 0.5s ease;
+      z-index: 2;
+    }
+    .section.active { display: flex; opacity: 1; }
+
+    .title-main { 
+      font-family: 'Cinzel', serif; 
+      color: #fff; 
+      font-weight: 800; 
+      font-size: 1.6rem; 
+      margin-bottom: 15px; 
+      text-shadow: 0 2px 15px rgba(217,4,41,0.8); 
     }
 
-    .step-screen.active {
-      display: flex;
-    }
+    /* Terminal Lock */
+    .terminal-box { background: rgba(20, 2, 6, 0.75); backdrop-filter: blur(12px); border: 2px solid #fff; border-radius: 22px; padding: 22px; width: 90%; max-width: 360px; color: #ffe6e8; text-align: left; margin: 15px 0; box-shadow: 0 15px 35px rgba(0,0,0,0.6); }
+    .keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; width: 85%; max-width: 300px; margin-top: 15px; }
+    .key-btn { background: rgba(255,255,255,0.15); border: 1.5px solid #fff; color: var(--text-light); padding: 16px; border-radius: 50%; font-size: 1.3rem; cursor: pointer; transition: 0.2s; }
+    .key-btn:active { background: #fff; color: #d90429; transform: scale(0.9); }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: scale(0.96); }
-      to { opacity: 1; transform: scale(1); }
-    }
-
-    /* Shared Visual Styles */
-    .title-gold {
-      font-family: 'Cinzel', serif;
-      color: var(--accent-gold);
-      font-weight: 800;
-      letter-spacing: 2px;
-    }
-
-    .action-btn {
-      background: linear-gradient(135deg, var(--maroon-dark), var(--accent-pink));
-      color: white;
-      border: 1px solid var(--accent-gold);
-      padding: 12px 28px;
-      border-radius: 50px;
-      font-weight: 700;
-      cursor: pointer;
-      box-shadow: 0 6px 15px rgba(255, 42, 109, 0.4);
-      margin-top: 15px;
-      transition: all 0.2s;
-    }
-
-    .action-btn:active {
-      transform: scale(0.95);
-    }
-
-    /* 
-       --- SCREEN 0: TERMINAL LOCK (`0404` Passcode) ---
-    */
-    .terminal-box {
-      background: rgba(0,0,0,0.6);
-      border: 1px solid var(--accent-gold);
-      border-radius: 15px;
-      padding: 20px;
-      width: 100%;
-      font-family: 'Fira Code', monospace;
-      color: #00ffcc;
-      text-align: left;
-      margin: 15px 0;
-    }
-
-    .passcode-inputs {
-      display: flex;
-      gap: 12px;
-      margin: 20px 0;
-      justify-content: center;
-    }
-
-    .passcode-dot {
-      width: 18px;
-      height: 18px;
-      border: 2px solid var(--accent-gold);
-      border-radius: 50%;
-      transition: all 0.2s;
-    }
-
-    .passcode-dot.filled {
-      background: var(--accent-gold);
-      box-shadow: 0 0 12px var(--accent-gold);
-    }
-
-    .keypad {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 15px;
-      width: 80%;
-      margin-top: 10px;
-    }
-
-    .key-btn {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(229, 184, 105, 0.3);
-      color: var(--text-light);
-      padding: 14px;
-      border-radius: 50%;
-      font-size: 1.2rem;
-      font-weight: 600;
-      cursor: pointer;
-    }
-
-    /* 
-       --- SCREEN 1: INTERACTIVE CURTAINS & SPIDER CLOCK (Canvas Features) ---
-    */
-    #curtainCanvas, #spiderCanvas {
-      position: absolute;
-      inset: 0;
-      pointer-events: auto;
-    }
-
-    /* 
-       --- SCREEN 2: DOMAIN EXPANSION / BMW LOADING SEQUENCE ---
-    */
-    .domain-overlay {
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle, #40001a 0%, #000000 100%);
-      z-index: 99;
-      display: none; /* Controlled by JS */
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-    }
-
-    /* 
-       --- SCREEN 3: INTERACTIVE 3D CAKE & PHONK SOUND ---
-    */
-    .cake-box {
-      font-size: 5rem;
-      animation: bounceCake 2s infinite ease-in-out;
-      cursor: pointer;
-    }
-
-    @keyframes bounceCake {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-15px); }
-    }
-
-    /* 
-       --- SCREEN 4: HEART & COMPLIMENT RAIN ---
-    */
-    .heart-element {
-      font-size: 4rem;
-      cursor: pointer;
-      filter: drop-shadow(0 0 15px var(--accent-pink));
-      transition: transform 0.2s;
-    }
-
-    .heart-element:active {
-      transform: scale(1.2);
-    }
-
-    .compliment-bubble {
-      position: absolute;
-      background: rgba(255, 42, 109, 0.85);
-      color: white;
-      padding: 8px 16px;
-      border-radius: 20px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      pointer-events: none;
-    }
-
-    /* 
-       --- SCREEN 5: 18 PHOTO MEMORY GRID ---
-    */
-    .gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-      width: 100%;
-      max-height: 430px;
-      overflow-y: auto;
-      padding: 10px;
-      background: rgba(0, 0, 0, 0.3);
-      border-radius: 15px;
-      border: 1px solid rgba(229, 184, 105, 0.2);
-    }
-
-    .gallery-item {
+    /* Spider Clock */
+    .spider-clock-container {
       position: relative;
-      width: 100%;
-      padding-top: 100%; /* Keeps square aspect ratio */
-      border-radius: 10px;
-      overflow: hidden;
-      border: 2px solid rgba(229, 184, 105, 0.3);
-    }
-
-    .gallery-item img {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    /* 
-       --- SCREEN 6: ANYA AGE TEASER BOX ---
-    */
-    .anya-dialogue {
-      background: var(--maroon-card);
-      border: 2px solid var(--accent-gold);
-      border-radius: 25px;
-      padding: 20px;
-      width: 100%;
-      text-align: left;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-    }
-
-    .anya-sticker {
-      font-size: 3rem;
-      margin-bottom: 8px;
-    }
-
-    /* 
-       --- SCREEN 7: ENVELOPE LOADING & TYPEWRITER LETTER ---
-    */
-    .modal-overlay {
-      position: absolute;
-      inset: 0;
-      background: rgba(18, 3, 7, 0.85);
+      width: 190px;
+      height: 190px;
+      border: 4px solid #fff;
+      border-radius: 50%;
+      background: rgba(10, 1, 3, 0.6);
       backdrop-filter: blur(10px);
       display: flex;
-      flex-direction: column;
       justify-content: center;
       align-items: center;
-      padding: 25px;
-      z-index: 10;
+      margin: 15px 0;
+      box-shadow: 0 0 35px rgba(217, 4, 41, 0.6);
     }
+    .spider-center { font-size: 3rem; z-index: 3; animation: pulseSpider 1.5s infinite alternate; }
+    @keyframes pulseSpider { 0% { transform: scale(0.92); } 100% { transform: scale(1.08); } }
 
-    .envelope-icon {
-      font-size: 5rem;
-      cursor: pointer;
-      display: none; /* Initially hidden, shown by JS */
-      filter: drop-shadow(0 0 15px var(--accent-pink));
-      transition: transform 0.3s;
-    }
+    /* Cake & Balloons */
+    .cake-wrapper { position: relative; z-index: 2; margin: 15px 0; display: flex; flex-direction: column; align-items: center; }
+    .candles-row { display: flex; gap: 14px; margin-bottom: -10px; z-index: 3; }
+    .candle { font-size: 2rem; animation: flicker 0.2s infinite alternate; }
+    @keyframes flicker { 0% { opacity: 0.8; transform: scale(1); } 100% { opacity: 1; transform: scale(1.15) rotate(2deg); } }
+    .big-cake { font-size: 6.5rem; filter: drop-shadow(0 15px 25px rgba(0,0,0,0.6)); }
 
-    .envelope-icon:hover {
-      transform: scale(1.1) rotate(5deg);
-    }
+    .balloon-container { position: fixed; inset: 0; pointer-events: none; z-index: 20; overflow: hidden; }
+    .balloon { position: absolute; bottom: -100px; font-size: 3.2rem; animation: floatUp 4s linear forwards; }
+    @keyframes floatUp { 0% { transform: translateY(0) rotate(0deg); opacity: 1; } 100% { transform: translateY(-110vh) rotate(20deg); opacity: 0; } }
 
-    .letter-card {
-      background: linear-gradient(180deg, rgba(74, 4, 4, 0.8) 0%, rgba(20, 2, 6, 0.9) 100%);
-      border: 1px solid var(--accent-gold);
+    /* Matrix Cloud */
+    #matrixCanvas { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+    .cloud-container { position: relative; z-index: 2; margin: 25px 0; cursor: pointer; }
+    .cloud-shape { width: 180px; height: 70px; background: #fff; border-radius: 50px; box-shadow: 0 0 30px rgba(255,255,255,0.9); position: relative; display: flex; align-items: center; justify-content: center; font-size: 2.2rem; animation: floatCloud 3s ease-in-out infinite; }
+    .cloud-shape::before { content: ''; position: absolute; top: -28px; left: 28px; width: 65px; height: 65px; background: #fff; border-radius: 50%; }
+    .cloud-shape::after { content: ''; position: absolute; top: -22px; right: 32px; width: 55px; height: 55px; background: #fff; border-radius: 50%; }
+    @keyframes floatCloud { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+
+    /* Heart & Compliments */
+    .heart-container { position: relative; z-index: 2; margin: 15px 0; }
+    .heart-element { font-size: 5.5rem; cursor: pointer; filter: drop-shadow(0 0 30px rgba(255,255,255,0.9)); transition: transform 0.2s; animation: pulseHeart 1.2s infinite; }
+    @keyframes pulseHeart { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.12); } }
+    .heart-element:active { transform: scale(0.9); }
+    
+    .compliment-bubble {
+      position: absolute;
+      background: rgba(217, 4, 41, 0.95);
+      border: 1.5px solid #fff;
+      color: #fff;
+      padding: 8px 16px;
       border-radius: 20px;
-      padding: 25px;
-      text-align: left;
-      font-size: 0.93rem;
-      line-height: 1.7;
-      color: #fce4ec;
-      width: 100%;
-      max-height: 480px;
-      overflow-y: auto;
+      font-size: 0.82rem;
+      pointer-events: none;
+      z-index: 10;
+      white-space: nowrap;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.5);
     }
 
-    .wa-btn {
-      background: #25d366;
-      color: white;
-      border: none;
-      padding: 12px 20px;
-      border-radius: 50px;
-      font-weight: 700;
-      font-size: 0.9rem;
-      cursor: pointer;
-      display: none; /* Shown by Typewriter end */
-      margin-top: 15px;
-      width: 100%;
-      box-shadow: 0 8px 20px rgba(37, 211, 102, 0.4);
-    }
+    /* 18 Photo Grid (Full Screen Layout) */
+    .gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 92%; max-width: 420px; max-height: 60vh; overflow-y: auto; padding: 12px; background: rgba(15, 2, 5, 0.6); backdrop-filter: blur(12px); border-radius: 22px; border: 1.5px solid rgba(255,255,255,0.4); z-index: 2; }
+    .gallery-item { position: relative; width: 100%; padding-top: 100%; border-radius: 12px; overflow: hidden; border: 1.5px solid #fff; }
+    .gallery-item img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 
+    /* Anime Teaser Box */
+    .anime-box { background: rgba(20, 2, 6, 0.85); backdrop-filter: blur(12px); border: 2px solid #fff; border-radius: 25px; padding: 22px; width: 90%; max-width: 380px; text-align: left; box-shadow: 0 15px 35px rgba(0,0,0,0.6); z-index: 2; position: relative; }
+    .anime-chars { display: flex; justify-content: space-around; margin-bottom: 12px; }
+    .anime-chars img { width: 75px; height: 75px; border-radius: 50%; border: 2px solid #fff; object-fit: cover; box-shadow: 0 0 20px rgba(255,255,255,0.7); }
+
+    /* Glassmorphism Envelope & Letter */
+    .modal-blur { position: absolute; inset: 0; background: rgba(217, 4, 41, 0.8); backdrop-filter: blur(18px); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 10; }
+    .envelope-box { width: 150px; height: 100px; background: #fff; color: #d90429; border-radius: 16px; display: flex; justify-content: center; align-items: center; font-size: 3.2rem; cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.5); animation: bounceEnv 1.5s infinite; border: 2px solid #d90429; }
+    @keyframes bounceEnv { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+
+    .glass-letter-card { background: rgba(20, 2, 6, 0.8); backdrop-filter: blur(25px); border: 1.5px solid #fff; border-radius: 25px; padding: 25px; text-align: left; font-size: 0.92rem; line-height: 1.7; color: #fff0f3; width: 92%; max-width: 400px; max-height: 78vh; overflow-y: auto; box-shadow: 0 20px 50px rgba(0,0,0,0.9); z-index: 5; }
+
+    #flowerCanvas { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+
+    /* Buttons */
+    .btn-action { background: linear-gradient(135deg, #ff5964, #d90429); color: #fff; border: 1.5px solid #fff; padding: 13px 36px; border-radius: 50px; font-weight: 600; font-size: 1rem; cursor: pointer; margin-top: 15px; box-shadow: 0 8px 25px rgba(0,0,0,0.5); z-index: 2; transition: 0.2s; }
+    .btn-action:active { transform: scale(0.95); }
+    .btn-wa { background: #25d366; color: white; border: none; padding: 13px 22px; border-radius: 50px; font-weight: 700; width: 100%; display: none; margin-top: 15px; cursor: pointer; box-shadow: 0 8px 20px rgba(37,211,102,0.5); }
   </style>
 </head>
 <body>
 
-  <div class="app-viewport">
+<div class="animated-bg"></div>
+<canvas class="bg-anim-canvas" id="bgCanvas"></canvas>
+<div class="balloon-container" id="balloonBox"></div>
 
-    <!-- SCREEN 0: терминал lock (Passcode) -->
-    <div class="step-screen active" id="screen0">
-      <div class="lock-icon" style="font-size: 3rem; margin-bottom: 15px;">🔒</div>
-      <h2 class="title-gold">ACCESS DINO'S DOMAIN</h2>
-      <p style="font-size: 0.85rem; color: #d3a373; margin-top: 5px;">Enter the 4-digit Passcode<br><small>(Hint: when 1st time we saw each other)</small></p>
+<div class="app-viewport">
 
-      <div class="passcode-inputs">
-        <div class="passcode-dot" id="dot0"></div>
-        <div class="passcode-dot" id="dot1"></div>
-        <div class="passcode-dot" id="dot2"></div>
-        <div class="passcode-dot" id="dot3"></div>
-      </div>
-
-      <div class="keypad">
-        <button class="key-btn" onclick="pressKey('0')">0</button>
-        <button class="key-btn" onclick="pressKey('4')">4</button>
-        <button class="key-btn" onclick="pressKey('1')">1</button>
-        <button class="key-btn" onclick="pressKey('2')">2</button>
-        <button class="key-btn" onclick="pressKey('0')">0</button>
-        <button class="key-btn" onclick="pressKey('4')">4</button>
-        <!-- Replace numbers based on target passcode e.g., 04/04 -->
-      </div>
+  <!-- SCREEN 0: TERMINAL LOCK -->
+  <div class="section active" id="sec0">
+    <h2 class="title-main">FOR MINE CUTE DINO 🦕</h2>
+    <div class="terminal-box">
+      <p>> System Locked.</p>
+      <p>> Enter Passcode (0404):</p>
+      <p id="passDisplay" style="color:#ffccd2; font-size:1.6rem; margin-top:10px; letter-spacing:3px;">_ _ _ _</p>
     </div>
-
-    <!-- SCREEN 1: Curtains & Spider Clock -->
-    <div class="step-screen" id="screen1" style="position: relative;">
-      <canvas id="curtainCanvas"></canvas>
-      <h2 class="title-gold" style="z-index: 2;">PULL THE THREADS</h2>
-      <div class="action-btn" style="z-index: 2;" onclick="nextStep(1)">➔ View Dino Clock</div>
+    <div class="keypad">
+      <button class="key-btn" onclick="pressKey('0')">0</button>
+      <button class="key-btn" onclick="pressKey('4')">4</button>
+      <button class="key-btn" onclick="pressKey('1')">1</button>
+      <button class="key-btn" onclick="pressKey('2')">2</button>
+      <button class="key-btn" onclick="pressKey('5')">5</button>
+      <button class="key-btn" onclick="pressKey('8')">8</button>
     </div>
-
-    <!-- SCREEN 2: Cake & Blowing -->
-    <div class="step-screen" id="screen2">
-      <h2 class="title-gold">MAKE A WISH 🎂</h2>
-      <p style="font-size: 0.85rem; color: #e5b869;">Tap the cake to blow out the candle flame!</p>
-      <div class="cake-box" onclick="blowCandle()">🎂</div>
-      <div class="action-btn" id="nextToHearts" style="display: none;" onclick="nextStep(2)">➔ View Compliments</div>
-    </div>
-
-    <!-- SCREEN 3: Heart & Compliment Rain -->
-    <div class="step-screen" id="screen3">
-      <h2 class="title-gold">TAP FOR LOVE 💖</h2>
-      <div class="heart-element" onclick="spawnCompliment(event)">💖</div>
-      <div class="action-btn" onclick="nextStep(3)">➔ Dino Gallery</div>
-    </div>
-
-    <!-- SCREEN 4: 18 Photo Gallery -->
-    <div class="step-screen" id="screen4">
-      <h2 class="title-gold">Human's nature they collect the thing what they like so...👉🏻👈🏻 i just collect ur 18 pics at ur 18 bd📸</h2>
-      <div class="gallery-grid" id="photoGrid"></div>
-      <div class="action-btn" onclick="nextStep(4)">➔ The Time Gap</div>
-    </div>
-
-    <!-- SCREEN 5: Anya Age Teaser -->
-    <div class="step-screen" id="screen5">
-      <h2 class="title-gold">A Soft Reminder I'm Elder Then U😉⏳</h2>
-      <div class="anya-dialogue">
-        <div class="anya-sticker">🤯</div>
-        <p style="font-size: 0.9rem; line-height: 1.6; color: #ffe3ec;">
-          Did you know? You are officially <strong>6 months & 8 days younger</strong> than me! That means I will always be the older, wiser, and cooler one! Hehehe!😎😏
-        </p>
-      </div>
-      <div class="action-btn" onclick="nextStep(5)">➔ Dino Secret Note💌</div>
-    </div>
-
-    <!-- SCREEN 6: Note & Reassurance -->
-    <div class="step-screen" id="screen6">
-      <h3 class="title-gold" style="font-size: 1.2rem; color: var(--accent-gold); margin-bottom: 12px;">🦕 Why I Call You Dino?</h3>
-      <div style="background: var(--bg-dark); border: 1px dashed var(--accent-gold); border-radius: 15px; padding: 15px; text-align: left; font-size: 0.9rem; color: #fcc9c5;">
-        It's not an insult! To me, "Dino" means you're incredibly cute, powerful, rare, slightly dramatic, and my absolute favorite person in the whole world! 🦖💕
-      </div>
-      <div class="action-btn" onclick="nextStep(6)">➔ Open Envelope</div>
-    </div>
-
-    <!-- SCREEN 7: Envelope & Typewriter Letter -->
-    <div class="step-screen" id="screen7" style="position: relative;">
-      
-      <!-- Envelope Overlay with Blur Background -->
-      <div class="modal-overlay" id="envelopeModal">
-        <p style="font-size: 0.9rem; color: var(--accent-gold); margin-bottom: 15px;">Tap the envelope to open your letter!</p>
-        <div class="envelope-icon" onclick="openEnvelope()">✉️</div>
-      </div>
-
-      <!-- Typewriter Letter Output -->
-      <div class="letter-card">
-        <div id="typewriterText"></div>
-        <button class="wa-btn" id="waBtn" onclick="sendWishWA()">💬 Tell Me Your Birthday Wish!</button>
-      </div>
-
-    </div>
-
-    <!-- Background Domain Expansion / BMW Sequence -->
-    <div class="domain-overlay" id="cyberSequence">
-      <h1 class="title-gold" style="font-size: 1.8rem;">VROOM DINO...</h1>
-      <p style="color:var(--text-light); margin-top:10px;">Domain Expansion: Phonk Anniversary 🤞</p>
-    </div>
-
   </div>
 
-  <script>
-    const birthday = new Date("2008-11-06"); // Set real date to calculate counter properly
-    const passcode = "0404"; // Secret Code Target
-    let enteredPin = "";
+  <!-- SCREEN 1: SPIDER CLOCK -->
+  <div class="section" id="sec1">
+    <h2 class="title-main">MIDNIGHT COUNTDOWN 🕷️</h2>
+    <div class="spider-clock-container">
+      <div class="spider-center">🕷️</div>
+    </div>
+    <div style="font-family:'Cinzel',serif; font-size:1.5rem; font-weight:700; margin:12px 0; color:#fff;">12:00:00 AM ✨</div>
+    <button class="btn-action" onclick="strikeMidnight()">Celebrate Midnight 🎆</button>
+  </div>
 
-    // 18 Sample Images Placeholder - REPLACE with actual paths/links
-    const photoUrls = [
-      "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=300",
-      "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=300",
-      "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=300",
-      "https://images.unsplash.com/photo-1494972308805-463bc619d34e?w=300",
-      "https://images.unsplash.com/photo-1507504038482-7621c3c786d7?w=300",
-      "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=300",
-      "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=300",
-      "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=300",
-      "https://images.unsplash.com/photo-1494972308805-463bc619d34e?w=300",
-      "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=300",
-      "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=300",
-      "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=300",
-      "https://images.unsplash.com/photo-1494972308805-463bc619d34e?w=300",
-      "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=300",
-      "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=300",
-      "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=300",
-      "https://images.unsplash.com/photo-1494972308805-463bc619d34e?w=300",
-      "https://images.unsplash.com/photo-1507504038482-7621c3c786d7?w=300"
-    ];
-
-    const complimets = ["Pro Coder! 💻", "Super Smart! 🧠", "Anime Lover! 🤞", "Cutest Dino! 🦖", "Elite IT Grad! 🔧", "Best Cousin! ✨"];
+  <!-- SCREEN 2: BIG CAKE & CANDLE BLOW -->
+  <div class="section" id="sec2">
+    <h2 class="title-main">MAKE A WISH 🎂</h2>
     
-    const letterContent = `May all your hidden prayers find an immediate response today. I pray that absolute happiness wraps around your heart forever, that you never know a moment of sorrow, and that every step you take brings beautiful success. You deserve the absolute best version of the world. Happy 18th Birthday my absolute favorite person! 🦖💖`;
+    <div class="cake-wrapper">
+      <div class="candles-row" id="candlesRow">
+        <span class="candle">🕯️</span>
+        <span class="candle">🕯️</span>
+        <span class="candle">🕯️</span>
+      </div>
+      <div class="big-cake">🎂</div>
+    </div>
 
-    // Initialize gallery images
-    window.addEventListener('DOMContentLoaded', () => {
-      const grid = document.getElementById('photoGrid');
-      photoUrls.forEach(url => {
-        const item = document.createElement('div');
-        item.className = 'gallery-item';
-        item.innerHTML = `<img src="${url}" alt="Memory">`;
-        grid.appendChild(item);
+    <button class="btn-action" id="blowBtn" onclick="blowCandles()">Blow Candles 💨</button>
+    <button class="btn-action" id="cakeNextBtn" style="display:none;" onclick="nextSec(3)">Next ➔</button>
+  </div>
+
+  <!-- SCREEN 3: MATRIX CLOUD -->
+  <div class="section" id="sec3">
+    <canvas id="matrixCanvas"></canvas>
+    <h3 class="title-main" style="z-index:2;">MATRIX CLOUD</h3>
+    <div class="cloud-container" onclick="triggerCloudRain()">
+      <div class="cloud-shape">☁️</div>
+    </div>
+    <button class="btn-action" onclick="nextSec(4)">Next ➔</button>
+  </div>
+
+  <!-- SCREEN 4: HEART & COMPLIMENTS -->
+  <div class="section" id="sec4">
+    <h2 class="title-main">COMPLIMENT RAIN 💖</h2>
+    <p style="font-size:0.88rem; color:#ffe6e8; margin-bottom:14px; padding:0 15px; font-weight:600;">
+      Do you wanna know what I think about you? If yes, tap again and again on the heart! 💖
+    </p>
+    <div class="heart-container" onclick="spawnCompliment(event)">
+      <div class="heart-element">💖</div>
+    </div>
+    <button class="btn-action" onclick="nextSec(5)">Next ➔</button>
+  </div>
+
+  <!-- SCREEN 5: 18 PHOTO GALLERY -->
+  <div class="section" id="sec5">
+    <h2 class="title-main">OUR MEMORIES 📸</h2>
+    <div class="gallery-grid" id="photoGrid"></div>
+    <button class="btn-action" onclick="nextSec(6)">Next ➔</button>
+  </div>
+
+  <!-- SCREEN 6: ANIME TEASER -->
+  <div class="section" id="sec6">
+    <h2 class="title-main" style="font-size: 1.35rem;">A SOFT REMINDER I'M ELDER THAN YOU 😉</h2>
+    
+    <div class="anime-box">
+      <div class="anime-chars">
+        <img src="https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3ZrbnZkZmV6bnN3bWZicDZwODV0bmd1NHAzdHN1NnlnenJtOWlnNyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3o7TKSjRrfIH_iBlE4/giphy.gif" alt="Anya">
+        <img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpqbjdrNGpqZTNxdTJqNXVpNHoxYm1lOWpzaW0yb2VlMmQ1Z3B5eiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/10WxZ8tq6q150K/giphy.gif" alt="Gojo">
+      </div>
+      <p style="font-size: 0.85rem; line-height: 1.6; text-align: center; color: #ffe6e8;">
+        "Hehehe! Waku Waku! 🥜✨ Did you know? You are officially <strong>6 months & 8 days younger</strong> than me! That means supreme senior privileges belong to me forever! 😎💖"
+      </p>
+    </div>
+
+    <button class="btn-action" onclick="nextSec(7)">Next ➔</button>
+  </div>
+
+  <!-- SCREEN 7: GLASSMORPHISM ENVELOPE -->
+  <div class="section" id="sec7">
+    <canvas id="flowerCanvas"></canvas>
+    
+    <div class="modal-blur" id="envelopeModal">
+      <p style="color:#fff; margin-bottom:15px; font-size: 1.05rem; font-weight: 600;">Tap the envelope to open!</p>
+      <div class="envelope-box" onclick="openLetter()">✉️</div>
+    </div>
+
+    <div class="glass-letter-card">
+      <div id="typewriterTarget"></div>
+      <button class="btn-wa" id="waBtn" onclick="redirectWA()">💬 Send Your Wish To Me!</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  let pin = "";
+  const correctPin = "0404";
+  const compliments = ["Pro Coder! 💻", "Super Smart! 🧠", "Most Special Cousin! 🌟", "Dino Power! 🦖", "Unmatched Charm! ✨", "Pure Heart! 💖", "BMW Fanatic! 🏎️"];
+  const noteText = "Suno! 🦕\n\nAgar main tumhein bar bar 'Dino' bolti hoon, toh iska matlab yeh bilkul nahi hai ke yeh koi bura word hai...\n\nMere liye 'Dino' ka matlab ek bohot hi cute, precious, aur thoda sa dramatic baby dinosaur hai! 🦖✨\n\nHaan, main tumse 6 months aur 8 days bari hoon, lekin yeh gap sirf is liye hai taake main tumhara zyada khayal rakh sakoon.\n\nWaise... Kya tum mujhe apni woh birthday wish batana pasand karoge jo tumne start mein candle blow karte waqt ki thi? Jo main abhi poori kar sakoon! 💭✨";
+
+  window.addEventListener('DOMContentLoaded', () => {
+    initBgStars();
+  });
+
+  function initBgStars() {
+    const canvas = document.getElementById('bgCanvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const stars = [];
+    for(let i=0; i<60; i++) {
+      stars.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 2.5 + 0.8,
+        alpha: Math.random()
       });
-      initCurtains();
-    });
-
-    // --- STEP NAVIGATION LOGIC ---
-    function nextStep(currentStepIdx) {
-      document.getElementById(`screen${currentStepIdx}`).classList.remove('active');
-      const nextIdx = currentStepIdx + 1;
-      
-      // Cyber Sequence Transition (Between Steps e.g. Curtains and Cake)
-      if(currentStepIdx === 1) { 
-        triggerCyberSequence(nextIdx);
-        return;
-      }
-
-      document.getElementById(`screen${nextIdx}`).classList.add('active');
-      if(nextIdx === 7) document.querySelector('.envelope-icon').style.display = 'block'; // Show Envelope
     }
 
-    // --- SCREEN 0: PASSCODE TERMINAL LOGIC ---
-    function pressKey(num) {
-      if (enteredPin.length < 4) {
-        enteredPin += num;
-        updatePasscodeDots();
+    function renderStars() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for(let s of stars) {
+        ctx.fillStyle = `rgba(255, 255, 255, ${s.alpha})`;
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.fill();
+        s.alpha += (Math.random() - 0.5) * 0.07;
+        if(s.alpha < 0.2) s.alpha = 0.2;
+        if(s.alpha > 0.95) s.alpha = 0.95;
       }
-      if (enteredPin.length === 4) {
-        setTimeout(() => {
-          if (enteredPin === passcode) {
-            nextStep(0);
-          } else {
-            alert("Wrong secret code!");
-            enteredPin = "";
-            updatePasscodeDots();
-          }
-        }, 200);
-      }
+      requestAnimationFrame(renderStars);
     }
+    renderStars();
+  }
 
-    function updatePasscodeDots() {
-      for (let i = 0; i < 4; i++) {
-        const dot = document.getElementById(`dot${i}`);
-        if (i < enteredPin.length) {
-          dot.classList.add('filled');
-        } else {
-          dot.classList.remove('filled');
-        }
-      }
+  function pressKey(num) {
+    if(pin.length < 4) pin += num;
+    document.getElementById('passDisplay').innerText = pin.padEnd(4, '_').split('').join(' ');
+    if(pin.length === 4) {
+      if(pin === correctPin) nextSec(1);
+      else { alert("Wrong Pin! (Hint: 0404)"); pin = ""; updatePassDisplay(); }
     }
+  }
 
-    // --- SCREEN 1: INTERACTIVE CURTAINS (CANVAS) ---
-    function initCurtains() {
-      const canvas = document.getElementById('curtainCanvas');
-      const ctx = canvas.getContext('2d');
-      canvas.width = window.innerWidth;
-      canvas.height = 300; // Set appropriate height
-      
-      const threads = 20;
-      const threadWidth = canvas.width / threads;
-      
-      function drawCurtains(offsetX) {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = "#8a0c20"; // Maroon Curtain Color
-        for(let i=0; i<threads; i++) {
-          ctx.fillRect(i * threadWidth + (offsetX * (i/threads)), 0, threadWidth - 2, canvas.height);
-        }
-      }
-      
-      drawCurtains(0); // Initial State
+  function updatePassDisplay() { document.getElementById('passDisplay').innerText = "_ _ _ _"; }
 
-      let isDragging = false;
-      canvas.addEventListener('mousedown', () => isDragging = true);
-      window.addEventListener('mouseup', () => isDragging = false);
-      canvas.addEventListener('mousemove', (e) => {
-        if (!isDragging) return;
-        drawCurtains(e.clientX - canvas.width/2);
-      });
-      
-      // Add mobile touch events similarly
-    }
+  function nextSec(secNum) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.getElementById(`sec${secNum}`).classList.add('active');
+    if(secNum === 3) initMatrixRain();
+    if(secNum === 7) initFlowerRain();
+  }
 
-    // --- CYBER SEQUENCE / DOMAIN EXPANSION ---
-    function triggerCyberSequence(nextStepIdx) {
-      const overlay = document.getElementById('cyberSequence');
-      overlay.style.display = 'flex';
-      
-      // Anime Domain Expansion Sparkles Confetti
-      confetti({ particleCount: 150, spread: 100, origin: { y: 0.5 } });
+  function strikeMidnight() {
+    confetti({ particleCount: 160, spread: 100, origin: { y: 0.5 } });
+    setTimeout(() => {
+      nextSec(2);
+    }, 1000);
+  }
 
+  function blowCandles() {
+    document.querySelectorAll('.candle').forEach(c => c.innerText = '💨');
+    document.getElementById('blowBtn').style.display = 'none';
+    document.getElementById('cakeNextBtn').style.display = 'inline-block';
+    
+    confetti({ particleCount: 150, spread: 90, origin: { y: 0.6 } });
+    
+    const box = document.getElementById('balloonBox');
+    const balloonEmojis = ['🎈', '🎈', '🎉', '✨', '🎈', '💖', '🏎️'];
+    for(let i=0; i<20; i++) {
       setTimeout(() => {
-        overlay.style.display = 'none';
-        document.getElementById(`screen${nextStepIdx}`).classList.add('active');
-      }, 2500); // Wait 2.5 seconds
+        const b = document.createElement('div');
+        b.className = 'balloon';
+        b.innerText = balloonEmojis[Math.floor(Math.random() * balloonEmojis.length)];
+        b.style.left = `${Math.random() * 88 + 4}%`;
+        box.appendChild(b);
+        setTimeout(() => b.remove(), 4000);
+      }, i * 150);
     }
+  }
 
-    // --- SCREEN 2: BLOW CANDLE LOGIC ---
-    function blowCandle() {
-      confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
-      document.querySelector('.cake-box').innerText = "🎂 Wish Made!";
-      document.getElementById('nextToHearts').style.display = "inline-block";
+  let matrixInterval;
+  function initMatrixRain() {
+    const canvas = document.getElementById('matrixCanvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const chars = "01CODESJAVAPYTHON<DINO/>✨💖BMW";
+    const fontSize = 14;
+    const columns = canvas.width / fontSize;
+    const drops = [];
+    for(let i=0; i<columns; i++) drops[i] = 1;
+
+    function draw() {
+      ctx.fillStyle = 'rgba(217, 4, 41, 0.12)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#ffccd2';
+      ctx.font = fontSize + 'px Fira Code';
+
+      for(let i=0; i<drops.length; i++) {
+        const text = chars.charAt(Math.floor(Math.random() * chars.length));
+        ctx.fillText(text, i*fontSize, drops[i]*fontSize);
+        if(drops[i]*fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+        drops[i]++;
+      }
     }
+    clearInterval(matrixInterval);
+    matrixInterval = setInterval(draw, 33);
+  }
 
-    // --- SCREEN 3: COMPLIMENT RAIN LOGIC ---
-    function spawnCompliment(event) {
-      const text = complimets[Math.floor(Math.random() * complimets.length)];
-      const bubble = document.createElement('div');
-      bubble.className = 'compliment-bubble';
-      bubble.innerText = text;
-      bubble.style.left = `${event.clientX - 50}px`;
-      bubble.style.top = `${event.clientY - 15}px`;
-      document.body.appendChild(bubble);
+  function triggerCloudRain() {
+    confetti({ particleCount: 40, spread: 70, origin: { y: 0.4 } });
+  }
 
-      gsap.to(bubble, {
-        y: -100,
-        opacity: 0,
-        duration: 1.5,
-        onComplete: () => bubble.remove()
+  function spawnCompliment(e) {
+    const bubble = document.createElement('div');
+    bubble.className = 'compliment-bubble';
+    bubble.innerText = compliments[Math.floor(Math.random()*compliments.length)];
+    
+    const offsetX = (Math.random() - 0.5) * 190;
+    const offsetY = (Math.random() - 0.5) * 150;
+
+    const rect = e.currentTarget.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+
+    bubble.style.left = `${centerX + offsetX}px`;
+    bubble.style.top = `${centerY + offsetY}px`;
+    document.body.appendChild(bubble);
+
+    gsap.fromTo(bubble, { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.3 });
+    gsap.to(bubble, { y: offsetY > 0 ? 45 : -45, opacity: 0, duration: 2.5, delay: 0.8, onComplete: () => bubble.remove() });
+
+    confetti({ particleCount: 15, spread: 40, origin: { x: centerX/window.innerWidth, y: centerY/window.innerHeight } });
+  }
+
+  window.addEventListener('DOMContentLoaded', () => {
+    const grid = document.getElementById('photoGrid');
+    for(let i=1; i<=18; i++) {
+      const item = document.createElement('div');
+      item.className = 'gallery-item';
+      item.innerHTML = `<img src="https://picsum.photos/200/200?random=${i}" alt="Memory ${i}">`;
+      grid.appendChild(item);
+    }
+  });
+
+  function initFlowerRain() {
+    const canvas = document.getElementById('flowerCanvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const flowers = [];
+    for(let i=0; i<35; i++) {
+      flowers.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 6 + 4,
+        d: Math.random() * 20,
+        color: ['#ffffff', '#ffccd2', '#ff8fa3', '#ffb5a7'][Math.floor(Math.random()*4)]
       });
     }
 
-    // --- SCREEN 7: ENVELOPE & TYPEWRITER LETTER LOGIC ---
-    function openEnvelope() {
-      document.getElementById('envelopeModal').style.display = 'none';
-      startTypewriter();
+    function drawFlowers() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for(let i=0; i<flowers.length; i++) {
+        let f = flowers[i];
+        ctx.fillStyle = f.color;
+        ctx.beginPath();
+        ctx.arc(f.x, f.y, f.r, 0, Math.PI*2, true);
+        ctx.fill();
+      }
+      updateFlowers();
     }
 
-    function startTypewriter() {
-      const container = document.getElementById('typewriterText');
-      container.innerHTML = "";
-      let i = 0;
-      function type() {
-        if (i < letterContent.length) {
-          container.innerHTML += letterContent.charAt(i);
-          i++;
-          setTimeout(type, 35); // Adjust typing speed here
-        } else {
-          document.getElementById('waBtn').style.display = 'block'; // Show WA button
+    let angle = 0;
+    function updateFlowers() {
+      angle += 0.01;
+      for(let i=0; i<flowers.length; i++) {
+        let f = flowers[i];
+        f.y += Math.cos(angle+f.d) + 1 + f.r/2;
+        f.x += Math.sin(angle) * 1.5;
+        if(f.x > canvas.width + 5 || f.x < -5 || f.y > canvas.height) {
+          f.x = Math.random() * canvas.width;
+          f.y = -10;
         }
       }
-      type();
     }
+    setInterval(drawFlowers, 25);
+  }
 
-    function sendWishWA() {
-      const myWA = "+923254150047";
-      const message = encodeURIComponent("Hey! Here is the wish I made: 👉👈");
-      window.open(`https://wa.me/${myWA}?text=${message}`, '_blank');
+  function openLetter() {
+    document.getElementById('envelopeModal').style.display = 'none';
+    let idx = 0;
+    const target = document.getElementById('typewriterTarget');
+    function type() {
+      if(idx < noteText.length) {
+        target.innerHTML += noteText.charAt(idx) === '\n' ? '<br>' : noteText.charAt(idx);
+        idx++;
+        setTimeout(type, 30);
+      } else {
+        document.getElementById('waBtn').style.display = 'block';
+        confetti({ particleCount: 90, spread: 90 });
+      }
     }
+    type();
+  }
 
-  </script>
+  function redirectWA() {
+    const num = "966557349396";
+    const msg = encodeURIComponent("Hey! Here is the birthday wish I made at the start that I want you to fulfill right now: ");
+    window.open(`https://wa.me/${num}?text=${msg}`, '_blank');
+  }
+</script>
+
 </body>
 </html>
