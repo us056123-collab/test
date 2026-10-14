@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Happy Birthday Dino! 🎂✨ — Dino Security Vault</title>
-  <link rel="stylesheet" href="styles.css">
   <style>
     /* Dino's Birthday Web App - Shared Stylesheet */
 *, *::before, *::after {
@@ -477,47 +476,9 @@ body {
 
   
 
-  <script src="audio.js"></script>
   <script>
-    
-        let enteredCode = "";
-        const correctCode = "0404";
-        function pressKey(n) {
-          audio.playKeyClick();
-          if (enteredCode.length < 4) { enteredCode += n; updateDisplay(); }
-          if (enteredCode.length === 4) submitPasscode();
-        }
-        function clearPasscode() {
-          audio.playKeyClick(); enteredCode = ""; updateDisplay();
-          document.getElementById('terminalStatus').textContent = "Awaiting authentication...";
-        }
-        function updateDisplay() {
-          let d = enteredCode.split('').map(() => '●').join('');
-          while(d.length < 4) d += '-';
-          document.getElementById('passcodeDisplay').textContent = d;
-        }
-        function quickFillPasscode() { enteredCode = correctCode; updateDisplay(); submitPasscode(); }
-        function submitPasscode() {
-          const st = document.getElementById('terminalStatus');
-          if (enteredCode === correctCode) {
-            st.className = "terminal-status status-success";
-            st.textContent = "[ACCESS GRANTED] Decrypting Dino's Birthday Surprise Protocol...";
-            audio.playAccessGranted();
-            launchConfettiBurst(40);
-            setTimeout(() => window.location.href = "curtains.html", 1200);
-          } else {
-            st.className = "terminal-status status-error";
-            st.textContent = "[ACCESS DENIED] Incorrect Passcode. Try '0404'!";
-            audio.playAccessDenied();
-            setTimeout(clearPasscode, 900);
-          }
-        }
-        window.addEventListener('keydown', (e) => {
-          if (e.key >= '0' && e.key <= '9') pressKey(e.key);
-          else if (e.key === 'Backspace') clearPasscode();
-          else if (e.key === 'Enter') submitPasscode();
-        });
-        /* Web Audio API Sound Synthesizer */
+
+    /* Web Audio API Sound Synthesizer */
 class BirthdayAudioEngine {
   constructor() {
     this.ctx = null;
@@ -526,11 +487,17 @@ class BirthdayAudioEngine {
 
   initContext() {
     if (!this.ctx) {
-      const AudioContext = window.AudioContext || window.webkitAudioContext;
-      this.ctx = new AudioContext();
+      try {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (AudioContext) {
+          this.ctx = new AudioContext();
+        }
+      } catch (e) {}
     }
     if (this.ctx && this.ctx.state === 'suspended') {
-      this.ctx.resume();
+      try {
+        this.ctx.resume();
+      } catch (e) {}
     }
   }
 
@@ -542,6 +509,7 @@ class BirthdayAudioEngine {
   playTone(freq, type = 'sine', duration = 0.1, gainVal = 0.2) {
     if (this.isMuted) return;
     this.initContext();
+    if (!this.ctx) return;
     try {
       const osc = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
@@ -579,6 +547,7 @@ class BirthdayAudioEngine {
   playWhoosh() {
     if (this.isMuted) return;
     this.initContext();
+    if (!this.ctx) return;
     try {
       const osc = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
@@ -612,6 +581,7 @@ class BirthdayAudioEngine {
   playDomainExpansionSound() {
     if (this.isMuted) return;
     this.initContext();
+    if (!this.ctx) return;
     try {
       const osc = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
@@ -640,6 +610,7 @@ class BirthdayAudioEngine {
   playBmwEngineStart() {
     if (this.isMuted) return;
     this.initContext();
+    if (!this.ctx) return;
     try {
       for (let i = 0; i < 4; i++) {
         setTimeout(() => this.playTone(80 + i * 15, 'square', 0.06, 0.15), i * 90);
@@ -664,6 +635,7 @@ class BirthdayAudioEngine {
   playBmwRev() {
     if (this.isMuted) return;
     this.initContext();
+    if (!this.ctx) return;
     try {
       const osc = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
@@ -719,7 +691,51 @@ class BirthdayAudioEngine {
 
 const audio = new BirthdayAudioEngine();
 
-// Ambient starfield
+    let enteredCode = "";
+        const correctCode = "0404";
+        function pressKey(n) {
+          audio.playKeyClick();
+          if (enteredCode.length < 4) { enteredCode += n; updateDisplay(); }
+          if (enteredCode.length === 4) submitPasscode();
+        }
+        function clearPasscode() {
+          audio.playKeyClick();
+          enteredCode = "";
+          updateDisplay();
+          const st = document.getElementById('terminalStatus');
+          if (st) {
+            st.className = "terminal-status";
+            st.textContent = "Awaiting authentication...";
+          }
+        }
+        function updateDisplay() {
+          let d = enteredCode.split('').map(() => '●').join('');
+          while(d.length < 4) d += '-';
+          document.getElementById('passcodeDisplay').textContent = d;
+        }
+        function quickFillPasscode() { enteredCode = correctCode; updateDisplay(); submitPasscode(); }
+        function submitPasscode() {
+          const st = document.getElementById('terminalStatus');
+          if (enteredCode === correctCode) {
+            st.className = "terminal-status status-success";
+            st.textContent = "[ACCESS GRANTED] Decrypting Dino's Birthday Surprise Protocol...";
+            audio.playAccessGranted();
+            launchConfettiBurst(40);
+            setTimeout(() => window.location.href = "curtains.html", 1200);
+          } else {
+            st.className = "terminal-status status-error";
+            st.textContent = "[ACCESS DENIED] Incorrect Passcode. Try '0404'!";
+            audio.playAccessDenied();
+            setTimeout(clearPasscode, 900);
+          }
+        }
+        window.addEventListener('keydown', (e) => {
+          if (e.key >= '0' && e.key <= '9') pressKey(e.key);
+          else if (e.key === 'Backspace') clearPasscode();
+          else if (e.key === 'Enter') submitPasscode();
+        });
+
+    // Ambient starfield
 (function initAmbientStars() {
   const canvas = document.getElementById('ambientCanvas');
   if (!canvas) return;
@@ -822,4 +838,3 @@ function launchConfettiBurst(count = 70) {
   </script>
 </body>
 </html>
-
