@@ -1,2868 +1,1428 @@
-<!DOCTYPE html>
+
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Happy Birthday Dino! 🎂✨ — The Ultimate Surprise Experience</title>
-  <style>
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      -webkit-tap-highlight-color: transparent;
-    }
+  <title>Happy Birthday Dino ✨🦖</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Nastaliq+Urdu:wght@700&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
 
+  <style>
     :root {
-      --bg-dark: #07090e;
-      --bg-card: rgba(15, 18, 28, 0.94);
-      --border-glow: rgba(255, 255, 255, 0.12);
-      --accent-gold: #f59e0b;
-      --accent-crimson: #e11d48;
-      --accent-purple: #9333ea;
-      --accent-cyan: #06b6d4;
-      --accent-pink: #ec4899;
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
-      --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      --font-mono: "SF Mono", Monaco, "Cascadia Code", "Courier New", monospace;
-      --font-serif: "Playfair Display", Georgia, "Times New Roman", serif;
-      --radius-lg: 20px;
+      --bg-dark: #0a0714;
+      --card-bg: rgba(18, 14, 30, 0.82);
+      --neon-pink: #ff5277;
+      --neon-purple: #c084fc;
+      --neon-mint: #4ade80;
     }
 
     body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
       background-color: var(--bg-dark);
-      color: var(--text-main);
-      font-family: var(--font-main);
-      min-height: 100vh;
+      color: #f8fafc;
+      margin: 0;
+      padding: 0;
       overflow-x: hidden;
-      position: relative;
+      -webkit-tap-highlight-color: transparent;
       user-select: none;
     }
 
-    #ambientCanvas {
+    .font-cute {
+      font-family: 'Quicksand', sans-serif;
+    }
+
+    .font-hand {
+      font-family: 'Caveat', cursive;
+    }
+
+    .font-urdu {
+      font-family: 'Noto Nastaliq Urdu', serif;
+    }
+
+    /* Ambient floating hearts & stars canvas */
+    #ambient-canvas {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: 0;
-      pointer-events: none;
-    }
-
-    #confettiCanvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: 9999;
-      pointer-events: none;
-    }
-
-    /* HEADER */
-    .app-header {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 64px;
-      background: rgba(7, 9, 14, 0.94);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      border-bottom: 1px solid var(--border-glow);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 20px;
-      z-index: 1000;
-    }
-
-    .header-left {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .header-logo {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 1.1rem;
-      font-weight: 800;
-      letter-spacing: 0.5px;
-      background: linear-gradient(135deg, #f59e0b, #ec4899, #06b6d4);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      cursor: pointer;
-    }
-
-    .header-nav {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .nav-header-btn {
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid var(--border-glow);
-      color: white;
-      padding: 7px 14px;
-      border-radius: 20px;
-      cursor: pointer;
-      font-weight: 700;
-      font-size: 0.8rem;
-      transition: all 0.2s;
-    }
-    .nav-header-btn:hover {
-      background: var(--accent-crimson);
-      border-color: var(--accent-crimson);
-    }
-    .nav-header-btn:disabled {
-      opacity: 0.3;
-      cursor: not-allowed;
-      background: rgba(255, 255, 255, 0.05);
-    }
-
-    .nav-pill-selector {
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid var(--border-glow);
-      color: var(--text-main);
-      border-radius: 20px;
-      padding: 7px 14px;
-      font-size: 0.82rem;
-      cursor: pointer;
-      outline: none;
-      transition: all 0.2s ease;
-      max-width: 220px;
-    }
-
-    .sound-toggle-btn {
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid var(--border-glow);
-      color: var(--text-main);
-      width: 38px;
-      height: 38px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      font-size: 1rem;
-      transition: all 0.2s;
-    }
-    .sound-toggle-btn:hover {
-      transform: scale(1.08);
-      background: rgba(255, 255, 255, 0.15);
-    }
-
-    /* MAIN VIEWPORT */
-    .main-viewport {
-      position: relative;
-      z-index: 10;
-      width: 100%;
-      min-height: calc(100vh - 64px);
-      margin-top: 64px;
-      padding: 24px 16px 60px 16px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-    }
-
-    .scene-section {
-      display: none;
-      width: 100%;
-      max-width: 1000px;
-      margin: 0 auto;
-      animation: sceneFadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    }
-
-    .scene-section.active {
-      display: block;
-    }
-
-    @keyframes sceneFadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(14px) scale(0.98);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-      }
-    }
-
-    .card-glass {
-      background: var(--bg-card);
-      border: 1px solid var(--border-glow);
-      border-radius: var(--radius-lg);
-      padding: 32px 28px;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .scene-header {
-      text-align: center;
-      margin-bottom: 24px;
-    }
-
-    .scene-badge {
-      display: inline-block;
-      padding: 4px 14px;
-      background: rgba(245, 158, 11, 0.15);
-      border: 1px solid rgba(245, 158, 11, 0.35);
-      color: #f59e0b;
-      font-size: 0.75rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-      border-radius: 20px;
-      margin-bottom: 10px;
-    }
-
-    .scene-title {
-      font-size: 2.1rem;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-      margin-bottom: 8px;
-      background: linear-gradient(135deg, #fff 0%, #cbd5e1 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .scene-subtitle {
-      color: var(--text-muted);
-      font-size: 0.95rem;
-      max-width: 600px;
-      margin: 0 auto;
-      line-height: 1.5;
-    }
-
-    .btn-action-primary {
-      background: linear-gradient(135deg, #e11d48, #be123c);
-      color: white;
-      border: none;
-      padding: 12px 28px;
-      border-radius: 30px;
-      font-size: 1rem;
-      font-weight: 700;
-      cursor: pointer;
-      box-shadow: 0 6px 20px rgba(225, 29, 72, 0.4);
-      transition: all 0.2s;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      text-decoration: none;
-    }
-    .btn-action-primary:hover {
-      transform: translateY(-2px) scale(1.02);
-      box-shadow: 0 10px 25px rgba(225, 29, 72, 0.6);
-    }
-
-    .card-footer-forward {
-      margin-top: 28px;
-      padding-top: 20px;
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .step-indicator-text {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      font-weight: 600;
-    }
-
-    .btn-step-next {
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid var(--border-glow);
-      color: white;
-      text-decoration: none;
-      padding: 8px 18px;
-      border-radius: 20px;
-      cursor: pointer;
-      font-weight: 700;
-      font-size: 0.85rem;
-      transition: all 0.2s;
-      display: inline-flex;
-      align-items: center;
-    }
-    .btn-step-next:hover {
-      background: var(--accent-gold);
-      color: #030712;
-      border-color: var(--accent-gold);
-    }
-
-    /* STAGE 1: TERMINAL LOCKSCREEN */
-    .terminal-window {
-      max-width: 480px;
-      margin: 0 auto;
-      background: #0b0f17;
-      border-radius: 14px;
-      border: 1px solid #2d3748;
-      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(6, 182, 212, 0.12);
-      overflow: hidden;
-      font-family: var(--font-mono);
-    }
-
-    .terminal-topbar {
-      background: #141b26;
-      padding: 12px 18px;
-      display: flex;
-      align-items: center;
-      border-bottom: 1px solid #2d3748;
-    }
-
-    .terminal-dots {
-      display: flex;
-      gap: 8px;
-    }
-
-    .terminal-dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-    }
-    .dot-red { background: #ff5f56; }
-    .dot-yellow { background: #ffbd2e; }
-    .dot-green { background: #27c93f; }
-
-    .terminal-title {
-      margin-left: auto;
-      margin-right: auto;
-      color: #94a3b8;
-      font-size: 0.8rem;
-    }
-
-    .terminal-body {
-      padding: 22px 20px;
-      color: #cbd5e1;
-      font-size: 0.88rem;
-      line-height: 1.6;
-    }
-
-    .terminal-log {
-      margin-bottom: 14px;
-      color: #38bdf8;
-    }
-
-    .passcode-display-box {
-      background: #03060a;
-      border: 1px solid #334155;
-      border-radius: 8px;
-      padding: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      margin: 16px 0;
-      font-size: 1.8rem;
-      letter-spacing: 12px;
-      color: #38bdf8;
-      min-height: 56px;
-    }
-
-    .terminal-keypad {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-      max-width: 290px;
-      margin: 0 auto 12px auto;
-    }
-
-    .key-btn {
-      background: #1e293b;
-      border: 1px solid #334155;
-      color: white;
-      font-size: 1.25rem;
-      font-family: var(--font-mono);
-      padding: 12px 0;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.15s;
-    }
-    .key-btn:hover {
-      background: #334155;
-      transform: translateY(-2px);
-    }
-    .key-btn:active {
-      background: #38bdf8;
-      color: #030407;
-    }
-
-    .key-btn.action-btn {
-      font-size: 0.8rem;
-      background: #334155;
-      color: #94a3b8;
-    }
-
-    .terminal-status {
-      text-align: center;
-      min-height: 26px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      margin-top: 8px;
-    }
-
-    .status-error {
-      color: #f87171;
-      animation: shake 0.4s ease-in-out;
-    }
-
-    .status-success {
-      color: #4ade80;
-      animation: pulseGlow 1s infinite alternate;
-    }
-
-    @keyframes shake {
-      0%, 100% { transform: translateX(0); }
-      20%, 60% { transform: translateX(-8px); }
-      40%, 80% { transform: translateX(8px); }
-    }
-
-    @keyframes pulseGlow {
-      from { text-shadow: 0 0 5px rgba(74, 222, 128, 0.4); }
-      to { text-shadow: 0 0 15px rgba(74, 222, 128, 0.9); }
-    }
-
-    .hint-chip {
-      text-align: center;
-      margin-top: 12px;
-      font-size: 0.8rem;
-      color: #94a3b8;
-      cursor: pointer;
-      text-decoration: underline;
-    }
-
-    /* STAGE 2: INTERACTIVE VELVET CURTAINS */
-    .curtains-stage {
-      position: relative;
-      height: 460px;
-      background: radial-gradient(circle at center, #1e1b4b 0%, #030712 100%);
-      border-radius: var(--radius-lg);
-      overflow: hidden;
-      box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.8);
-    }
-
-    .curtains-valance {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 70px;
-      background: linear-gradient(180deg, #991b1b 0%, #b91c1c 80%, #7f1d1d 100%);
-      border-bottom: 4px solid #f59e0b;
-      z-index: 5;
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
-      display: flex;
-      justify-content: space-around;
-      align-items: flex-end;
-    }
-
-    .valance-scallop {
-      width: 60px;
-      height: 30px;
-      background: #b91c1c;
-      border-radius: 0 0 30px 30px;
-      border-bottom: 3px solid #f59e0b;
-    }
-
-    .curtain-panel {
-      position: absolute;
-      top: 0;
-      height: 100%;
-      width: 50.5%;
-      z-index: 4;
-      background: repeating-linear-gradient(
-        90deg,
-        #7f1d1d 0px,
-        #991b1b 25px,
-        #ef4444 40px,
-        #991b1b 55px,
-        #7f1d1d 70px
-      );
-      box-shadow: 0 0 30px rgba(0, 0, 0, 0.9);
-      transition: transform 1.2s cubic-bezier(0.77, 0, 0.175, 1);
-      cursor: pointer;
-    }
-
-    .curtain-left {
-      left: 0;
-      transform-origin: left top;
-    }
-
-    .curtain-right {
-      right: 0;
-      transform-origin: right top;
-    }
-
-    .curtains-open .curtain-left {
-      transform: translateX(-90%) skewY(-2deg);
-    }
-
-    .curtains-open .curtain-right {
-      transform: translateX(90%) skewY(2deg);
-    }
-
-    .gold-tassel {
-      position: absolute;
-      bottom: 60px;
-      width: 24px;
-      height: 70px;
-      background: linear-gradient(180deg, #f59e0b, #d97706);
-      border-radius: 4px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-    }
-    .curtain-left .gold-tassel { right: 20px; }
-    .curtain-right .gold-tassel { left: 20px; }
-
-    .stage-content-inside {
-      position: absolute;
       inset: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 30px;
-      z-index: 2;
-    }
-
-    .spotlight {
-      position: absolute;
-      top: 0;
-      width: 240px;
-      height: 100%;
-      background: radial-gradient(ellipse at top, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0) 70%);
+      width: 100vw;
+      height: 100vh;
       pointer-events: none;
-      animation: sweepSpotlight 6s infinite alternate ease-in-out;
+      z-index: 0;
     }
 
-    @keyframes sweepSpotlight {
-      0% { transform: translateX(-80px) rotate(-10deg); }
-      100% { transform: translateX(80px) rotate(10deg); }
+    /* Glass card styling */
+    .glass-box {
+      background: var(--card-bg);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.7), 0 0 20px rgba(255, 82, 119, 0.1);
     }
 
-    .curtain-controls {
-      margin-top: 24px;
-      display: flex;
-      justify-content: center;
-      gap: 16px;
+    .glass-glow-pink {
+      border: 1px solid rgba(255, 82, 119, 0.35);
+      box-shadow: 0 0 30px rgba(255, 82, 119, 0.22), 0 10px 40px rgba(0,0,0,0.8);
     }
 
-    /* STAGE 3: REAL-TIME ACCURATE CLOCK & MIDNIGHT CELEBRATION */
-    .spider-clock-wrapper {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 24px;
+    /* Cute dinosaur float animation */
+    .dino-bounce {
+      animation: dinoFloat 3s infinite ease-in-out;
+    }
+    @keyframes dinoFloat {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-8px) rotate(2deg); }
+    }
+
+    /* Candle Flame */
+    .flame {
+      width: 14px;
+      height: 24px;
+      background: radial-gradient(ellipse at bottom, #ffffff 10%, #fde047 35%, #ff5277 85%, transparent 100%);
+      border-radius: 50% 50% 25% 25% / 60% 60% 40% 40%;
+      box-shadow: 0 0 18px 5px rgba(255, 82, 119, 0.75), 0 -5px 12px rgba(253, 224, 71, 0.8);
+      animation: flameFlicker 0.15s infinite alternate ease-in-out;
+      transform-origin: bottom center;
+      transition: all 0.4s ease;
+    }
+
+    .flame.extinguished {
+      opacity: 0;
+      transform: scale(0.1) translateY(-15px);
+      pointer-events: none;
+    }
+
+    @keyframes flameFlicker {
+      0% { transform: scale(1) rotate(-2deg); }
+      100% { transform: scale(1.1, 0.93) rotate(3deg); }
+    }
+
+    /* GASHAPON / LOVE CAPSULE DISPENSER */
+    .capsule-machine {
       position: relative;
+      width: 250px;
+      margin: 0 auto;
     }
 
-    .clock-outer-case {
-      position: relative;
-      width: 290px;
-      height: 290px;
+    .capsule-globe {
+      width: 190px;
+      height: 190px;
+      margin: 0 auto;
       border-radius: 50%;
-      background: radial-gradient(circle, #1e293b 0%, #0f172a 70%, #020617 100%);
-      border: 8px solid #dc2626;
-      box-shadow: 0 0 35px rgba(220, 38, 38, 0.4), inset 0 0 30px rgba(0, 0, 0, 0.8);
+      background: radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.35), rgba(255, 82, 119, 0.12) 50%, rgba(192, 132, 252, 0.25) 90%);
+      border: 3px solid rgba(255, 255, 255, 0.35);
+      box-shadow: inset 0 0 25px rgba(255, 82, 119, 0.3), inset 8px 10px 18px rgba(255,255,255,0.4), 0 15px 35px rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(8px);
+      position: relative;
+      overflow: hidden;
       display: flex;
       align-items: center;
       justify-content: center;
-    }
-
-    .spider-web-bg {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      opacity: 0.25;
-      background-image: 
-        radial-gradient(circle at center, transparent 40px, rgba(255, 255, 255, 0.4) 41px, transparent 42px),
-        radial-gradient(circle at center, transparent 80px, rgba(255, 255, 255, 0.4) 81px, transparent 82px),
-        radial-gradient(circle at center, transparent 115px, rgba(255, 255, 255, 0.4) 116px, transparent 117px);
-    }
-
-    .clock-dino-name {
-      position: absolute;
-      top: 28%;
-      font-size: 0.8rem;
-      font-weight: 800;
-      letter-spacing: 2px;
-      color: #94a3b8;
-      text-transform: uppercase;
       z-index: 5;
     }
 
-    .spider-icon-center {
-      position: absolute;
-      width: 38px;
-      height: 38px;
-      fill: #dc2626;
-      z-index: 8;
-      filter: drop-shadow(0 0 8px rgba(220, 38, 38, 0.8));
-    }
-
-    .clock-dial-number {
-      position: absolute;
-      font-weight: 800;
-      color: #f8fafc;
-      font-size: 1.15rem;
-      transform: translate(-50%, -50%);
-    }
-
-    .clock-hand {
-      position: absolute;
-      bottom: 50%;
-      left: 50%;
-      transform-origin: bottom center;
-      border-radius: 4px;
-      z-index: 6;
-      transition: transform 0.05s cubic-bezier(0.4, 2.08, 0.55, 0.44);
-    }
-
-    .hour-hand {
-      width: 6px;
-      height: 68px;
-      background: #f8fafc;
-      margin-left: -3px;
-    }
-
-    .minute-hand {
-      width: 4px;
-      height: 98px;
-      background: #38bdf8;
-      margin-left: -2px;
-    }
-
-    .second-hand {
-      width: 2px;
-      height: 114px;
-      background: #ef4444;
-      margin-left: -1px;
-      z-index: 7;
-    }
-
-    .clock-center-pin {
-      position: absolute;
-      width: 14px;
-      height: 14px;
-      border-radius: 50%;
-      background: #ef4444;
-      border: 3px solid #fff;
-      z-index: 9;
-    }
-
-    .time-cards-container {
+    .machine-base {
+      width: 210px;
+      height: 120px;
+      margin: -25px auto 0;
+      background: linear-gradient(180deg, #ff5277 0%, #db2777 50%, #831843 100%);
+      border-radius: 28px 28px 24px 24px;
+      box-shadow: 0 16px 30px rgba(0,0,0,0.7), inset 0 3px 6px rgba(255,255,255,0.4);
+      position: relative;
+      z-index: 4;
+      padding-top: 30px;
       display: flex;
-      gap: 16px;
-      flex-wrap: wrap;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .machine-dial {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, #fef08a, #f59e0b);
+      border-radius: 50%;
+      border: 3px solid #fff;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+      display: flex;
+      align-items: center;
       justify-content: center;
+      cursor: pointer;
+      transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
-    .time-card-box {
-      background: rgba(15, 23, 42, 0.85);
-      border: 1px solid rgba(220, 38, 38, 0.35);
-      padding: 14px 24px;
-      border-radius: 12px;
-      text-align: center;
-      box-shadow: 0 0 20px rgba(220, 38, 38, 0.15);
-      min-width: 240px;
+    .machine-dial.turning {
+      transform: rotate(360deg);
     }
 
-    .time-card-label {
-      font-size: 0.78rem;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: #94a3b8;
-      margin-bottom: 4px;
-      font-weight: 700;
+    .dispensed-capsule {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      margin: 0 auto;
+      box-shadow: 0 10px 25px rgba(255, 82, 119, 0.5), inset 4px 4px 10px rgba(255,255,255,0.6);
+      cursor: pointer;
+      animation: capsulePop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
-    .current-real-time-digits {
-      font-family: var(--font-mono);
-      font-size: 1.8rem;
-      font-weight: 800;
-      color: #38bdf8;
-      letter-spacing: 1px;
+    @keyframes capsulePop {
+      0% { transform: scale(0.2) translateY(-40px); opacity: 0; }
+      100% { transform: scale(1) translateY(0); opacity: 1; }
     }
 
-    .countdown-timer-digits {
-      font-family: var(--font-mono);
-      font-size: 1.8rem;
-      font-weight: 800;
-      color: #ef4444;
-      letter-spacing: 1px;
-      text-shadow: 0 0 10px rgba(239, 68, 68, 0.6);
-    }
-
-    /* Midnight 12 Baje Celebration Overlay */
-    .midnight-celebration-banner {
-      display: none;
-      background: linear-gradient(135deg, #e11d48, #9333ea, #f59e0b);
-      color: white;
-      padding: 18px 28px;
-      border-radius: 16px;
-      text-align: center;
-      font-size: 1.3rem;
-      font-weight: 900;
-      box-shadow: 0 10px 30px rgba(225, 29, 72, 0.6);
-      animation: bannerPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-      margin-top: 10px;
-    }
-
-    @keyframes bannerPop {
-      from { transform: scale(0.8); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
-    }
-
-    /* Floating Balloons */
-    .balloon-particle {
+    /* MASSIVE FLOATING BALLOONS OVERLAY */
+    #balloon-overlay {
       position: fixed;
-      bottom: -100px;
-      width: 45px;
-      height: 55px;
-      border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
-      z-index: 9998;
-      animation: balloonRise 6s linear forwards;
+      inset: 0;
       pointer-events: none;
+      z-index: 100;
+      overflow: hidden;
     }
-    .balloon-particle::after {
-      content: "";
+
+    .floating-balloon {
+      position: absolute;
+      bottom: -150px;
+      width: 55px;
+      height: 72px;
+      border-radius: 50% 50% 48% 48% / 55% 55% 45% 45%;
+      box-shadow: inset 8px 8px 15px rgba(255,255,255,0.4), 0 10px 25px rgba(0,0,0,0.5);
+      animation: floatUpwards linear forwards;
+    }
+
+    .floating-balloon::after {
+      content: '';
       position: absolute;
       bottom: -12px;
       left: 50%;
       transform: translateX(-50%);
-      width: 2px;
-      height: 16px;
-      background: rgba(255, 255, 255, 0.7);
+      width: 1px;
+      height: 35px;
+      background: rgba(255,255,255,0.4);
     }
 
-    @keyframes balloonRise {
-      0% { transform: translateY(0) rotate(0deg); opacity: 0.9; }
-      100% { transform: translateY(-120vh) rotate(20deg); opacity: 0; }
-    }
-
-    /* STAGE 4: GOJO DOMAIN EXPANSION */
-    .gojo-domain-container {
-      position: relative;
-      min-height: 460px;
-      border-radius: var(--radius-lg);
-      background: radial-gradient(circle at center, #2e1065 0%, #090314 100%);
-      overflow: hidden;
-      border: 1px solid rgba(147, 51, 234, 0.4);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 30px;
-      box-shadow: 0 0 50px rgba(147, 51, 234, 0.3);
-    }
-
-    .domain-overlay {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.8s ease;
-      background: radial-gradient(circle at center, rgba(168, 85, 247, 0.25) 0%, rgba(10, 5, 20, 0.95) 75%);
-    }
-
-    .gojo-domain-container.domain-active .domain-overlay {
-      opacity: 1;
-    }
-
-    .sakura-particles-canvas {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-    }
-
-    .domain-kanji-title {
-      font-size: 2.5rem;
-      font-weight: 900;
-      letter-spacing: 4px;
-      color: #e9d5ff;
-      text-shadow: 0 0 25px #a855f7, 0 0 50px #9333ea;
-      margin-bottom: 12px;
-      text-align: center;
-      transform: scale(0.9);
-      transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-
-    .gojo-domain-container.domain-active .domain-kanji-title {
-      transform: scale(1.05);
-    }
-
-    .gojo-quote-box {
-      background: rgba(18, 12, 34, 0.85);
-      border: 1px solid rgba(168, 85, 247, 0.4);
-      border-radius: 14px;
-      padding: 22px 28px;
-      max-width: 580px;
-      text-align: center;
-      font-size: 1.1rem;
-      line-height: 1.6;
-      color: #f3e8ff;
-      margin: 20px 0;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-    }
-
-    .btn-domain-expand {
-      background: linear-gradient(135deg, #7e22ce, #a855f7);
-      color: white;
-      border: none;
-      padding: 14px 32px;
-      border-radius: 30px;
-      font-size: 1.1rem;
-      font-weight: 800;
-      letter-spacing: 1px;
-      cursor: pointer;
-      box-shadow: 0 0 25px rgba(168, 85, 247, 0.6);
-      transition: all 0.25s;
-    }
-    .btn-domain-expand:hover {
-      transform: scale(1.06);
-      box-shadow: 0 0 35px rgba(168, 85, 247, 0.9);
-    }
-
-    /* STAGE 5: ISOMETRIC 3D CAKE */
-    .cake-scene-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 460px;
-    }
-
-    .cake-svg-wrapper {
-      position: relative;
-      width: 320px;
-      height: 270px;
-      margin: 10px auto;
-    }
-
-    .candle-flame-svg {
-      animation: flickerFlame 0.3s infinite alternate ease-in-out;
-      transform-origin: 50% 90%;
-      transition: opacity 0.5s ease;
-    }
-
-    .candles-blown .candle-flame-svg {
-      opacity: 0;
-      animation: none;
-    }
-
-    .cake-slice-svg {
-      transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-
-    .cake-sliced .cake-slice-svg {
-      transform: translate(50px, 20px) rotate(6deg);
-    }
-
-    .cake-actions-row {
-      display: flex;
-      gap: 14px;
-      flex-wrap: wrap;
-      justify-content: center;
-      margin-top: 24px;
-    }
-
-    @keyframes flickerFlame {
-      0% { transform: scaleY(1); }
-      100% { transform: scaleY(1.15); }
-    }
-
-    /* STAGE 6: COMPLIMENT BUBBLES */
-    .bubbles-area-wrapper {
-      position: relative;
-      height: 460px;
-      background: radial-gradient(circle at center, #1e1b4b 0%, #030712 100%);
-      border-radius: var(--radius-lg);
-      overflow: hidden;
-      border: 1px solid rgba(236, 72, 153, 0.3);
-    }
-
-    .central-glowing-heart {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 100px;
-      height: 100px;
-      fill: #e11d48;
-      filter: drop-shadow(0 0 25px rgba(225, 29, 72, 0.7));
-      animation: heartBeating 1.2s infinite ease-in-out;
-      z-index: 5;
-      cursor: pointer;
-    }
-
-    @keyframes heartBeating {
-      0%, 100% { transform: translate(-50%, -50%) scale(1); }
-      15% { transform: translate(-50%, -50%) scale(1.18); }
-      30% { transform: translate(-50%, -50%) scale(1.05); }
-      45% { transform: translate(-50%, -50%) scale(1.22); }
-    }
-
-    .compliment-bubble {
-      position: absolute;
-      padding: 10px 18px;
-      background: rgba(255, 255, 255, 0.12);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      border-radius: 30px;
-      color: white;
-      font-size: 0.88rem;
-      font-weight: 600;
-      cursor: pointer;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), inset 0 0 12px rgba(255, 255, 255, 0.2);
-      transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      animation: floatUpAndDrift 8s infinite linear;
-      z-index: 6;
-      white-space: nowrap;
-    }
-
-    .compliment-bubble:hover {
-      transform: scale(1.12);
-      background: rgba(236, 72, 153, 0.35);
-      border-color: #f472b6;
-    }
-
-    @keyframes floatUpAndDrift {
-      0% { transform: translateY(460px) translateX(0); opacity: 0; }
-      10% { opacity: 1; }
-      90% { opacity: 1; }
-      100% { transform: translateY(-50px) translateX(20px); opacity: 0; }
-    }
-
-    .bubble-score-badge {
-      position: absolute;
-      top: 16px;
-      right: 16px;
-      background: rgba(0, 0, 0, 0.65);
-      border: 1px solid rgba(236, 72, 153, 0.5);
-      padding: 8px 16px;
-      border-radius: 20px;
-      font-size: 0.85rem;
-      color: #f472b6;
-      font-weight: 700;
-      z-index: 10;
-    }
-
-    /* STAGE 7: AGE TEASER WITH PHOTO FRAME (ANYA REPLACED WITH PHOTO) */
-    .age-teaser-wrapper {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 460px;
-      text-align: center;
-    }
-
-    .speech-bubble-teaser {
-      position: relative;
-      background: #fef08a;
-      color: #713f12;
-      padding: 22px 32px;
-      border-radius: 24px;
-      max-width: 580px;
-      font-size: 1.18rem;
-      font-weight: 700;
-      line-height: 1.6;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
-      margin-bottom: 26px;
-    }
-
-    .speech-bubble-teaser::after {
-      content: "";
-      position: absolute;
-      bottom: -16px;
-      left: 50%;
-      transform: translateX(-50%);
-      border-width: 16px 16px 0 16px;
-      border-style: solid;
-      border-color: #fef08a transparent transparent transparent;
-    }
-
-    .photo-avatar-container {
-      position: relative;
-      width: 170px;
-      height: 170px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #f472b6, #ec4899);
-      padding: 5px;
-      box-shadow: 0 10px 30px rgba(244, 114, 182, 0.5), 0 0 20px rgba(245, 158, 11, 0.4);
-      cursor: pointer;
-      transition: transform 0.25s ease;
-    }
-    .photo-avatar-container:hover {
-      transform: scale(1.06);
-    }
-
-    .photo-avatar-inner {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      overflow: hidden;
-      background: #1e293b;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .photo-avatar-inner img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .photo-upload-overlay-badge {
-      position: absolute;
-      bottom: 6px;
-      right: 6px;
-      background: #e11d48;
-      color: white;
-      border: 2px solid #ffffff;
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1rem;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-    }
-
-    /* STAGE 8: 18-PHOTO GALLERY GRID */
-    .gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-      gap: 16px;
-      margin-top: 20px;
-    }
-
-    @media (min-width: 768px) {
-      .gallery-grid {
-        grid-template-columns: repeat(6, 1fr);
+    @keyframes floatUpwards {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0.95;
+      }
+      100% {
+        transform: translateY(calc(-100vh - 200px)) rotate(18deg);
+        opacity: 0.2;
       }
     }
 
-    .polaroid-card {
-      background: #ffffff;
-      padding: 10px 10px 24px 10px;
-      border-radius: 4px;
-      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.35);
-      cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    /* URDU HAMZA WAX SEAL */
+    .wax-seal {
+      width: 78px;
+      height: 78px;
+      background: radial-gradient(circle, #b91c1c 20%, #7f1d1d 80%, #450a0a 100%);
+      border: 3px dashed #ef4444;
+      border-radius: 50%;
+      box-shadow: 0 0 25px rgba(239, 68, 68, 0.6), inset 0 3px 8px rgba(255,255,255,0.4), 0 8px 18px rgba(0,0,0,0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
       position: relative;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .wax-seal:hover {
+      transform: scale(1.1) rotate(5deg);
+      box-shadow: 0 0 35px rgba(239, 68, 68, 0.85);
+    }
+
+    /* Polaroids */
+    .polaroid-card {
+      background: #141024;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 8px 8px 14px 8px;
+      border-radius: 14px;
+      transition: all 0.3s ease;
+      cursor: pointer;
     }
 
     .polaroid-card:hover {
-      transform: translateY(-6px) scale(1.04) rotate(1deg);
-      box-shadow: 0 14px 28px rgba(0, 0, 0, 0.5);
-      z-index: 5;
+      transform: translateY(-4px) scale(1.02);
+      border-color: rgba(255, 82, 119, 0.4);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.7), 0 0 15px rgba(255, 82, 119, 0.2);
     }
 
-    .polaroid-img-wrapper {
-      width: 100%;
-      aspect-ratio: 1/1;
-      background: #f1f5f9;
-      border-radius: 2px;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-    }
-
-    .polaroid-img-wrapper img, .polaroid-img-wrapper svg {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .polaroid-caption {
-      margin-top: 10px;
-      font-size: 0.75rem;
-      font-family: var(--font-serif);
-      color: #334155;
-      text-align: center;
-      font-weight: 700;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .photo-edit-badge {
-      position: absolute;
-      top: 6px;
-      right: 6px;
-      background: rgba(0, 0, 0, 0.6);
-      color: white;
+    /* Step indicator dots */
+    .step-dot {
+      width: 8px;
+      height: 8px;
       border-radius: 50%;
-      width: 22px;
-      height: 22px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.65rem;
-      opacity: 0;
-      transition: opacity 0.2s;
+      background: rgba(255,255,255,0.2);
+      transition: all 0.3s ease;
     }
-    .polaroid-card:hover .photo-edit-badge {
-      opacity: 1;
+    .step-dot.active {
+      background: var(--neon-pink);
+      width: 24px;
+      border-radius: 12px;
+      box-shadow: 0 0 12px var(--neon-pink);
     }
 
-    /* LIGHTBOX MODAL */
-    .lightbox-modal {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.92);
-      backdrop-filter: blur(12px);
-      z-index: 10000;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
+    /* Step transition fade */
+    .step-fade-in {
+      animation: stepFade 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
-    .lightbox-modal.active {
-      display: flex;
+    @keyframes stepFade {
+      0% { opacity: 0; transform: translateY(12px) scale(0.98); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
     }
 
-    .lightbox-content {
-      max-width: 600px;
-      width: 100%;
-      background: #1e293b;
-      border-radius: var(--radius-lg);
-      padding: 20px;
-      border: 1px solid var(--border-glow);
-      text-align: center;
-    }
-
-    .lightbox-img-box {
-      width: 100%;
-      max-height: 400px;
-      border-radius: 8px;
-      overflow: hidden;
-      margin-bottom: 16px;
-      background: #0f172a;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .lightbox-img-box img, .lightbox-img-box svg {
-      max-width: 100%;
-      max-height: 350px;
-      object-fit: contain;
-    }
-
-    /* STAGE 9: VINTAGE ENVELOPE & TYPEWRITER WITH 'ء' WAX SEAL */
-    .envelope-scene-wrapper {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 460px;
-    }
-
-    .vintage-envelope {
-      position: relative;
-      width: 320px;
-      height: 200px;
-      background: #ea580c;
-      border-radius: 8px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
-      cursor: pointer;
-      transition: all 0.4s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    /* Wax seal with 'ء' monogram */
+    /* Wax seal enhanced shine */
     .wax-seal {
-      width: 70px;
-      height: 70px;
-      background: radial-gradient(circle, #dc2626 0%, #991b1b 100%);
+      width: 82px;
+      height: 82px;
+      background: radial-gradient(circle at 35% 35%, #ef4444 0%, #b91c1c 45%, #7f1d1d 80%, #450a0a 100%);
+      border: 3px double #fca5a5;
       border-radius: 50%;
-      border: 3.5px solid #fecaca;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5), inset 0 2px 4px rgba(255, 255, 255, 0.3);
+      box-shadow: 0 0 25px rgba(239, 68, 68, 0.6), inset 0 3px 10px rgba(255,255,255,0.45), 0 10px 22px rgba(0,0,0,0.8);
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #fef2f2;
-      font-size: 2.2rem;
-      font-weight: 800;
-      z-index: 10;
-      transition: transform 0.3s;
-      line-height: 1;
-      padding-bottom: 4px;
+      position: relative;
+      cursor: pointer;
+      transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
     .wax-seal:hover {
-      transform: scale(1.1);
+      transform: scale(1.08) rotate(4deg);
+      box-shadow: 0 0 35px rgba(239, 68, 68, 0.85), inset 0 4px 12px rgba(255,255,255,0.6);
     }
-
-    .parchment-letter {
-      display: none;
-      max-width: 650px;
-      width: 100%;
-      background: #fefce8;
-      color: #451a03;
-      border-radius: 14px;
-      padding: 36px 40px;
-      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7);
-      font-family: var(--font-mono);
-      font-size: 1rem;
-      line-height: 1.8;
-      border: 1px solid #fef08a;
-      position: relative;
-    }
-
-    .parchment-letter.active {
-      display: block;
-      animation: letterSlideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    }
-
-    @keyframes letterSlideUp {
-      from { opacity: 0; transform: translateY(40px) scale(0.95); }
-      to { opacity: 1; transform: translateY(0) scale(1); }
-    }
-
-    .typewriter-cursor {
-      display: inline-block;
-      width: 8px;
-      height: 1.2em;
-      background: #ea580c;
-      margin-left: 4px;
-      vertical-align: middle;
-      animation: blinkCursor 0.8s infinite;
-    }
-
-    @keyframes blinkCursor {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0; }
-    }
-
-    .whatsapp-action-btn {
-      background: #25d366;
-      color: white;
-      text-decoration: none;
-      padding: 14px 28px;
-      border-radius: 30px;
-      font-weight: 700;
-      font-size: 1rem;
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      margin-top: 24px;
-      box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
-      transition: all 0.2s;
-    }
-    .whatsapp-action-btn:hover {
-      transform: translateY(-2px) scale(1.02);
-      box-shadow: 0 10px 25px rgba(37, 211, 102, 0.6);
-      background: #22c55e;
+    .wax-seal:active {
+      transform: scale(0.95);
     }
   </style>
 </head>
-<body>
 
-  <canvas id="ambientCanvas"></canvas>
-  <canvas id="confettiCanvas"></canvas>
+<body class="min-h-screen text-slate-100 relative selection:bg-pink-500 selection:text-white flex flex-col justify-between">
 
-  <header class="app-header">
-    <div class="header-left">
-      <div class="header-logo" onclick="goToScene(1)">
-        <span>🎂</span>
-        <span>Dino's B-Day Special</span>
+  <!-- Ambient continuous hearts & stars canvas -->
+  <canvas id="ambient-canvas"></canvas>
+
+  <!-- Massive balloons container -->
+  <div id="balloon-overlay"></div>
+
+  <!-- TOP HEADER (Only appears after password unlock) -->
+  <header id="appHeader" class="hidden relative z-30 w-full max-w-xl mx-auto px-5 pt-4 pb-2 flex items-center justify-between">
+    <!-- Dino Sticker Avatar & Label -->
+    <div class="flex items-center gap-2.5">
+      <div class="w-12 h-12 rounded-2xl bg-pink-500/10 border border-pink-500/30 overflow-hidden p-1 shadow-[0_0_15px_rgba(255,82,119,0.2)] dino-bounce flex items-center justify-center">
+        <!-- Cute Sparkly Shiny-Eyed SVG Dino -->
+        <svg viewBox="0 0 100 100" class="w-full h-full">
+          <!-- Tail -->
+          <path d="M 22 62 Q 8 60 10 46 Q 16 54 26 56 Z" fill="#34d399"/>
+          <!-- Body -->
+          <ellipse cx="46" cy="62" rx="26" ry="22" fill="#34d399"/>
+          <ellipse cx="43" cy="66" rx="18" ry="14" fill="#a7f3d0"/>
+          <!-- Back Spikes -->
+          <polygon points="32,44 38,36 44,44" fill="#fb7185"/>
+          <polygon points="46,44 52,36 58,44" fill="#fb7185"/>
+          <polygon points="60,46 65,40 70,48" fill="#fb7185"/>
+          <!-- Head -->
+          <circle cx="64" cy="42" r="21" fill="#34d399"/>
+          <!-- Party Hat -->
+          <polygon points="64,12 55,27 73,27" fill="#f43f5e"/>
+          <circle cx="64" cy="11" r="3.5" fill="#fde047"/>
+          <!-- Snout & Smile -->
+          <ellipse cx="76" cy="47" rx="10" ry="7" fill="#34d399"/>
+          <path d="M 72 49 Q 77 54 82 48" stroke="#065f46" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <!-- Big Shiny Sparkly Manga Eyes -->
+          <ellipse cx="63" cy="39" rx="6.5" ry="8" fill="#111827"/>
+          <circle cx="61" cy="36" r="2.8" fill="#ffffff"/>
+          <circle cx="65.5" cy="42" r="1.3" fill="#ffffff"/>
+          <!-- Blush Cheeks -->
+          <ellipse cx="58" cy="47" rx="4" ry="2.5" fill="#f43f5e" opacity="0.6"/>
+          <ellipse cx="74" cy="51" rx="3.5" ry="2" fill="#f43f5e" opacity="0.6"/>
+          <!-- Cute feet -->
+          <ellipse cx="38" cy="82" rx="7" ry="4" fill="#059669"/>
+          <ellipse cx="54" cy="82" rx="7" ry="4" fill="#059669"/>
+        </svg>
+      </div>
+      <div>
+        <h1 class="text-sm font-bold text-white tracking-wide font-cute flex items-center gap-1.5">
+          <span>Dino's B-Day Special</span>
+          <span class="w-2 h-2 rounded-full bg-pink-400 animate-pulse"></span>
+        </h1>
+        <p class="text-[11px] text-pink-300/80 font-medium font-hand text-base -mt-0.5">Surprise edition for my favorite guy ✨</p>
       </div>
     </div>
-    <div class="header-nav">
-      <button class="nav-header-btn" id="prevSceneBtn" onclick="navigateScene(-1)">◀ Prev</button>
-      <select id="stageSelector" class="nav-pill-selector" onchange="goToScene(parseInt(this.value))">
-        <option value="1">1. Passcode Lockscreen</option>
-        <option value="2">2. Grand Curtains</option>
-        <option value="3">3. Real-Time Clock</option>
-        <option value="4">4. Domain Expansion</option>
-        <option value="5">5. Interactive 3D Cake</option>
-        <option value="6">6. Floating Heart Rain</option>
-        <option value="7">7. Age Teaser (Photo)</option>
-        <option value="8">8. 18-Photo Memory Grid</option>
-        <option value="9">9. Letter From The Heart</option>
-      </select>
-      <button class="nav-header-btn" id="nextSceneBtn" onclick="navigateScene(1)">Next ▶</button>
-      <button id="soundToggleBtn" class="sound-toggle-btn" title="Toggle Sound (Web Audio)">🔊</button>
-    </div>
+
+    <!-- Music Toggle -->
+    <button id="musicToggleBtn" onclick="toggleBgmMusic()" class="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900/80 border border-pink-500/30 hover:border-pink-400 text-xs text-pink-200 backdrop-blur-md transition active:scale-95 shadow-sm">
+      <i data-lucide="music" id="musicIcon" class="w-3.5 h-3.5 text-pink-400 animate-bounce"></i>
+      <span id="musicLabel" class="text-[11px] font-semibold">Music Playing</span>
+    </button>
   </header>
 
-  <main class="main-viewport">
+  <!-- STEP PROGRESS BARS (Only visible after password) -->
+  <div id="stepIndicators" class="hidden max-w-xs mx-auto flex items-center justify-center gap-2 pt-1 pb-3 relative z-20">
+    <div id="dot-0" class="step-dot active"></div>
+    <div id="dot-1" class="step-dot"></div>
+    <div id="dot-2" class="step-dot"></div>
+    <div id="dot-3" class="step-dot"></div>
+    <div id="dot-4" class="step-dot"></div>
+  </div>
 
-    <!-- STAGE 1: PASSCODE LOCKSCREEN -->
-    <section id="scene-1" class="scene-section active">
-      <div class="card-glass">
-        <div class="scene-header">
-          <span class="scene-badge">Stage 01</span>
-          <h1 class="scene-title">Dino Security Vault</h1>
-          <p class="scene-subtitle">Enter the secret birthday passcode to decrypt the experience</p>
+  <!-- MAIN MULTI-STEP CONTAINER -->
+  <main class="relative z-10 w-full max-w-xl mx-auto px-4 py-2 flex-1 flex flex-col justify-center">
+
+    <!-- ================= STEP 0: SECRET PASSWORD / PIN SCREEN ================= -->
+    <div id="step-password" class="w-full space-y-6 text-center my-auto">
+      <!-- Big Shiny-Eyed Cute Dino Mascot -->
+      <div class="w-36 h-36 mx-auto relative dino-bounce rounded-3xl p-2 border-2 border-pink-400/40 shadow-[0_0_35px_rgba(255,82,119,0.35)] bg-gradient-to-b from-purple-950/40 to-pink-950/30 flex items-center justify-center">
+        <svg viewBox="0 0 100 100" class="w-full h-full drop-shadow-lg">
+          <!-- Tail with waggle -->
+          <path d="M 20 64 Q 6 62 8 46 Q 16 54 26 58 Z" fill="#34d399"/>
+          <!-- Body -->
+          <ellipse cx="46" cy="64" rx="27" ry="23" fill="#34d399"/>
+          <ellipse cx="43" cy="68" rx="19" ry="14" fill="#a7f3d0"/>
+          <!-- Cute Back Spikes -->
+          <polygon points="30,46 36,36 43,45" fill="#fb7185"/>
+          <polygon points="45,45 52,35 59,45" fill="#fb7185"/>
+          <polygon points="61,47 67,39 73,49" fill="#fb7185"/>
+          <!-- Head -->
+          <circle cx="65" cy="42" r="22" fill="#34d399"/>
+          <!-- Party Hat with sparkles -->
+          <polygon points="65,9 54,26 75,26" fill="#f43f5e"/>
+          <circle cx="65" cy="8" r="4" fill="#fde047"/>
+          <path d="M 57 20 L 72 20" stroke="#fde047" stroke-width="2"/>
+          <!-- Snout & Cute Blush -->
+          <ellipse cx="78" cy="48" rx="11" ry="8" fill="#34d399"/>
+          <path d="M 73 50 Q 79 56 85 49" stroke="#065f46" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <!-- Huge Manga Anime Sparkly Eyes -->
+          <ellipse cx="63" cy="38" rx="7" ry="9" fill="#0f172a"/>
+          <circle cx="60.5" cy="35" r="3.2" fill="#ffffff"/>
+          <circle cx="66" cy="41.5" r="1.6" fill="#ffffff"/>
+          <circle cx="62" cy="43.5" r="0.9" fill="#ffffff"/>
+          <!-- Rosy Blush -->
+          <ellipse cx="57" cy="48" rx="4.5" ry="3" fill="#f43f5e" opacity="0.65"/>
+          <ellipse cx="76" cy="53" rx="4" ry="2.2" fill="#f43f5e" opacity="0.65"/>
+          <!-- Little Hands holding heart -->
+          <path d="M 53 60 Q 56 64 61 62" stroke="#059669" stroke-width="3" stroke-linecap="round" fill="none"/>
+          <path d="M 64 61 C 64 59 62 57 59 58 C 57 59 57 62 61 66 C 65 62 65 59 64 61 Z" fill="#ff5277"/>
+          <!-- Little Feet -->
+          <ellipse cx="37" cy="85" rx="8" ry="4.5" fill="#059669"/>
+          <ellipse cx="55" cy="85" rx="8" ry="4.5" fill="#059669"/>
+        </svg>
+      </div>
+
+      <div class="glass-box glass-glow-pink p-7 rounded-3xl space-y-4">
+        <div class="space-y-1">
+          <span class="px-3 py-1 rounded-full bg-pink-500/20 text-pink-300 text-xs font-bold uppercase tracking-wider">Restricted Area 🦖</span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-white pt-2 font-cute">Enter Passcode Dino</h2>
+          <p class="text-xs sm:text-sm text-slate-300">Enter our 4-digit secret code to unlock your birthday world.</p>
         </div>
 
-        <div class="terminal-window">
-          <div class="terminal-topbar">
-            <div class="terminal-dots">
-              <span class="terminal-dot dot-red"></span>
-              <span class="terminal-dot dot-yellow"></span>
-              <span class="terminal-dot dot-green"></span>
-            </div>
-            <span class="terminal-title">dino_birthday_gate.sh</span>
+        <div class="space-y-3 pt-2">
+          <div class="relative max-w-xs mx-auto">
+            <input type="password" id="passcodeInput" placeholder="••••" maxlength="6" autocomplete="off" 
+              class="w-full text-center tracking-[0.5em] text-2xl py-3 px-4 bg-slate-950/70 border border-pink-500/40 focus:border-pink-400 focus:outline-none rounded-2xl text-white font-bold placeholder:text-slate-600 shadow-inner">
           </div>
-          <div class="terminal-body">
-            <div class="terminal-log">
-              [SYS] Initializing encrypted birthday surprise protocol...<br>
-              [SYS] User identity verified: Dino 🦖✨<br>
-              [SYS] Please input 4-digit master passcode:
-            </div>
 
-            <div class="passcode-display-box" id="passcodeDisplay">----</div>
+          <div id="passcodeError" class="text-xs text-rose-400 font-medium min-h-[18px]"></div>
 
-            <div class="terminal-keypad">
-              <button class="key-btn" onclick="pressKey('1')">1</button>
-              <button class="key-btn" onclick="pressKey('2')">2</button>
-              <button class="key-btn" onclick="pressKey('3')">3</button>
-              <button class="key-btn" onclick="pressKey('4')">4</button>
-              <button class="key-btn" onclick="pressKey('5')">5</button>
-              <button class="key-btn" onclick="pressKey('6')">6</button>
-              <button class="key-btn" onclick="pressKey('7')">7</button>
-              <button class="key-btn" onclick="pressKey('8')">8</button>
-              <button class="key-btn" onclick="pressKey('9')">9</button>
-              <button class="key-btn action-btn" onclick="clearPasscode()">CLEAR</button>
-              <button class="key-btn" onclick="pressKey('0')">0</button>
-              <button class="key-btn action-btn" onclick="submitPasscode()">ENTER</button>
-            </div>
+          <button onclick="checkPasscode()" class="w-full max-w-xs mx-auto py-3.5 rounded-2xl bg-gradient-to-r from-pink-500 via-rose-500 to-purple-600 hover:opacity-95 text-white font-bold text-sm shadow-[0_0_25px_rgba(255,82,119,0.5)] active:scale-95 transition flex items-center justify-center gap-2">
+            <span>Unlock Surprise</span>
+            <i data-lucide="unlock" class="w-4 h-4"></i>
+          </button>
 
-            <div id="terminalStatus" class="terminal-status">Awaiting authentication...</div>
-            <div class="hint-chip" onclick="quickFillPasscode()">💡 Hint:When We Saw Each Other 1st Time.👀(Click for auto-fill)</div>
-          </div>
-        </div>
-
-        <div class="card-footer-forward">
-          <span class="step-indicator-text">Stage 1 of 9</span>
-          <button class="btn-step-next" onclick="quickFillPasscode()">Auto Unlock & Proceed ➔</button>
+          <p class="text-[11px] text-pink-300/60 font-mono">Secret Passcode: 0404</p>
         </div>
       </div>
-    </section>
+    </div>
 
-    <!-- STAGE 2: INTERACTIVE THEATER CURTAINS -->
-    <section id="scene-2" class="scene-section">
-      <div class="card-glass">
-        <div class="scene-header">
-          <span class="scene-badge">Stage 02</span>
-          <h1 class="scene-title">Grand Stage Reveal</h1>
-          <p class="scene-subtitle">Pull open the velvet curtains to unveil the celebration</p>
+
+    <!-- ================= STEP 0.5: REAL-TIME 12:00 AM MIDNIGHT TRACKER ================= -->
+    <div id="step-clock" class="hidden w-full space-y-6 text-center my-auto">
+      <div class="glass-box glass-glow-pink p-6 sm:p-8 rounded-3xl relative overflow-hidden space-y-5">
+        
+        <div class="space-y-1">
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-pink-500/20 text-pink-300 text-xs font-bold font-cute">
+            <i data-lucide="clock" class="w-3.5 h-3.5"></i>
+            <span>Real-Time Midnight Tracker</span>
+          </span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-white font-cute">
+            Countdown To Dino's Big Moment ⏰
+          </h2>
+          <p id="clockSubtitle" class="text-xs sm:text-sm text-slate-300">
+            Hold tight Dino! The birthday portal automatically unlocks right at 12:00 AM midnight.
+          </p>
         </div>
 
-        <div class="curtains-stage" id="curtainsStage">
-          <div class="curtains-valance">
-            <div class="valance-scallop"></div>
-            <div class="valance-scallop"></div>
-            <div class="valance-scallop"></div>
-            <div class="valance-scallop"></div>
-            <div class="valance-scallop"></div>
-            <div class="valance-scallop"></div>
+        <!-- Live Clock Display -->
+        <div class="py-3 px-4 rounded-2xl bg-slate-950/80 border border-pink-500/30 max-w-md mx-auto shadow-inner space-y-2">
+          <div class="text-[11px] text-pink-300/80 uppercase font-semibold tracking-widest font-mono">Current Live Time</div>
+          <div id="liveClockDisplay" class="text-3xl sm:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pink-300 via-rose-200 to-purple-300 font-mono tracking-wider">
+            --:--:-- --
+          </div>
+          <div class="text-[11px] text-slate-400 font-medium" id="clockDateDisplay">
+            Syncing local system clock...
+          </div>
+        </div>
+
+        <!-- Countdown / Status Box -->
+        <div id="clockStatusBox" class="p-4 rounded-2xl bg-purple-950/30 border border-purple-500/30 max-w-md mx-auto space-y-2">
+          <div class="flex items-center justify-center gap-2 text-xs font-bold text-pink-300 uppercase tracking-wider">
+            <span class="w-2 h-2 rounded-full bg-pink-400 animate-ping"></span>
+            <span id="countdownLabel">Time Remaining Until 12:00 AM</span>
+          </div>
+          <div id="countdownTimer" class="text-2xl sm:text-3xl font-extrabold font-mono text-white tracking-widest">
+            00h : 00m : 00s
+          </div>
+          <p id="clockWaitMsg" class="text-xs text-pink-200/80 font-hand text-lg">
+            "Good things come to those who wait for 12:00 AM ✨"
+          </p>
+        </div>
+
+        <!-- Live Status / Unlock Area -->
+        <div id="clockActionArea" class="pt-2 space-y-3">
+          <div id="midnightUnlockedBanner" class="hidden p-4 rounded-2xl bg-emerald-950/60 border border-emerald-400/50 space-y-2">
+            <div class="text-base font-bold text-emerald-300 font-cute flex items-center justify-center gap-1.5">
+              <span>🎉 IT'S 12:00 AM! HAPPY BIRTHDAY DINO! 🎉</span>
+            </div>
+            <button onclick="goToStep(1)" class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-emerald-500 to-pink-500 text-white font-bold text-sm shadow-[0_0_30px_rgba(16,185,129,0.5)] active:scale-95 transition flex items-center justify-center gap-2">
+              <span>Enter Birthday Celebrations 🎂</span>
+              <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </button>
           </div>
 
-          <div class="curtain-panel curtain-left" id="curtainLeft" onclick="toggleCurtains()">
-            <div class="gold-tassel"></div>
+          <!-- Early Preview / Skip Button (So you can test without waiting till 12AM) -->
+          <div id="clockSkipArea">
+            <button onclick="unlockMidnightEarly()" class="text-xs text-pink-400/80 hover:text-pink-200 underline underline-offset-4 decoration-pink-500/40 transition">
+              Preview right now (Skip 12:00 AM wait) ✨
+            </button>
           </div>
-          <div class="curtain-panel curtain-right" id="curtainRight" onclick="toggleCurtains()">
-            <div class="gold-tassel"></div>
-          </div>
+        </div>
 
-          <div class="stage-content-inside">
-            <div class="spotlight"></div>
-            <h2 style="font-size: 2.2rem; font-weight: 800; color: #f8fafc; margin-bottom: 12px;">Happy Birthday, Cute Dino!🦕💗</h2>
-            <p style="color: #cbd5e1; max-width: 480px; font-size: 1.05rem; line-height: 1.6;">
-              Welcome to your VIP birthday arena. Every single detail here was custom built just for you!🫵🏻
-            </p>
-            <div style="margin-top: 24px;">
-              <button class="btn-action-primary" onclick="goToScene(3)">Proceed to Real-Time Clock ⏰ ➔</button>
+      </div>
+    </div>
+
+
+    <!-- ================= STEP 1: CAKE & MIC CANDLE BLOW ================= -->
+    <div id="step-cake" class="hidden w-full space-y-6 text-center my-auto">
+      <div class="glass-box glass-glow-pink p-6 sm:p-8 rounded-3xl relative overflow-hidden space-y-4">
+        
+        <!-- Header -->
+        <div class="space-y-1">
+          <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-pink-500/20 text-pink-300 text-xs font-bold">
+            <span>Level Up Day 🎂</span>
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-white font-cute">
+            Make A Wish & Blow, Dino!
+          </h2>
+          <p class="text-xs sm:text-sm text-slate-300">
+            Blow into your mobile microphone 🎤 or tap the candle flame!
+          </p>
+        </div>
+
+        <!-- Mic Volume Meter -->
+        <div id="micIndicator" class="max-w-xs mx-auto bg-slate-900/80 border border-pink-500/30 rounded-xl p-2.5 flex items-center gap-3">
+          <i data-lucide="mic" class="w-4 h-4 text-pink-400 shrink-0"></i>
+          <div class="flex-1 bg-slate-950 rounded-full h-2.5 overflow-hidden">
+            <div id="micVolumeBar" class="bg-gradient-to-r from-emerald-400 via-yellow-400 to-rose-500 h-full w-0 transition-all duration-75"></div>
+          </div>
+          <span id="micStatusText" class="text-[10px] text-slate-400 shrink-0 font-medium">Listening for blow...</span>
+        </div>
+
+        <!-- 3D-ish Birthday Cake with 3 Candles -->
+        <div class="relative w-64 h-44 mx-auto flex flex-col items-center justify-end select-none pt-4">
+          <!-- Candles Layer -->
+          <div class="absolute top-1 flex justify-between w-36 z-20">
+            <!-- Candle 1 -->
+            <div class="flex flex-col items-center cursor-pointer" onclick="extinguishCandleManually(0)">
+              <div id="flame-0" class="flame"></div>
+              <div class="w-3 h-10 bg-gradient-to-b from-pink-300 to-pink-600 rounded-t-sm shadow"></div>
+            </div>
+            <!-- Candle 2 (Center) -->
+            <div class="flex flex-col items-center cursor-pointer" onclick="extinguishCandleManually(1)">
+              <div id="flame-1" class="flame"></div>
+              <div class="w-3.5 h-12 bg-gradient-to-b from-emerald-300 to-emerald-600 rounded-t-sm shadow"></div>
+            </div>
+            <!-- Candle 3 -->
+            <div class="flex flex-col items-center cursor-pointer" onclick="extinguishCandleManually(2)">
+              <div id="flame-2" class="flame"></div>
+              <div class="w-3 h-10 bg-gradient-to-b from-purple-300 to-purple-600 rounded-t-sm shadow"></div>
             </div>
           </div>
+
+          <!-- Cake Top Layer with Frosting -->
+          <div class="w-44 h-14 bg-gradient-to-r from-pink-600 via-rose-500 to-pink-700 rounded-t-2xl shadow-lg border-t-2 border-pink-200/50 relative z-10 flex items-center justify-center">
+            <span class="text-xs font-cute text-pink-100 font-bold tracking-wider">✨ DINO ✨</span>
+          </div>
+
+          <!-- Cake Bottom Tier -->
+          <div class="w-56 h-18 bg-gradient-to-r from-[#201533] via-[#2d1c47] to-[#201533] rounded-t-2xl border-t-2 border-purple-400/40 shadow-2xl relative flex items-center justify-center">
+            <span class="font-hand text-2xl text-pink-300 font-bold tracking-wide">Happy Birthday Dino</span>
+          </div>
+
+          <!-- Plate -->
+          <div class="w-64 h-4 bg-gradient-to-r from-slate-400 via-slate-100 to-slate-400 rounded-full shadow-2xl"></div>
         </div>
 
-        <div class="curtain-controls">
-          <button class="btn-action-primary" onclick="toggleCurtains()">
-            <span id="curtainBtnText">🎭 Pull Open Curtains</span>
+        <div id="cakeMessage" class="min-h-[24px] text-xs font-bold text-pink-300 font-cute">
+          Phoonk maro candles par! 💨
+        </div>
+
+        <!-- Fallback Tap Button -->
+        <button onclick="blowAllCandles()" id="manualBlowBtn" class="text-xs text-slate-400 hover:text-pink-300 underline underline-offset-4 decoration-pink-500/50 py-1 transition">
+          (Or tap here if mic doesn't work)
+        </button>
+
+        <!-- NEXT STEP BUTTON (Unlocks when candles blow out) -->
+        <div id="cakeNextArea" class="pt-2 hidden animate-bounce">
+          <button onclick="goToStep(2)" class="px-8 py-3.5 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 text-white font-bold text-sm shadow-[0_0_25px_rgba(255,82,119,0.6)] active:scale-95 transition flex items-center gap-2 mx-auto">
+            <span>Next: Dino's Love Capsule Dispenser 🎰</span>
+            <i data-lucide="arrow-right" class="w-4 h-4"></i>
           </button>
         </div>
 
-        <div class="card-footer-forward">
-          <span class="step-indicator-text">Stage 2 of 9</span>
-          <button class="btn-step-next" onclick="goToScene(3)">Next: The Clock ➔</button>
-        </div>
       </div>
-    </section>
+    </div>
 
-    <!-- STAGE 3: REAL-TIME CLOCK & MIDNIGHT CELEBRATION -->
-    <section id="scene-3" class="scene-section">
-      <div class="card-glass">
-        <div class="scene-header">
-          <span class="scene-badge">Stage 03</span>
-          <h1 class="scene-title">The Real-Time Clock</h1>
-          <p class="scene-subtitle">Ticking dynamically with your exact local time — watch the midnight 12:00 celebration!</p>
-        </div>
 
-        <div class="spider-clock-wrapper">
-          <div class="clock-outer-case">
-            <div class="spider-web-bg"></div>
-            <div class="clock-dino-name">Dino's Hour</div>
+    <!-- ================= STEP 2: DINO'S LOVE CAPSULE GASHAPON MACHINE ================= -->
+    <div id="step-jar" class="hidden w-full space-y-5 text-center my-auto">
+      <div class="space-y-1">
+        <span class="px-3 py-1 rounded-full bg-pink-500/20 text-pink-300 text-xs font-bold font-cute uppercase">Interactive Love Gashapon</span>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-white font-cute">Dino's Love Capsule Machine 🎰</h2>
+        <p class="text-xs text-slate-300">Turn the golden wheel to dispense and pop open a glowing love capsule!</p>
+      </div>
 
-            <svg class="spider-icon-center" viewBox="0 0 24 24">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
-            </svg>
-
-            <div class="clock-dial-number" style="top: 15%; left: 50%;">12</div>
-            <div class="clock-dial-number" style="top: 50%; left: 88%;">3</div>
-            <div class="clock-dial-number" style="top: 85%; left: 50%;">6</div>
-            <div class="clock-dial-number" style="top: 50%; left: 12%;">9</div>
-
-            <div class="clock-hand hour-hand" id="hourHand"></div>
-            <div class="clock-hand minute-hand" id="minuteHand"></div>
-            <div class="clock-hand second-hand" id="secondHand"></div>
-            <div class="clock-center-pin"></div>
-          </div>
-
-          <div class="time-cards-container">
-            <div class="time-card-box">
-              <div class="time-card-label">Current Exact Time</div>
-              <div class="current-real-time-digits" id="liveTimeDigits">00:00:00 AM</div>
-            </div>
-            <div class="time-card-box">
-              <div class="time-card-label">Time Remaining to 12:00 Midnight</div>
-              <div class="countdown-timer-digits" id="countdownDigits">00:00:00</div>
+      <!-- Capsule Machine UI -->
+      <div class="py-2 flex flex-col items-center">
+        <div class="capsule-machine">
+          <!-- Translucent Glass Bubble with Floating Mini Spheres -->
+          <div class="capsule-globe">
+            <div class="grid grid-cols-3 gap-2.5 p-3 select-none pointer-events-none">
+              <span class="w-8 h-8 rounded-full bg-gradient-to-br from-pink-400 to-pink-600 shadow-md inline-block animate-pulse"></span>
+              <span class="w-8 h-8 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 shadow-md inline-block animate-bounce"></span>
+              <span class="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 shadow-md inline-block animate-pulse"></span>
+              <span class="w-8 h-8 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 shadow-md inline-block animate-bounce"></span>
+              <span class="w-8 h-8 rounded-full bg-gradient-to-br from-cyan-400 to-cyan-600 shadow-md inline-block animate-pulse"></span>
+              <span class="w-8 h-8 rounded-full bg-gradient-to-br from-rose-400 to-rose-600 shadow-md inline-block animate-bounce"></span>
             </div>
           </div>
 
-          <!-- Banner that pops up at 12:00 Midnight or on Test Click -->
-          <div class="midnight-celebration-banner" id="midnightBanner">
-            🎉 HAPPY BIRTHDAY DINO! 🎂🎈✨
-          </div>
-
-          <div style="display: flex; gap: 14px; flex-wrap: wrap; justify-content: center;">
-            <button class="btn-action-primary" onclick="strikeMidnightCelebration()">
-              🎆 Test 12:00 Midnight Strike (Fireworks & Balloons!)
-            </button>
+          <!-- Base with Turn Knob -->
+          <div class="machine-base">
+            <div id="machineDial" onclick="dispenseLoveCapsule()" class="machine-dial" title="Click to turn dial!">
+              <i data-lucide="rotate-cw" class="w-5 h-5 text-amber-900"></i>
+            </div>
+            <span class="text-[10px] font-bold text-white uppercase tracking-wider mt-2">Turn Dial ↷</span>
           </div>
         </div>
 
-        <div class="card-footer-forward">
-          <span class="step-indicator-text">Stage 3 of 9</span>
-          <button class="btn-step-next" onclick="goToScene(4)">Next: Domain ➔</button>
-        </div>
+        <button onclick="dispenseLoveCapsule()" class="mt-4 px-6 py-2.5 rounded-full bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-400 hover:to-rose-400 text-white font-bold text-xs sm:text-sm shadow-[0_0_20px_rgba(255,82,119,0.5)] flex items-center gap-2 transition active:scale-95">
+          <i data-lucide="sparkles" class="w-4 h-4"></i>
+          <span>Dispense Love Capsule</span>
+        </button>
+
+        <p class="text-[11px] text-slate-400 mt-2 font-medium">
+          Unlocked: <span id="openedScrollsCount" class="text-pink-400 font-bold">0</span> / 18 Compliments
+        </p>
       </div>
-    </section>
 
-    <!-- STAGE 4: GOJO'S DOMAIN EXPANSION -->
-    <section id="scene-4" class="scene-section">
-      <div class="card-glass">
-        <div class="scene-header">
-          <span class="scene-badge">Stage 04</span>
-          <h1 class="scene-title">Domain Expansion</h1>
-          <p class="scene-subtitle">月が綺麗ですね。 — Infinite Admiration</p>
+      <!-- Result Card (Popped Capsule Content) -->
+      <div id="complimentCard" class="glass-box p-6 rounded-3xl border border-pink-500/40 text-center space-y-3 transition-all duration-500 opacity-0 translate-y-3 pointer-events-none max-w-md mx-auto">
+        <div id="activeCapsuleBall" class="dispensed-capsule flex items-center justify-center bg-gradient-to-tr from-pink-500 to-purple-500 text-white text-2xl font-bold">
+          🎁
         </div>
+        <span id="scrollBadge" class="inline-block px-3 py-1 rounded-full bg-pink-500/20 text-pink-300 text-xs font-bold">
+          Dino Capsule #1
+        </span>
+        <p id="scrollText" class="font-hand text-2xl sm:text-3xl text-white font-bold leading-relaxed px-2">
+          "Turn the golden dial to hatch your first love compliment!"
+        </p>
+        <span class="text-xs text-pink-300/70 italic block">100% genuine Dino truth ✨</span>
+      </div>
 
-        <div class="gojo-domain-container" id="gojoDomainBox">
-          <div class="domain-overlay"></div>
-          <canvas class="sakura-particles-canvas" id="sakuraCanvas"></canvas>
+      <!-- Navigation buttons -->
+      <div class="pt-2 flex items-center justify-center gap-3">
+        <button onclick="goToStep(1)" class="px-5 py-2.5 rounded-full bg-slate-900/80 border border-white/10 hover:border-pink-500/30 text-slate-300 hover:text-white text-xs font-semibold transition active:scale-95 flex items-center gap-1.5">
+          <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+          <span>Back to Cake</span>
+        </button>
 
-          <div class="domain-kanji-title" id="domainTitle">月が綺麗ですね。</div>
-
-          <div class="gojo-quote-box">
-            <p style="font-size: 1.15rem; font-weight: 700; color: #d8b4fe; margin-bottom: 8px;">
-              "Throughout Heaven & Earth, u alone are the most precious."
-            </p>
-            <p style="font-size: 0.95rem; color: #cbd5e1;">
-              Inside this domain, time pauses and an infinite amount of love, respect, and compliments flow endlessly directly into Dino's soul!
-            </p>
-          </div>
-
-          <button class="btn-domain-expand" id="domainExpandBtn" onclick="toggleDomainExpansion()">
-            ⚡ Activate Domain: Infinite Admiration
+        <div id="jarNextArea" class="hidden">
+          <button onclick="goToStep(3)" class="px-6 py-2.5 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 text-white font-bold text-xs sm:text-sm shadow-[0_0_25px_rgba(255,82,119,0.6)] active:scale-95 transition flex items-center gap-2">
+            <span>Next: 18 Moments 📸</span>
+            <i data-lucide="arrow-right" class="w-4 h-4"></i>
           </button>
         </div>
-
-        <div class="card-footer-forward">
-          <span class="step-indicator-text">Stage 4 of 9</span>
-          <button class="btn-step-next" onclick="goToScene(5)">Next: Birthday Cake ➔</button>
-        </div>
       </div>
-    </section>
+    </div>
 
-    <!-- STAGE 5: ISOMETRIC 3D CAKE -->
-    <section id="scene-5" class="scene-section">
-      <div class="card-glass">
-        <div class="scene-header">
-          <span class="scene-badge">Stage 05</span>
-          <h1 class="scene-title">Interactive Birthday Cake</h1>
-          <p class="scene-subtitle">Make your wish, blow the candles, slice the cake!</p>
-        </div>
 
-        <div class="cake-scene-container" id="cakeScene">
-          <div class="cake-svg-wrapper" id="cakeSvgBox">
-            <svg viewBox="0 0 400 340" width="100%" height="100%">
-              <defs>
-                <radialGradient id="plateGrad" cx="50%" cy="50%" r="50%">
-                  <stop offset="0%" stop-color="#cbd5e1"/>
-                  <stop offset="90%" stop-color="#64748b"/>
-                  <stop offset="100%" stop-color="#475569"/>
-                </radialGradient>
-                <linearGradient id="tierBottomGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stop-color="#f472b6"/>
-                  <stop offset="40%" stop-color="#db2777"/>
-                  <stop offset="100%" stop-color="#9d174d"/>
-                </linearGradient>
-                <linearGradient id="tierTopGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stop-color="#fda4af"/>
-                  <stop offset="40%" stop-color="#f43f5e"/>
-                  <stop offset="100%" stop-color="#be123c"/>
-                </linearGradient>
-                <radialGradient id="flameGrad" cx="50%" cy="80%" r="70%">
-                  <stop offset="0%" stop-color="#ffffff"/>
-                  <stop offset="30%" stop-color="#fef08a"/>
-                  <stop offset="70%" stop-color="#f97316"/>
-                  <stop offset="100%" stop-color="transparent"/>
-                </radialGradient>
-              </defs>
+    <!-- ================= STEP 3: 18 MOMENTS PICTURE SECTION ================= -->
+    <div id="step-gallery" class="hidden w-full space-y-5 text-center my-auto">
+      <div class="space-y-1">
+        <span class="px-3 py-1 rounded-full bg-pink-500/20 text-pink-300 text-xs font-bold uppercase font-cute">Our Photo Reel</span>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-white font-cute">18 Memories With Dino 📸</h2>
+        <p class="text-xs text-slate-300">18 moments that remind me why I'm so lucky to have you. Tap any photo to zoom!</p>
+      </div>
 
-              <ellipse cx="200" cy="275" rx="170" ry="45" fill="url(#plateGrad)" filter="drop-shadow(0 15px 12px rgba(0,0,0,0.6))"/>
-              <ellipse cx="200" cy="273" rx="155" ry="38" fill="#e2e8f0" stroke="#f59e0b" stroke-width="2"/>
+      <!-- 18 Polaroids Grid (2 cols on mobile, 3 on tablet) -->
+      <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 max-h-[58vh] overflow-y-auto pr-1 py-1" id="polaroidGrid">
+        <!-- Javascript dynamically fills all 18 photos below -->
+      </div>
 
-              <path d="M 60,210 L 60,240 C 60,270 340,270 340,240 L 340,210 Z" fill="url(#tierBottomGrad)"/>
-              <ellipse cx="200" cy="210" rx="140" ry="35" fill="#fdf2f8"/>
-              <path d="M 60,210 Q 75,235 90,215 Q 110,245 130,218 Q 155,248 180,215 Q 210,245 235,216 Q 260,242 285,215 Q 315,240 340,210 C 340,205 60,205 60,210 Z" fill="#ffffff" opacity="0.95"/>
+      <!-- Navigation buttons -->
+      <div class="pt-3 flex items-center justify-center gap-3">
+        <button onclick="goToStep(2)" class="px-5 py-2.5 rounded-full bg-slate-900/80 border border-white/10 hover:border-pink-500/30 text-slate-300 hover:text-white text-xs font-semibold transition active:scale-95 flex items-center gap-1.5">
+          <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+          <span>Back to Capsules</span>
+        </button>
 
-              <path d="M 105,145 L 105,175 C 105,200 295,200 295,175 L 295,145 Z" fill="url(#tierTopGrad)"/>
-              <ellipse cx="200" cy="145" rx="95" ry="24" fill="#fff1f2"/>
-              <path d="M 105,145 Q 125,168 145,148 Q 170,172 195,150 Q 225,170 250,148 Q 275,166 295,145 C 295,140 105,140 105,145 Z" fill="#ffffff"/>
+        <button onclick="goToStep(4)" class="px-6 py-2.5 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 text-white font-bold text-xs sm:text-sm shadow-[0_0_25px_rgba(255,82,119,0.6)] active:scale-95 transition flex items-center gap-2">
+          <span>Next: Sealed Letter 💌</span>
+          <i data-lucide="arrow-right" class="w-4 h-4"></i>
+        </button>
+      </div>
+    </div>
 
-              <circle cx="160" cy="140" r="9" fill="#e11d48"/>
-              <circle cx="200" cy="136" r="10" fill="#e11d48"/>
-              <circle cx="240" cy="140" r="9" fill="#e11d48"/>
 
-              <g id="candlesGroup">
-                <rect x="156" y="90" width="8" height="42" rx="3" fill="#fef08a" stroke="#f59e0b" stroke-width="1.5"/>
-                <path class="candle-flame-svg" d="M 160,65 Q 166,78 160,88 Q 154,78 160,65 Z" fill="url(#flameGrad)" filter="drop-shadow(0 0 10px #f59e0b)"/>
+    <!-- ================= STEP 4: PRIVATE LETTER WITH URDU "ء" WAX SEAL ================= -->
+    <div id="step-letter" class="hidden w-full space-y-5 text-center my-auto">
+      <div class="space-y-1">
+        <span class="px-3 py-1 rounded-full bg-purple-500/20 text-purple-300 text-xs font-bold uppercase font-cute">Official Love Seal</span>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-white font-cute">For Dino's Eyes Only 💌</h2>
+        <p class="text-xs text-slate-300">Tap the royal seal with <strong class="text-pink-300">‘ء’</strong> to break the wax and read.</p>
+      </div>
 
-                <rect x="196" y="82" width="8" height="46" rx="3" fill="#fef08a" stroke="#f59e0b" stroke-width="1.5"/>
-                <path class="candle-flame-svg" d="M 200,55 Q 207,70 200,80 Q 193,70 200,55 Z" fill="url(#flameGrad)" filter="drop-shadow(0 0 12px #f59e0b)"/>
-
-                <rect x="236" y="90" width="8" height="42" rx="3" fill="#fef08a" stroke="#f59e0b" stroke-width="1.5"/>
-                <path class="candle-flame-svg" d="M 240,65 Q 246,78 240,88 Q 234,78 240,65 Z" fill="url(#flameGrad)" filter="drop-shadow(0 0 10px #f59e0b)"/>
-              </g>
-
-              <g class="cake-slice-svg" id="cakeSliceSvg" opacity="0">
-                <polygon points="310,220 370,250 340,280 290,240" fill="#f43f5e" stroke="#fff" stroke-width="2"/>
-                <circle cx="330" cy="245" r="7" fill="#fda4af"/>
-              </g>
-            </svg>
+      <div class="max-w-md mx-auto space-y-4">
+        <!-- Sealed Envelope -->
+        <div id="sealedEnvelope" class="glass-box p-8 rounded-3xl border border-pink-500/30 text-center space-y-5 cursor-pointer hover:border-pink-400/50 transition-all duration-300" onclick="breakHamzaSeal()">
+          <!-- Real Urdu 'ء' Wax Seal Button -->
+          <div class="wax-seal mx-auto">
+            <span class="font-urdu text-4xl text-amber-100 font-bold select-none leading-none pt-1 drop-shadow-sm">ء</span>
           </div>
 
-          <div class="cake-actions-row">
-            <button class="btn-action-primary" id="blowCandlesBtn" onclick="blowCandles()">
-              💨 Make a Wish & Blow Candles
+          <div class="space-y-1">
+            <h3 class="text-base font-bold text-white font-cute">Strictly Private Dispatch</h3>
+            <p class="text-xs text-pink-300/80 font-hand text-lg">Tap the 'ء' seal to break and open</p>
+          </div>
+        </div>
+
+        <!-- Unfolded Letter Container (Revealed after breaking wax seal) -->
+        <div id="unfoldedLetter" class="hidden glass-box p-6 sm:p-8 rounded-3xl border border-pink-500/40 text-left space-y-4 relative">
+          <div class="flex items-center justify-between border-b border-white/10 pb-3">
+            <div class="flex items-center gap-2">
+              <span class="wax-seal !w-8 !h-8 !border-0 shadow-sm">
+                <span class="font-urdu text-lg text-amber-200 font-bold pt-0.5">ء</span>
+              </span>
+              <span class="text-xs uppercase font-bold tracking-wider text-pink-300">Dearest Dino,</span>
+            </div>
+            <button onclick="replayLetterTypewriter()" title="Replay letter" class="text-xs text-slate-400 hover:text-pink-300 flex items-center gap-1 transition">
+              <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+              <span class="text-[11px]">Replay</span>
             </button>
-            <button class="btn-action-primary" id="sliceCakeBtn" onclick="sliceCake()" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
-              🍰 Slice The Cake
-            </button>
-            <button class="btn-action-primary" onclick="launchConfettiBurst(60)" style="background: linear-gradient(135deg, #06b6d4, #0284c7);">
-              🎊 Blast Confetti Cannon!
+          </div>
+
+          <div class="min-h-[160px] text-slate-200 text-sm sm:text-base leading-relaxed space-y-3 font-normal">
+            <p id="typedLetterText" class="inline font-cute"></p>
+            <span id="letterBlinkCursor" class="inline-block w-1.5 h-4 bg-pink-400 ml-1 animate-pulse align-middle"></span>
+          </div>
+
+          <div class="pt-4 border-t border-white/10 flex items-center justify-between">
+            <span class="font-hand text-2xl text-pink-300 font-bold">Forever yours 🦖❤️</span>
+            <button onclick="triggerLoveShower()" class="px-4 py-2 rounded-full bg-pink-500/20 hover:bg-pink-500/30 border border-pink-400/40 text-xs text-pink-200 font-semibold transition active:scale-95 flex items-center gap-1.5 shadow-sm">
+              <span>Send Hugs</span>
+              <span>✨</span>
             </button>
           </div>
         </div>
 
-        <div class="card-footer-forward">
-          <span class="step-indicator-text">Stage 5 of 9</span>
-          <button class="btn-step-next" onclick="goToScene(6)">Next: Compliment Rain ➔</button>
-        </div>
-      </div>
-    </section>
-
-    <!-- STAGE 6: COMPLIMENT RAIN -->
-    <section id="scene-6" class="scene-section">
-      <div class="card-glass">
-        <div class="scene-header">
-          <span class="scene-badge">Stage 06</span>
-          <h1 class="scene-title">Compliment Rain</h1>
-          <p class="scene-subtitle">Tap & pop the floating bubbles to collect compliments for Dino</p>
-        </div>
-
-        <div class="bubbles-area-wrapper" id="bubblesZone">
-          <div class="bubble-score-badge" id="bubbleCounterBadge">Compliments: 0 / 10</div>
-
-          <svg class="central-glowing-heart" viewBox="0 0 24 24" onclick="burstHeartLove()">
-            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-          </svg>
-        </div>
-
-        <div style="text-align: center; margin-top: 20px;">
-          <button class="btn-action-primary" onclick="spawnMoreBubbles()" style="background: linear-gradient(135deg, #ec4899, #db2777);">
-            ✨ Spawn More Compliment Bubbles
+        <!-- Back to Memories link -->
+        <div class="pt-1">
+          <button onclick="goToStep(3)" class="text-xs text-slate-400 hover:text-pink-300 flex items-center gap-1 mx-auto transition">
+            <i data-lucide="arrow-left" class="w-3 h-3"></i>
+            <span>Revisit 18 Memories</span>
           </button>
         </div>
-
-        <div class="card-footer-forward">
-          <span class="step-indicator-text">Stage 6 of 9</span>
-          <button class="btn-step-next" onclick="goToScene(7)">Next: Age Teaser ➔</button>
-        </div>
       </div>
-    </section>
-
-    <!-- STAGE 7: AGE TEASER (ANYA REPLACED WITH CUSTOMIZABLE PHOTO AVATAR) -->
-    <section id="scene-7" class="scene-section">
-      <div class="card-glass">
-        <div class="scene-header">
-          <span class="scene-badge">Stage 07</span>
-          <h1 class="scene-title">Age Teaser</h1>
-          <p class="scene-subtitle">A special celebration of our exact time difference</p>
-        </div>
-
-        <div class="age-teaser-wrapper">
-          <div class="speech-bubble-teaser">
-            "Was the exact exact difference of <span style="color: #ea580c; text-decoration: underline;">6 months & 8 days</span>! That means I'm officially older, wiser... & the boss! 💅🏻✨"
-          </div>
-
-          <!-- Photo avatar frame that user can replace with their own picture -->
-          <div class="photo-avatar-container" onclick="triggerTeaserPhotoUpload()">
-            <div class="photo-avatar-inner" id="teaserPhotoInner">
-              <!-- Default aesthetic portrait silhouette SVG -->
-              <svg viewBox="0 0 100 100" width="100%" height="100%">
-                <circle cx="50" cy="50" r="50" fill="#1e293b"/>
-                <circle cx="50" cy="38" r="18" fill="#fda4af"/>
-                <path d="M 22,86 Q 50,60 78,86 Z" fill="#f43f5e"/>
-                <circle cx="50" cy="50" r="46" fill="none" stroke="#f59e0b" stroke-width="2" stroke-dasharray="6 4"/>
-              </svg>
-            </div>
-            <div class="photo-upload-overlay-badge" title="Tap to upload your photo">📷</div>
-          </div>
-          <input type="file" id="teaserPhotoInput" accept="image/*" style="display: none;" onchange="handleTeaserPhotoUpload(event)">
-
-          <div style="font-size: 0.85rem; color: #94a3b8; margin-top: 12px;">
-            Tap photo above or use button below to put your picture
-          </div>
-
-          <div style="display: flex; gap: 14px; margin-top: 20px; flex-wrap: wrap; justify-content: center;">
-            <button class="btn-action-primary" onclick="triggerTeaserPhotoUpload()" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
-              📸 Upload / Change Your Photo
-            </button>
-            <button class="btn-action-primary" onclick="sendHeartBurst()" style="background: linear-gradient(135deg, #ec4899, #be185d);">
-              💖 Send Love (Confetti & Hearts)
-            </button>
-          </div>
-        </div>
-
-        <div class="card-footer-forward">
-          <span class="step-indicator-text">Stage 7 of 9</span>
-          <button class="btn-step-next" onclick="goToScene(8)">Next: 18 Memories ➔</button>
-        </div>
-      </div>
-    </section>
-
-    <!-- STAGE 8: 18-PHOTO MEMORY GALLERY -->
-    <section id="scene-8" class="scene-section">
-      <div class="card-glass">
-        <div class="scene-header">
-          <span class="scene-badge">Stage 08</span>
-          <h1 class="scene-title">18 Cherished Memories</h1>
-          <p class="scene-subtitle">Humans Like To Collect The Things What They Like so...👉🏻👈🏻I Just Collect Ur 18 Pics At Ur 18 BD(tap any photo to view)</p>
-        </div>
-
-        <div class="gallery-grid" id="galleryGrid">
-          
-    <div class="polaroid-card" onclick="openLightbox(0)">
-      <div class="polaroid-img-wrapper" id="photoWrap-1">
-        <svg viewBox="0 0 300 300" width="100%" height="100%">
-      <defs>
-        <radialGradient id="g01" cx="50%" cy="50%" r="65%">
-          <stop offset="0%" stop-color="#1e293b"/>
-          <stop offset="100%" stop-color="#0f172a"/>
-        </radialGradient>
-      </defs>
-      <rect width="300" height="300" fill="url(#g01)"/>
-      <circle cx="150" cy="155" r="60" fill="#38bdf8" opacity="0.12"/>
-      <path d="M100 240 L135 120 L165 120 L200 240 Z" fill="#38bdf8" opacity="0.8"/><line x1="150" y1="130" x2="150" y2="230" stroke="#fff" stroke-dasharray="10 8" stroke-width="4"/>
-      <text x="150" y="70" font-family="-apple-system, sans-serif" font-size="28" font-weight="900" fill="#f8fafc" text-anchor="middle">#01</text>
-    </svg>
-        <div class="photo-edit-badge" title="Custom Photo Slot">✎</div>
-      </div>
-      <div class="polaroid-caption">Day One ✨</div>
     </div>
-    
-    <div class="polaroid-card" onclick="openLightbox(1)">
-      <div class="polaroid-img-wrapper" id="photoWrap-2">
-        <svg viewBox="0 0 300 300" width="100%" height="100%">
-      <defs>
-        <radialGradient id="g02" cx="50%" cy="50%" r="65%">
-          <stop offset="0%" stop-color="#1e293b"/>
-          <stop offset="100%" stop-color="#0f172a"/>
-        </radialGradient>
-      </defs>
-      <rect width="300" height="300" fill="url(#g02)"/>
-      <circle cx="150" cy="155" r="60" fill="#818cf8" opacity="0.12"/>
-      <path d="M170 120 A 40 40 0 1 0 170 180 A 30 30 0 0 1 170 120 Z" fill="#818cf8"/>
-      <text x="150" y="70" font-family="-apple-system, sans-serif" font-size="28" font-weight="900" fill="#f8fafc" text-anchor="middle">#02</text>
-    </svg>
-        <div class="photo-edit-badge" title="Custom Photo Slot">✎</div>
-      </div>
-      <div class="polaroid-caption">🌙</div>
-    </div>
-    
-    <div class="polaroid-card" onclick="openLightbox(2)">
-      <div class="polaroid-img-wrapper" id="photoWrap-3">
-        <svg viewBox="0 0 300 300" width="100%" height="100%">
-      <defs>
-        <radialGradient id="g03" cx="50%" cy="50%" r="65%">
-          <stop offset="0%" stop-color="#1e293b"/>
-          <stop offset="100%" stop-color="#0f172a"/>
-        </radialGradient>
-      </defs>
-      <rect width="300" height="300" fill="url(#g03)"/>
-      <circle cx="150" cy="155" r="60" fill="#fbbf24" opacity="0.12"/>
-      <ellipse cx="150" cy="160" rx="40" ry="20" fill="#fbbf24"/><path d="M110 160 Q150 200 190 160 Z" fill="#fbbf24" opacity="0.9"/>
-      <text x="150" y="70" font-family="-apple-system, sans-serif" font-size="28" font-weight="900" fill="#f8fafc" text-anchor="middle">#03</text>
-    </svg>
-        <div class="photo-edit-badge" title="Custom Photo Slot">✎</div>
-      </div>
-      <div class="polaroid-caption">🍜</div>
-    </div>
-    
-    <div class="polaroid-card" onclick="openLightbox(3)">
-      <div class="polaroid-img-wrapper" id="photoWrap-4">
-        <svg viewBox="0 0 300 300" width="100%" height="100%">
-      <defs>
-        <radialGradient id="g04" cx="50%" cy="50%" r="65%">
-          <stop offset="0%" stop-color="#1e293b"/>
-          <stop offset="100%" stop-color="#0f172a"/>
-        </radialGradient>
-      </defs>
-      <rect width="300" height="300" fill="url(#g04)"/>
-      <circle cx="150" cy="155" r="60" fill="#06b6d4" opacity="0.12"/>
-      <rect x="110" y="145" width="80" height="25" rx="5" fill="#06b6d4"/><circle cx="125" cy="175" r="10" fill="#fff"/><circle cx="175" cy="175" r="10" fill="#fff"/>
-      <text x="150" y="70" font-family="-apple-system, sans-serif" font-size="28" font-weight="900" fill="#f8fafc" text-anchor="middle">#04</text>
-    </svg>
-        <div class="photo-edit-badge" title="Custom Photo Slot">✎</div>
-      </div>
-      <div class="polaroid-caption">🌒</div>
-    </div>
-    
-    <div class="polaroid-card" onclick="openLightbox(4)">
-      <div class="polaroid-img-wrapper" id="photoWrap-5">
-        <svg viewBox="0 0 300 300" width="100%" height="100%">
-      <defs>
-        <radialGradient id="g05" cx="50%" cy="50%" r="65%">
-          <stop offset="0%" stop-color="#1e293b"/>
-          <stop offset="100%" stop-color="#0f172a"/>
-        </radialGradient>
-      </defs>
-      <rect width="300" height="300" fill="url(#g05)"/>
-      <circle cx="150" cy="155" r="60" fill="#f472b6" opacity="0.12"/>
-      <circle cx="150" cy="155" r="28" fill="#f472b6" opacity="0.8"/><circle cx="150" cy="155" r="12" fill="#fff"/>
-      <text x="150" y="70" font-family="-apple-system, sans-serif" font-size="28" font-weight="900" fill="#f8fafc" text-anchor="middle">#05</text>
-    </svg>
-        <div class="photo-edit-badge" title="Custom Photo Slot">✎</div>
-      </div>
-      <div class="polaroid-caption">🤍</div>
-    </div>
-    
-    <div class="polaroid-card" onclick="openLightbox(5)">
-      <div class="polaroid-img-wrapper" id="photoWrap-6">
-        <svg viewBox="0 0 300 300" width="100%" height="100%">
-      <defs>
-        <radialGradient id="g06" cx="50%" cy="50%" r="65%">
-          <stop offset="0%" stop-color="#1e293b"/>
-          <stop offset="100%" stop-color="#0f172a"/>
-        </radialGradient>
-      </defs>
-      <rect width="300" height="300" fill="url(#g06)"/>
-      <circle cx="150" cy="155" r="60" fill="#34d399" opacity="0.12"/>
-      <path d="M150 125 L165 160 L195 165 L165 175 L150 200 L145 175 L115 165 L145 160 Z" fill="#34d399"/>
-      <text x="150" y="70" font-family="-apple-system, sans-serif" font-size="28" font-weight="900" fill="#f8fafc" text-anchor="middle">#06</text>
-    </svg>
-        <div class="photo-edit-badge" title="Custom Photo Slot">✎</div>
-      </div>
-      <div class="polaroid-caption">🤎</div>
-    </div>
-    
-    <div class="polaroid-card" onclick="openLightbox(6)">
-      <div class="polaroid-img-wrapper" id="photoWrap-7">
-        <svg viewBox="0 0 300 300" width="100%" height="100%">
-      <defs>
-        <radialGradient id="g07" cx="50%" cy="50%" r="65%">
-          <stop offset="0%" stop-color="#1e293b"/>
-          <stop offset="100%" stop-color="#0f172a"/>
-        </radialGradient>
-      </defs>
-      <rect width="300" height="300" fill="url(#g07)"/>
-      <circle cx="150" cy="155" r="60" fill="#f97316" opacity="0.12"/>
-      <rect x="125" y="140" width="40" height="40" rx="6" fill="#f97316"/><path d="M165 150 Q180 150 180 165 Q180 175 165 175" stroke="#f97316" stroke-width="4" fill="none"/>
-      <text x="150" y="70" font-family="-apple-system, sans-serif" font-size="28" font-weight="900" fill="#f8fafc" text-anchor="middle">#07</text>
-    </svg>
-        <div class="photo-edit-badge" title="Custom Photo Slot">✎</div>
-      </div>
-      <div class="polaroid-caption">🖤</div>
-    </div>
-    
-    <div class="polaroid-card" onclick="openLightbox(7)">
-      <div class="polaroid-img-wrapper" id="photoWrap-8">
-        <svg viewBox="0 0 300 300" width="100%" height="100%">
-      <defs>
-        <radialGradient id="g08" cx="50%" cy="50%" r="65%">
-          <stop offset="0%" stop-color="#1e293b"/>
-          <stop offset="100%" stop-color="#0f172a"/>
-        </radialGradient>
-      </defs>
-      <rect width="300" height="300" fill="url(#g08)"/>
-      <circle cx="150" cy="155" r="60" fill="#fb923c" opacity="0.12"/>
-      <circle cx="150" cy="160" r="30" fill="#fb923c"/><line x1="100" y1="165" x2="200" y2="165" stroke="#fff" stroke-width="4"/>
-      <text x="150" y="70" font-family="-apple-system, sans-serif" font-size="28" font-weight="900" fill="#f8fafc" text-anchor="middle">#08</text>
-    </svg>
-        <div class="photo-edit-badge" title="Custom Photo Slot">✎</div>
-      </div>
-      <div class="polaroid-caption">Golden Hour 🌅</div>
-    </div>
-    
-    <div class="polaroid-card" onclick="openLightbox(8)">
-      <div class="polaroid-img-wrapper" id="photoWrap-9">
-        <svg viewBox="0 0 300 300" width="100%" height="100%">
-      <defs>
-        <radialGradient id="g09" cx="50%" cy="50%" r="65%">
-          <stop offset="0%" stop-color="#1e293b"/>
-          <stop offset="100%" stop-color="#0f172a"/>
-        </radialGradient>
-      </defs>
-      <rect width="300" height="300" fill="url(#g09)"/>
-      <circle cx="150" cy="155" r="60" fill="#60a5fa" opacity="0.12"/>
-      <circle cx="150" cy="155" r="28" fill="#60a5fa" opacity="0.8"/><circle cx="150" cy="155" r="12" fill="#fff"/>
-      <text x="150" y="70" font-family="-apple-system, sans-serif" font-size="28" font-weight="900" fill="#f8fafc" text-anchor="middle">#09</text>
-    </svg>
-        <div class="photo-edit-badge" title="Custom Photo Slot">✎</div>
-      </div>
-      <div class="polaroid-caption">🦕</div>
-    </div>
-    
-    <div class="polaroid-card" onclick="openLightbox(9)">
-      <div class="polaroid-img-wrapper" id="photoWrap-10">
-        <svg viewBox="0 0 300 300" width="100%" height="100%">
-      <defs>
-        <radialGradient id="g10" cx="50%" cy="50%" r="65%">
-          <stop offset="0%" stop-color="#1e293b"/>
-          <stop offset="100%" stop-color="#0f172a"/>
-        </radialGradient>
-      </defs>
-      <rect width="300" height="300" fill="url(#g10)"/>
-      <circle cx="150" cy="155" r="60" fill="#eab308" opacity="0.12"/>
-      <path d="M130 135 L170 135 L165 165 Q150 180 135 165 Z" fill="#eab308"/><rect x="145" y="180" width="10" height="15" fill="#eab308"/><rect x="135" y="195" width="30" height="8" rx="2" fill="#eab308"/>
-      <text x="150" y="70" font-family="-apple-system, sans-serif" font-size="28" font-weight="900" fill="#f8fafc" text-anchor="middle">#10</text>
-    </svg>
-        <div class="photo-edit-badge" title="Custom Photo Slot">✎</div>
-      </div>
-      <div class="polaroid-caption">🤓</div>
-    </div>
-    
-    <div class="polaroid-card" onclick="openLightbox(10)">
-      <div class="polaroid-img-wrapper" id="photoWrap-11">
-        <svg viewBox="0 0 300 300" width="100%" height="100%">
-      <defs>
-        <radialGradient id="g11" cx="50%" cy="50%" r="65%">
-          <stop offset="0%" stop-color="#1e293b"/>
-          <stop offset="100%" stop-color="#0f172a"/>
-        </radialGradient>
-      </defs>
-      <rect width="300" height="300" fill="url(#g11)"/>
-      <circle cx="150" cy="155" r="60" fill="#a855f7" opacity="0.12"/>
-      <circle cx="150" cy="155" r="28" fill="#a855f7" opacity="0.8"/><circle cx="150" cy="155" r="12" fill="#fff"/>
-      <text x="150" y="70" font-family="-apple-system, sans-serif" font-size="28" font-weight="900" fill="#f8fafc" text-anchor="middle">#11</text>
-    </svg>
-        <div class="photo-edit-badge" title="Custom Photo Slot">✎</div>
-      </div>
-      <div class="polaroid-caption">🩵</div>
-    </div>
-    
-    <div class="polaroid-card" onclick="openLightbox(11)">
-      <div class="polaroid-img-wrapper" id="photoWrap-12">
-        <svg viewBox="0 0 300 300" width="100%" height="100%">
-      <defs>
-        <radialGradient id="g12" cx="50%" cy="50%" r="65%">
-          <stop offset="0%" stop-color="#1e293b"/>
-          <stop offset="100%" stop-color="#0f172a"/>
-        </radialGradient>
-      </defs>
-      <rect width="300" height="300" fill="url(#g12)"/>
-      <circle cx="150" cy="155" r="60" fill="#2dd4bf" opacity="0.12"/>
-      <circle cx="150" cy="155" r="28" fill="#2dd4bf" opacity="0.8"/><circle cx="150" cy="155" r="12" fill="#fff"/>
-      <text x="150" y="70" font-family="-apple-system, sans-serif" font-size="28" font-weight="900" fill="#f8fafc" text-anchor="middle">#12</text>
-    </svg>
-        <div class="photo-edit-badge" title="Custom Photo Slot">✎</div>
-      </div>
-      <div class="polaroid-caption">🌊</div>
-    </div>
-    
-    <div class="polaroid-card" onclick="openLightbox(12)">
-      <div class="polaroid-img-wrapper" id="photoWrap-13">
-        <svg viewBox="0 0 300 300" width="100%" height="100%">
-      <defs>
-        <radialGradient id="g13" cx="50%" cy="50%" r="65%">
-          <stop offset="0%" stop-color="#1e293b"/>
-          <stop offset="100%" stop-color="#0f172a"/>
-        </radialGradient>
-      </defs>
-      <rect width="300" height="300" fill="url(#g13)"/>
-      <circle cx="150" cy="155" r="60" fill="#ec4899" opacity="0.12"/>
-      <circle cx="135" cy="175" r="10" fill="#ec4899"/><circle cx="165" cy="165" r="10" fill="#ec4899"/><path d="M145 175 L145 135 L175 125 L175 165" stroke="#ec4899" stroke-width="4" fill="none"/>
-      <text x="150" y="70" font-family="-apple-system, sans-serif" font-size="28" font-weight="900" fill="#f8fafc" text-anchor="middle">#13</text>
-    </svg>
-        <div class="photo-edit-badge" title="Custom Photo Slot">✎</div>
-      </div>
-      <div class="polaroid-caption">🎶</div>
-    </div>
-    
-    <div class="polaroid-card" onclick="openLightbox(13)">
-      <div class="polaroid-img-wrapper" id="photoWrap-14">
-        <svg viewBox="0 0 300 300" width="100%" height="100%">
-      <defs>
-        <radialGradient id="g14" cx="50%" cy="50%" r="65%">
-          <stop offset="0%" stop-color="#1e293b"/>
-          <stop offset="100%" stop-color="#0f172a"/>
-        </radialGradient>
-      </defs>
-      <rect width="300" height="300" fill="url(#g14)"/>
-      <circle cx="150" cy="155" r="60" fill="#f87171" opacity="0.12"/>
-      <circle cx="150" cy="155" r="28" fill="#f87171" opacity="0.8"/><circle cx="150" cy="155" r="12" fill="#fff"/>
-      <text x="150" y="70" font-family="-apple-system, sans-serif" font-size="28" font-weight="900" fill="#f8fafc" text-anchor="middle">#14</text>
-    </svg>
-        <div class="photo-edit-badge" title="Custom Photo Slot">✎</div>
-      </div>
-      <div class="polaroid-caption">🥰</div>
-    </div>
-    
-    <div class="polaroid-card" onclick="openLightbox(14)">
-      <div class="polaroid-img-wrapper" id="photoWrap-15">
-        <svg viewBox="0 0 300 300" width="100%" height="100%">
-      <defs>
-        <radialGradient id="g15" cx="50%" cy="50%" r="65%">
-          <stop offset="0%" stop-color="#1e293b"/>
-          <stop offset="100%" stop-color="#0f172a"/>
-        </radialGradient>
-      </defs>
-      <rect width="300" height="300" fill="url(#g15)"/>
-      <circle cx="150" cy="155" r="60" fill="#c084fc" opacity="0.12"/>
-      <circle cx="150" cy="155" r="28" fill="#c084fc" opacity="0.8"/><circle cx="150" cy="155" r="12" fill="#fff"/>
-      <text x="150" y="70" font-family="-apple-system, sans-serif" font-size="28" font-weight="900" fill="#f8fafc" text-anchor="middle">#15</text>
-    </svg>
-        <div class="photo-edit-badge" title="Custom Photo Slot">✎</div>
-      </div>
-      <div class="polaroid-caption">Goofy Moments 🤪</div>
-    </div>
-    
-    <div class="polaroid-card" onclick="openLightbox(15)">
-      <div class="polaroid-img-wrapper" id="photoWrap-16">
-        <svg viewBox="0 0 300 300" width="100%" height="100%">
-      <defs>
-        <radialGradient id="g16" cx="50%" cy="50%" r="65%">
-          <stop offset="0%" stop-color="#1e293b"/>
-          <stop offset="100%" stop-color="#0f172a"/>
-        </radialGradient>
-      </defs>
-      <rect width="300" height="300" fill="url(#g16)"/>
-      <circle cx="150" cy="155" r="60" fill="#38bdf8" opacity="0.12"/>
-      <circle cx="150" cy="155" r="28" fill="#38bdf8" opacity="0.8"/><circle cx="150" cy="155" r="12" fill="#fff"/>
-      <text x="150" y="70" font-family="-apple-system, sans-serif" font-size="28" font-weight="900" fill="#f8fafc" text-anchor="middle">#16</text>
-    </svg>
-        <div class="photo-edit-badge" title="Custom Photo Slot">✎</div>
-      </div>
-      <div class="polaroid-caption">😊</div>
-    </div>
-    
-    <div class="polaroid-card" onclick="openLightbox(16)">
-      <div class="polaroid-img-wrapper" id="photoWrap-17">
-        <svg viewBox="0 0 300 300" width="100%" height="100%">
-      <defs>
-        <radialGradient id="g17" cx="50%" cy="50%" r="65%">
-          <stop offset="0%" stop-color="#1e293b"/>
-          <stop offset="100%" stop-color="#0f172a"/>
-        </radialGradient>
-      </defs>
-      <rect width="300" height="300" fill="url(#g17)"/>
-      <circle cx="150" cy="155" r="60" fill="#fb7185" opacity="0.12"/>
-      <path d="M150 180 L130 160 A15 15 0 0 1 150 140 A15 15 0 0 1 170 160 Z" fill="#fb7185"/>
-      <text x="150" y="70" font-family="-apple-system, sans-serif" font-size="28" font-weight="900" fill="#f8fafc" text-anchor="middle">#17</text>
-    </svg>
-        <div class="photo-edit-badge" title="Custom Photo Slot">✎</div>
-      </div>
-      <div class="polaroid-caption">💖</div>
-    </div>
-    
-    <div class="polaroid-card" onclick="openLightbox(17)">
-      <div class="polaroid-img-wrapper" id="photoWrap-18">
-        <svg viewBox="0 0 300 300" width="100%" height="100%">
-      <defs>
-        <radialGradient id="g18" cx="50%" cy="50%" r="65%">
-          <stop offset="0%" stop-color="#1e293b"/>
-          <stop offset="100%" stop-color="#0f172a"/>
-        </radialGradient>
-      </defs>
-      <rect width="300" height="300" fill="url(#g18)"/>
-      <circle cx="150" cy="155" r="60" fill="#a78bfa" opacity="0.12"/>
-      <path d="M125 160 Q135 145 150 160 Q165 175 175 160 Q165 145 150 160 Q135 175 125 160 Z" stroke="#a78bfa" stroke-width="6" fill="none"/>
-      <text x="150" y="70" font-family="-apple-system, sans-serif" font-size="28" font-weight="900" fill="#f8fafc" text-anchor="middle">#18</text>
-    </svg>
-        <div class="photo-edit-badge" title="Custom Photo Slot">✎</div>
-      </div>
-      <div class="polaroid-caption">♾️</div>
-    </div>
-    
-        </div>
-
-        <div style="text-align: center; margin-top: 28px;">
-          <label style="background: rgba(255, 255, 255, 0.1); border: 1px dashed var(--accent-gold); padding: 12px 24px; border-radius: 20px; font-size: 0.9rem; cursor: pointer; display: inline-block;">
-            📸 Click here to replace photos with your own image files
-            <input type="file" id="batchPhotoUpload" multiple accept="image/*" style="display: none;" onchange="handleUserPhotoUpload(event)">
-          </label>
-        </div>
-
-        <div class="card-footer-forward">
-          <span class="step-indicator-text">Stage 8 of 9</span>
-          <button class="btn-step-next" onclick="goToScene(9)">Next: Secret Letter ➔</button>
-        </div>
-      </div>
-    </section>
-
-    <!-- STAGE 9: ENVELOPE & TYPEWRITER LOVE LETTER (WAX SEAL WITH 'ء') -->
-    <section id="scene-9" class="scene-section">
-      <div class="card-glass">
-        <div class="scene-header">
-          <span class="scene-badge">Stage 09</span>
-          <h1 class="scene-title">Letter From The Heart.</h1>
-          <p class="scene-subtitle">Break the wax seal to reveal ur handwritten birthday message</p>
-        </div>
-
-        <div class="envelope-scene-wrapper">
-          <div class="vintage-envelope" id="envelopeBox" onclick="openEnvelopeLetter()">
-            <!-- WAX SEAL WITH 'ء' MONOGRAM -->
-            <div class="wax-seal" id="waxSeal">ء</div>
-            <div style="position: absolute; bottom: 15px; color: #fff; font-size: 0.85rem; font-weight: 600;">
-              ✉️ Tap Wax Seal to Open
-            </div>
-          </div>
-
-          <div class="parchment-letter" id="parchmentLetter">
-            <div id="typewriterBody"></div>
-            <span class="typewriter-cursor" id="typewriterCursor"></span>
-
-            <div style="margin-top: 28px; display: flex; flex-direction: column; align-items: center; gap: 12px;">
-              <a href="https://api.whatsapp.com/send?text=Happy%20Birthday%20Dino!%20%F0%9F%8E%82%E2%9C%A8%20I%20just%20opened%20your%20amazing%20birthday%20surprise%20web%20app%20and%20read%20the%20letter!%20Love%20you%20so%20much%20%E2%9D%A4%EF%B8%8F" target="_blank" class="whatsapp-action-btn">
-                <span>💬 Tell Wish / Roast on WhatsApp</span>
-              </a>
-
-              <button class="btn-action-primary" onclick="restartTypewriter()" style="background: rgba(0, 0, 0, 0.15); color: #451a03; border: 1px solid #d97706;">
-                🔄 Replay Typewriter Letter
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div class="card-footer-forward">
-          <span class="step-indicator-text">Stage 9 of 9</span>
-          <button class="btn-step-next" onclick="goToScene(1)">Replay From Beginning ↺</button>
-        </div>
-      </div>
-    </section>
 
   </main>
 
-  <div class="lightbox-modal" id="lightboxModal" onclick="closeLightbox(event)">
-    <div class="lightbox-content" onclick="event.stopPropagation()">
-      <div class="lightbox-img-box" id="lightboxImgBox">
-        <img id="lightboxImg" src="" alt="Memory">
-      </div>
-      <h3 id="lightboxTitle" style="color: #f8fafc; font-size: 1.2rem; margin-bottom: 6px;"></h3>
-      <p id="lightboxDesc" style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 16px;"></p>
-      <div style="display: flex; justify-content: center; gap: 12px;">
-        <button class="btn-step-next" onclick="prevLightboxPhoto()">◀ Previous</button>
-        <button class="btn-step-next" onclick="nextLightboxPhoto()">Next ▶</button>
-        <button class="btn-step-next" onclick="closeLightbox()" style="background: #e11d48; border-color: #e11d48;">Close ✕</button>
+  <!-- LIGHTBOX MODAL FOR EXPANDING 18 POLAROIDS -->
+  <div id="photoLightbox" class="fixed inset-0 z-50 bg-black/95 backdrop-blur-md hidden flex items-center justify-center p-4" onclick="closePhotoModal()">
+    <div class="relative max-w-sm w-full bg-[#130f24] border border-pink-500/40 rounded-3xl p-4 overflow-hidden" onclick="event.stopPropagation()">
+      <button onclick="closePhotoModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-black/70 text-white flex items-center justify-center hover:bg-pink-600 transition">
+        ✕
+      </button>
+      <img id="lightboxImg" src="" alt="Dino memory full" class="w-full aspect-square object-cover rounded-2xl mb-3 shadow">
+      <div class="px-1">
+        <h4 id="lightboxTitle" class="text-base font-bold text-white font-cute"></h4>
+        <p id="lightboxCaption" class="font-hand text-xl text-pink-300 mt-1"></p>
       </div>
     </div>
   </div>
 
+  <footer class="relative z-20 py-3 text-center text-[11px] text-slate-500">
+    Made with pure love for Dino 🦖
+  </footer>
+
   <script>
-    class BirthdayAudioEngine {
-      constructor() {
-        this.ctx = null;
-        this.isMuted = false;
+    lucide.createIcons();
+
+    /* ==========================================================
+       2. SWEET MUSIC BOX & CELESTA BGM (WARM & RELAXING)
+       ========================================================== */
+    let audioCtx = null;
+    let isBgmPlaying = false;
+    let bgmTimer = null;
+
+    function getAudioContext() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
       }
-
-      initContext() {
-        if (!this.ctx) {
-          const AudioContext = window.AudioContext || window.webkitAudioContext;
-          this.ctx = new AudioContext();
-        }
-        if (this.ctx && this.ctx.state === 'suspended') {
-          this.ctx.resume();
-        }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
       }
+      return audioCtx;
+    }
 
-      toggleMute() {
-        this.isMuted = !this.isMuted;
-        return !this.isMuted;
+    function playSoftTone(freq, duration = 0.5, type = 'triangle', volume = 0.08) {
+      try {
+        const ctx = getAudioContext();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, ctx.currentTime);
+
+        // Music Box Bell-like attack & decay
+        gain.gain.setValueAtTime(0.0001, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(volume, ctx.currentTime + 0.03);
+        gain.gain.exponentialRampToValueAtTime(volume * 0.4, ctx.currentTime + 0.15);
+        gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + duration);
+      } catch (e) {}
+    }
+
+    // Sweet Warm Music Box Melody in G Major (Cozy & Magical)
+    const bdayMelody = [
+      { f: 392.00, d: 0.35 }, { f: 392.00, d: 0.35 }, { f: 440.00, d: 0.6 }, { f: 392.00, d: 0.6 },
+      { f: 523.25, d: 0.6 }, { f: 493.88, d: 1.1 },
+      { f: 392.00, d: 0.35 }, { f: 392.00, d: 0.35 }, { f: 440.00, d: 0.6 }, { f: 392.00, d: 0.6 },
+      { f: 587.33, d: 0.6 }, { f: 523.25, d: 1.1 },
+      { f: 392.00, d: 0.35 }, { f: 392.00, d: 0.35 }, { f: 783.99, d: 0.6 }, { f: 659.25, d: 0.6 },
+      { f: 523.25, d: 0.6 }, { f: 493.88, d: 0.6 }, { f: 440.00, d: 0.9 },
+      { f: 698.46, d: 0.35 }, { f: 698.46, d: 0.35 }, { f: 659.25, d: 0.6 }, { f: 523.25, d: 0.6 },
+      { f: 587.33, d: 0.6 }, { f: 523.25, d: 1.3 }
+    ];
+
+    let noteIndex = 0;
+    function startContinuousBgm() {
+      if (isBgmPlaying) return;
+      isBgmPlaying = true;
+      getAudioContext();
+
+      function step() {
+        if (!isBgmPlaying) return;
+        const note = bdayMelody[noteIndex];
+        playSoftTone(note.f, note.d + 0.3, 'sine', 0.08);
+        noteIndex = (noteIndex + 1) % bdayMelody.length;
+        bgmTimer = setTimeout(step, (note.d + 0.18) * 1000);
       }
+      step();
+      updateMusicUI();
+    }
 
-      playTone(freq, type = 'sine', duration = 0.1, gainVal = 0.2) {
-        if (this.isMuted) return;
-        this.initContext();
-        try {
-          const osc = this.ctx.createOscillator();
-          const gain = this.ctx.createGain();
-          osc.type = type;
-          osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
-          gain.gain.setValueAtTime(gainVal, this.ctx.currentTime);
-          gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + duration);
-          osc.connect(gain);
-          gain.connect(this.ctx.destination);
-          osc.start();
-          osc.stop(this.ctx.currentTime + duration);
-        } catch (e) {}
+    function toggleBgmMusic() {
+      if (isBgmPlaying) {
+        clearTimeout(bgmTimer);
+        isBgmPlaying = false;
+      } else {
+        startContinuousBgm();
       }
+      updateMusicUI();
+    }
 
-      playKeyClick() {
-        this.playTone(800 + Math.random() * 300, 'triangle', 0.04, 0.1);
-      }
-
-      playAccessGranted() {
-        if (this.isMuted) return;
-        this.initContext();
-        const notes = [523.25, 659.25, 783.99, 1046.50];
-        notes.forEach((freq, idx) => {
-          setTimeout(() => this.playTone(freq, 'sine', 0.25, 0.25), idx * 90);
-        });
-      }
-
-      playAccessDenied() {
-        if (this.isMuted) return;
-        this.initContext();
-        this.playTone(150, 'sawtooth', 0.2, 0.3);
-        setTimeout(() => this.playTone(130, 'sawtooth', 0.3, 0.3), 150);
-      }
-
-      playWhoosh() {
-        if (this.isMuted) return;
-        this.initContext();
-        try {
-          const osc = this.ctx.createOscillator();
-          const gain = this.ctx.createGain();
-          osc.type = 'sine';
-          osc.frequency.setValueAtTime(300, this.ctx.currentTime);
-          osc.frequency.exponentialRampToValueAtTime(80, this.ctx.currentTime + 0.4);
-          gain.gain.setValueAtTime(0.2, this.ctx.currentTime);
-          gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.4);
-          osc.connect(gain);
-          gain.connect(this.ctx.destination);
-          osc.start();
-          osc.stop(this.ctx.currentTime + 0.4);
-        } catch(e) {}
-      }
-
-      playClockTick() {
-        this.playTone(1200, 'sine', 0.03, 0.08);
-      }
-
-      playMidnightStrike() {
-        if (this.isMuted) return;
-        this.initContext();
-        for (let i = 0; i < 4; i++) {
-          setTimeout(() => {
-            this.playTone(220, 'triangle', 1.8, 0.4);
-            this.playTone(440, 'sine', 1.4, 0.3);
-            this.playTone(554.37, 'sine', 1.2, 0.2);
-          }, i * 650);
-        }
-      }
-
-      playDomainExpansionSound() {
-        if (this.isMuted) return;
-        this.initContext();
-        try {
-          const osc = this.ctx.createOscillator();
-          const gain = this.ctx.createGain();
-          osc.type = 'sawtooth';
-          osc.frequency.setValueAtTime(140, this.ctx.currentTime);
-          osc.frequency.exponentialRampToValueAtTime(40, this.ctx.currentTime + 1.2);
-          gain.gain.setValueAtTime(0.4, this.ctx.currentTime);
-          gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 1.2);
-          osc.connect(gain);
-          gain.connect(this.ctx.destination);
-          osc.start();
-          osc.stop(this.ctx.currentTime + 1.2);
-
-          setTimeout(() => {
-            [880, 1108, 1320, 1760].forEach((freq, idx) => {
-              setTimeout(() => this.playTone(freq, 'sine', 0.8, 0.15), idx * 120);
-            });
-          }, 300);
-        } catch(e) {}
-      }
-
-      playCandleBlow() {
-        this.playTone(200, 'sine', 0.3, 0.15);
-      }
-
-      playBubblePop() {
-        const freq = 600 + Math.random() * 400;
-        this.playTone(freq, 'sine', 0.12, 0.25);
-      }
-
-      playTypewriterKey() {
-        this.playTone(950 + Math.random() * 300, 'triangle', 0.03, 0.08);
-      }
-
-      playTypewriterDing() {
-        this.playTone(1567.98, 'sine', 0.4, 0.25);
-      }
-
-      playHappyBirthdayTune() {
-        if (this.isMuted) return;
-        this.initContext();
-        const melody = [
-          { f: 261.63, d: 250 }, { f: 261.63, d: 250 }, { f: 293.66, d: 500 }, { f: 261.63, d: 500 }, { f: 349.23, d: 500 }, { f: 329.63, d: 900 },
-          { f: 261.63, d: 250 }, { f: 261.63, d: 250 }, { f: 293.66, d: 500 }, { f: 261.63, d: 500 }, { f: 392.00, d: 500 }, { f: 349.23, d: 900 }
-        ];
-        let offset = 0;
-        melody.forEach(note => {
-          setTimeout(() => this.playTone(note.f, 'triangle', note.d / 1000, 0.2), offset);
-          offset += note.d + 60;
-        });
+    function updateMusicUI() {
+      const label = document.getElementById('musicLabel');
+      const icon = document.getElementById('musicIcon');
+      if (isBgmPlaying) {
+        label.innerText = 'Music Playing';
+        icon.classList.add('animate-bounce');
+      } else {
+        label.innerText = 'Music Paused';
+        icon.classList.remove('animate-bounce');
       }
     }
 
-    const audio = new BirthdayAudioEngine();
+    /* ==========================================================
+       3. STEP ROUTER & PASSCODE (0404)
+       ========================================================== */
+    let currentStep = 0;
+    const stepElements = ['step-clock', 'step-cake', 'step-jar', 'step-gallery', 'step-letter'];
+    let clockInterval = null;
+    let isMidnightUnlocked = false;
 
-    document.getElementById('soundToggleBtn').addEventListener('click', () => {
-      const active = audio.toggleMute();
-      document.getElementById('soundToggleBtn').textContent = active ? '🔊' : '🔇';
-    });
+    // Support Enter key on passcode input
+    const passcodeField = document.getElementById('passcodeInput');
+    if (passcodeField) {
+      passcodeField.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') checkPasscode();
+      });
+    }
 
-    let currentScene = 1;
-    const totalScenes = 9;
+    function checkPasscode() {
+      const val = document.getElementById('passcodeInput').value.trim();
+      const err = document.getElementById('passcodeError');
 
-    function goToScene(sceneNumber) {
-      if (sceneNumber < 1 || sceneNumber > totalScenes) return;
-      document.querySelectorAll('.scene-section').forEach(sec => sec.classList.remove('active'));
-      const targetSec = document.getElementById(`scene-${sceneNumber}`);
-      if (targetSec) {
-        targetSec.classList.add('active');
+      // Requested Password: 0404
+      if (val === '0404') {
+        startContinuousBgm();
+        document.getElementById('step-password').classList.add('hidden');
+        document.getElementById('appHeader').classList.remove('hidden');
+        document.getElementById('stepIndicators').classList.remove('hidden');
+
+        // Go to Step 0 (Real-time clock tracker)
+        goToStep(0);
+        startRealtimeClockTracker();
+      } else {
+        err.innerText = "Incorrect passcode! Hint: 0404 🦖";
+        playSoftTone(220, 0.25, 'sawtooth', 0.08);
       }
-      currentScene = sceneNumber;
-      document.getElementById('stageSelector').value = currentScene;
+    }
 
-      document.getElementById('prevSceneBtn').disabled = (currentScene === 1);
-      document.getElementById('nextSceneBtn').disabled = (currentScene === totalScenes);
+    function goToStep(stepIndex) {
+      currentStep = stepIndex;
+      stepElements.forEach((id, index) => {
+        const el = document.getElementById(id);
+        if (el) {
+          if (index === stepIndex) {
+            el.classList.remove('hidden');
+            el.classList.remove('step-fade-in');
+            void el.offsetWidth; // Trigger reflow
+            el.classList.add('step-fade-in');
+          } else {
+            el.classList.add('hidden');
+          }
+        }
+      });
 
+      // Update dot indicators (0: clock, 1: cake, 2: jar, 3: gallery, 4: letter)
+      for (let i = 0; i <= 4; i++) {
+        const dot = document.getElementById(`dot-${i}`);
+        if (dot) {
+          if (i === stepIndex) {
+            dot.classList.add('active');
+          } else {
+            dot.classList.remove('active');
+          }
+        }
+      }
+
+      // If stepping into cake, init microphone
+      if (stepIndex === 1) {
+        initMicrophoneBlowDetection();
+      }
+
+      lucide.createIcons();
       window.scrollTo({ top: 0, behavior: 'smooth' });
-      audio.playWhoosh();
-
-      if (currentScene === 6) spawnInitialBubbles();
     }
 
-    function navigateScene(delta) {
-      goToScene(currentScene + delta);
-    }
+    /* ==========================================================
+       3.5 REAL-TIME 12:00 AM MIDNIGHT TRACKER LOGIC
+       ========================================================== */
+    function startRealtimeClockTracker() {
+      if (clockInterval) clearInterval(clockInterval);
 
-    /* Lockscreen PIN */
-    let enteredCode = "";
-    const correctCode = "0404";
+      function updateClock() {
+        const now = new Date();
 
-    function pressKey(num) {
-      audio.playKeyClick();
-      if (enteredCode.length < 4) {
-        enteredCode += num;
-        updatePasscodeDisplay();
-      }
-      if (enteredCode.length === 4) {
-        submitPasscode();
-      }
-    }
+        // 1. Live Time display
+        let hours = now.getHours();
+        const minutes = now.getMinutes();
+        const seconds = now.getSeconds();
+        const ampm = hours >= 12 ? 'PM' : 'AM';
+        const displayHours = hours % 12 || 12;
+        const timeStr = `${String(displayHours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')} ${ampm}`;
 
-    function clearPasscode() {
-      audio.playKeyClick();
-      enteredCode = "";
-      updatePasscodeDisplay();
-      document.getElementById('terminalStatus').className = "terminal-status";
-      document.getElementById('terminalStatus').textContent = "Awaiting authentication...";
-    }
+        const liveClockEl = document.getElementById('liveClockDisplay');
+        if (liveClockEl) liveClockEl.innerText = timeStr;
 
-    function updatePasscodeDisplay() {
-      const display = document.getElementById('passcodeDisplay');
-      let dots = enteredCode.split('').map(() => '●').join('');
-      while (dots.length < 4) dots += '-';
-      display.textContent = dots;
-    }
+        // 2. Date display
+        const dateStr = now.toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' });
+        const dateEl = document.getElementById('clockDateDisplay');
+        if (dateEl) dateEl.innerText = dateStr;
 
-    function quickFillPasscode() {
-      enteredCode = correctCode;
-      updatePasscodeDisplay();
-      submitPasscode();
-    }
+        // 3. Check if midnight (12:00 AM) has been reached
+        // Calculate milliseconds to next 12:00:00 AM
+        const nextMidnight = new Date(now);
+        nextMidnight.setHours(24, 0, 0, 0); // Next 12:00:00 AM
 
-    function submitPasscode() {
-      const status = document.getElementById('terminalStatus');
-      if (enteredCode === correctCode) {
-        status.className = "terminal-status status-success";
-        status.textContent = "[ACCESS GRANTED] Decrypting Dino's Birthday Surprise Protocol...";
-        audio.playAccessGranted();
-        launchConfettiBurst(25);
-        setTimeout(() => {
-          goToScene(2);
-        }, 1200);
-      } else {
-        status.className = "terminal-status status-error";
-        status.textContent = "[ACCESS DENIED] Incorrect Passcode. Try '0404'!";
-        audio.playAccessDenied();
-        setTimeout(clearPasscode, 900);
-      }
-    }
+        const diffMs = nextMidnight - now;
 
-    window.addEventListener('keydown', (e) => {
-      if (currentScene === 1) {
-        if (e.key >= '0' && e.key <= '9') pressKey(e.key);
-        else if (e.key === 'Backspace') clearPasscode();
-        else if (e.key === 'Enter') submitPasscode();
-      }
-    });
+        // If it's already 12 AM (e.g., between 00:00:00 and 00:05:00) or user passed it
+        const isCurrentlyMidnight = (hours === 0 && minutes === 0);
 
-    /* Curtains Logic */
-    let curtainsOpen = false;
-    function toggleCurtains() {
-      const stage = document.getElementById('curtainsStage');
-      curtainsOpen = !curtainsOpen;
-      if (curtainsOpen) {
-        stage.classList.add('curtains-open');
-        document.getElementById('curtainBtnText').textContent = "🎭 Close Curtains";
-        audio.playWhoosh();
-        launchConfettiBurst(35);
-      } else {
-        stage.classList.remove('curtains-open');
-        document.getElementById('curtainBtnText').textContent = "🎭 Pull Open Curtains";
-        audio.playWhoosh();
-      }
-    }
-
-    /* REAL-TIME DYNAMIC CLOCK & MIDNIGHT CELEBRATION */
-    let midnightCelebrated = false;
-
-    function updateRealTimeClock() {
-      const now = new Date();
-      const sec = now.getSeconds();
-      const min = now.getMinutes();
-      const hr = now.getHours();
-
-      // Analog hands angles based on real user system time
-      const secDeg = (sec / 60) * 360;
-      const minDeg = ((min + sec / 60) / 60) * 360;
-      const hrDeg = (((hr % 12) + min / 60) / 12) * 360;
-
-      const secEl = document.getElementById('secondHand');
-      const minEl = document.getElementById('minuteHand');
-      const hrEl = document.getElementById('hourHand');
-
-      if (secEl) secEl.style.transform = `rotate(${secDeg}deg)`;
-      if (minEl) minEl.style.transform = `rotate(${minDeg}deg)`;
-      if (hrEl) hrEl.style.transform = `rotate(${hrDeg}deg)`;
-
-      // Real Digital Time Display (e.g. 01:10:45 PM)
-      let displayHr = hr % 12 || 12;
-      let ampm = hr >= 12 ? 'PM' : 'AM';
-      let padH = String(displayHr).padStart(2, '0');
-      let padM = String(min).padStart(2, '0');
-      let padS = String(sec).padStart(2, '0');
-      const liveTimeEl = document.getElementById('liveTimeDigits');
-      if (liveTimeEl) {
-        liveTimeEl.textContent = `${padH}:${padM}:${padS} ${ampm}`;
-      }
-
-      // Countdown to 12:00:00 Midnight
-      const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0);
-      const diffMs = midnight - now;
-
-      // Check if it's exactly 12:00 midnight!
-      if (hr === 0 && min === 0 && sec < 10 && !midnightCelebrated) {
-        midnightCelebrated = true;
-        strikeMidnightCelebration();
-      }
-
-      const diffHrs = String(Math.floor(diffMs / (1000 * 60 * 60))).padStart(2, '0');
-      const diffMins = String(Math.floor((diffMs / (1000 * 60)) % 60)).padStart(2, '0');
-      const diffSecs = String(Math.floor((diffMs / 1000) % 60)).padStart(2, '0');
-
-      const digitsEl = document.getElementById('countdownDigits');
-      if (digitsEl && !midnightCelebrated) {
-        digitsEl.textContent = `${diffHrs}h ${diffMins}m ${diffSecs}s`;
-      }
-    }
-
-    setInterval(updateRealTimeClock, 1000);
-    updateRealTimeClock();
-
-    function strikeMidnightCelebration() {
-      audio.playMidnightStrike();
-      launchConfettiBurst(100);
-      spawnBalloonsRain(25);
-
-      const banner = document.getElementById('midnightBanner');
-      if (banner) {
-        banner.style.display = 'block';
-      }
-
-      const digitsEl = document.getElementById('countdownDigits');
-      if (digitsEl) {
-        digitsEl.textContent = "12:00 AM — HAPPY BIRTHDAY!";
-        digitsEl.style.color = "#4ade80";
-      }
-    }
-
-    /* Floating Balloons Generator */
-    function spawnBalloonsRain(count = 20) {
-      const colors = ['#f43f5e', '#ec4899', '#a855f7', '#38bdf8', '#fbbf24', '#34d399'];
-      for (let i = 0; i < count; i++) {
-        setTimeout(() => {
-          const b = document.createElement('div');
-          b.className = 'balloon-particle';
-          b.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-          b.style.left = `${5 + Math.random() * 90}vw`;
-          b.style.animationDuration = `${4.5 + Math.random() * 3}s`;
-          document.body.appendChild(b);
-          setTimeout(() => b.remove(), 8000);
-        }, i * 180);
-      }
-    }
-
-    /* Gojo Domain Expansion */
-    let domainActive = false;
-    function toggleDomainExpansion() {
-      const box = document.getElementById('gojoDomainBox');
-      const btn = document.getElementById('domainExpandBtn');
-      domainActive = !domainActive;
-
-      if (domainActive) {
-        box.classList.add('domain-active');
-        btn.textContent = "🌌 Domain Active: Infinite Void Collapsing...";
-        audio.playDomainExpansionSound();
-        launchConfettiBurst(50);
-        initSakuraPetals();
-      } else {
-        box.classList.remove('domain-active');
-        btn.textContent = "⚡ Activate Domain: Infinite Admiration";
-      }
-    }
-
-    function initSakuraPetals() {
-      const canvas = document.getElementById('sakuraCanvas');
-      if (!canvas) return;
-      const ctx = canvas.getContext('2d');
-      canvas.width = canvas.parentElement.clientWidth;
-      canvas.height = canvas.parentElement.clientHeight;
-
-      const petals = [];
-      for (let i = 0; i < 40; i++) {
-        petals.push({
-          x: Math.random() * canvas.width,
-          y: Math.random() * canvas.height,
-          size: 6 + Math.random() * 8,
-          speedY: 1 + Math.random() * 2,
-          speedX: Math.sin(Math.random() * Math.PI) * 1.5,
-          angle: Math.random() * 360,
-          color: Math.random() > 0.4 ? '#f472b6' : '#a855f7'
-        });
-      }
-
-      function renderPetals() {
-        if (!domainActive) {
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
+        if ((isCurrentlyMidnight || diffMs <= 1000) && !isMidnightUnlocked) {
+          triggerMidnightCelebration();
           return;
         }
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        petals.forEach(p => {
-          p.y += p.speedY;
-          p.x += p.speedX;
-          p.angle += 1;
-          if (p.y > canvas.height) p.y = -10;
-          if (p.x > canvas.width) p.x = 0;
-          if (p.x < 0) p.x = canvas.width;
 
-          ctx.save();
-          ctx.translate(p.x, p.y);
-          ctx.rotate((p.angle * Math.PI) / 180);
-          ctx.fillStyle = p.color;
-          ctx.beginPath();
-          ctx.ellipse(0, 0, p.size, p.size / 2, 0, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.restore();
-        });
-        requestAnimationFrame(renderPetals);
+        // Format countdown string
+        const totalSec = Math.floor(diffMs / 1000);
+        const remH = Math.floor(totalSec / 3600);
+        const remM = Math.floor((totalSec % 3600) / 60);
+        const remS = totalSec % 60;
+
+        const countdownEl = document.getElementById('countdownTimer');
+        if (countdownEl && !isMidnightUnlocked) {
+          countdownEl.innerText = `${String(remH).padStart(2, '0')}h : ${String(remM).padStart(2, '0')}m : ${String(remS).padStart(2, '0')}s`;
+        }
       }
-      renderPetals();
+
+      updateClock();
+      clockInterval = setInterval(updateClock, 1000);
     }
 
-    /* Cake, Blowing Candles & Slicing */
-    let candlesBlown = false;
-    let cakeSliced = false;
+    function triggerMidnightCelebration() {
+      isMidnightUnlocked = true;
+      if (clockInterval) clearInterval(clockInterval);
 
-    function blowCandles() {
-      const candles = document.getElementById('candlesGroup');
-      candles.classList.add('candles-blown');
-      candlesBlown = true;
-      audio.playCandleBlow();
-      audio.playHappyBirthdayTune();
-      launchConfettiBurst(60);
-      document.getElementById('blowCandlesBtn').textContent = "✨ Candles Blown! Wish Sent!";
-    }
+      const banner = document.getElementById('midnightUnlockedBanner');
+      const waitMsg = document.getElementById('clockWaitMsg');
+      const countdownTimer = document.getElementById('countdownTimer');
+      const countdownLabel = document.getElementById('countdownLabel');
+      const skipArea = document.getElementById('clockSkipArea');
 
-    function sliceCake() {
-      const sliceEl = document.getElementById('cakeSliceSvg');
-      sliceEl.style.opacity = "1";
-      document.getElementById('cakeSvgBox').classList.add('cake-sliced');
-      cakeSliced = true;
-      audio.playTone(500, 'triangle', 0.2, 0.2);
-      launchConfettiBurst(45);
-      document.getElementById('sliceCakeBtn').textContent = "🍽️ Slice Served to Dino!";
-    }
+      if (banner) banner.classList.remove('hidden');
+      if (skipArea) skipArea.classList.add('hidden');
+      if (waitMsg) waitMsg.innerText = "The clock struck 12:00 AM! Let's celebrate! 🦖✨";
+      if (countdownTimer) countdownTimer.innerText = "00h : 00m : 00s";
+      if (countdownLabel) countdownLabel.innerText = "IT'S DINO'S BIRTHDAY NOW!";
 
-    /* Floating Heart & Compliments */
-    const complimentsList = [
-      "عيناكِ أرض لا خائن فيها، كلاهما وطني.👀",
-      "U've a nice smile 😊💖",
-      "Master of witty comebacks 😂👑",
-      "Endlessly caring & loyal 🌟",
-      "Top-tier music taste 🎧🎶",
-      "Cute Dino 🦕🗺️",
-      "Actually, 👉🏻👈🏻U Look Hot In Brown 🤎",
-      "أنتِ كالنجم في السماء، تضيئين حتى في أظلم الأوقات.✨",
-      "Heart of pure 24K gold 💛",
-      "The rarest gem alive 💎✨"
-    ];
-
-    let poppedBubblesCount = 0;
-
-    function spawnInitialBubbles() {
-      const zone = document.getElementById('bubblesZone');
-      zone.querySelectorAll('.compliment-bubble').forEach(b => b.remove());
-      poppedBubblesCount = 0;
-      updateBubbleBadge();
-
-      complimentsList.forEach((text, i) => {
-        createBubble(text, i * 600);
+      // Confetti burst
+      confetti({
+        particleCount: 120,
+        spread: 90,
+        origin: { y: 0.5 },
+        colors: ['#ff5277', '#c084fc', '#4ade80', '#fde047']
       });
-    }
 
-    function createBubble(text, delay = 0) {
+      playSoftTone(523.25, 0.4);
+      setTimeout(() => playSoftTone(659.25, 0.4), 250);
+      setTimeout(() => playSoftTone(783.99, 0.8), 500);
+
+      // Auto-navigate to cake in 2 seconds
       setTimeout(() => {
-        const zone = document.getElementById('bubblesZone');
-        if (!zone) return;
-        const b = document.createElement('div');
-        b.className = 'compliment-bubble';
-        b.textContent = text;
-        b.style.left = `${10 + Math.random() * 75}%`;
-        b.style.animationDuration = `${6 + Math.random() * 4}s`;
-        b.style.animationDelay = `${Math.random() * 2}s`;
-
-        b.onclick = (e) => {
-          e.stopPropagation();
-          audio.playBubblePop();
-          b.remove();
-          poppedBubblesCount++;
-          updateBubbleBadge();
-          launchConfettiBurst(15);
-        };
-
-        zone.appendChild(b);
-      }, delay);
+        goToStep(1);
+      }, 2200);
     }
 
-    function updateBubbleBadge() {
-      const badge = document.getElementById('bubbleCounterBadge');
-      if (badge) badge.textContent = `Compliments: ${poppedBubblesCount} / 10`;
+    function unlockMidnightEarly() {
+      triggerMidnightCelebration();
     }
 
-    function spawnMoreBubbles() {
-      complimentsList.forEach((text) => createBubble(text, Math.random() * 1000));
-    }
+    /* ==========================================================
+       4. AMBIENT FLOATING HEARTS & STARS CANVAS
+       ========================================================== */
+    const canvas = document.getElementById('ambient-canvas');
+    const ctx = canvas.getContext('2d');
+    let width = (canvas.width = window.innerWidth);
+    let height = (canvas.height = window.innerHeight);
 
-    function burstHeartLove() {
-      audio.playTone(600, 'sine', 0.2, 0.3);
-      launchConfettiBurst(50);
-    }
+    window.addEventListener('resize', () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    });
 
-    /* STAGE 7: AGE TEASER PHOTO CUSTOMIZATION */
-    function triggerTeaserPhotoUpload() {
-      document.getElementById('teaserPhotoInput').click();
-    }
+    const particles = [];
+    const heartColors = ['#ff5277', '#c084fc', '#f43f5e', '#ec4899', '#f472b6'];
 
-    function handleTeaserPhotoUpload(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const inner = document.getElementById('teaserPhotoInner');
-        inner.innerHTML = `<img src="${e.target.result}" alt="My Photo">`;
-        launchConfettiBurst(40);
-        audio.playAccessGranted();
-      };
-      reader.readAsDataURL(file);
-    }
-
-    function sendHeartBurst() {
-      audio.playTone(700, 'sine', 0.15, 0.25);
-      setTimeout(() => audio.playTone(950, 'triangle', 0.25, 0.25), 120);
-      launchConfettiBurst(40);
-      spawnBalloonsRain(10);
-    }
-
-    /* 18-Photo Memory Gallery & Lightbox */
-    const memoriesData = [
-      { id: 1, tag: "Day One ✨", desc: "Day One ✨" },
-      { id: 2, tag: "🌙", desc: "🌙" },
-      { id: 3, tag: "🍜", desc: "🍜" },
-      { id: 4, tag: "🌒", desc: "🌒" },
-      { id: 5, tag: "🤍", desc: "🤍U Look Cool In Sweet" },
-      { id: 6, tag: "🤎", desc: "But In Brown U Look Hot🤎" },
-      { id: 7, tag: "🖤", desc: "🖤And In Black U Look Cool" },
-      { id: 8, tag: "Golden Hour 🌅", desc: "whenever u miss me take a sky pic" },
-      { id: 9, tag: "🦕", desc: "lil dino!" },
-      { id: 10, tag: "🤓", desc: "Celebrating every achievement and milestone." },
-      { id: 11, tag: "🩵", desc: "One look across the room is all it takes." },
-      { id: 12, tag: "🌊", desc: "أنتِ كالنجم في السماء، تضيئين حتى في أظلم الأوقات." },
-      { id: 13, tag: "🎶", desc: "Screaming lyrics " },
-      { id: 14, tag: "🥰", desc: "Stay Bless" },
-      { id: 15, tag: "Goofy Moments 🤪", desc: "Unfiltered, ridiculous." },
-      { id: 16, tag: "😊", desc: "Sketching out our goals." },
-      { id: 17, tag: "💖", desc: "The warm smile you give only to me." },
-      { id: 18, tag: "♾️", desc: "Here's to another lifetime of amazing memories." }
-    ];
-
-    let userCustomPhotos = {};
-
-    function handleUserPhotoUpload(event) {
-      const files = event.target.files;
-      if (!files || files.length === 0) return;
-      Array.from(files).forEach((file, idx) => {
-        if (idx < 18) {
-          const reader = new FileReader();
-          reader.onload = (e) => {
-            userCustomPhotos[idx + 1] = e.target.result;
-            const wrap = document.getElementById(`photoWrap-${idx + 1}`);
-            if (wrap) {
-              wrap.innerHTML = `<img src="${e.target.result}" alt="Memory #${idx + 1}"><div class="photo-edit-badge">✎</div>`;
-            }
-          };
-          reader.readAsDataURL(file);
-        }
-      });
-      launchConfettiBurst(30);
-    }
-
-    let currentLightboxIndex = 0;
-
-    function openLightbox(index) {
-      currentLightboxIndex = index;
-      const modal = document.getElementById('lightboxModal');
-      const item = memoriesData[index];
-      const wrap = document.getElementById(`photoWrap-${index + 1}`);
-      const imgBox = document.getElementById('lightboxImgBox');
-
-      if (userCustomPhotos[index + 1]) {
-        imgBox.innerHTML = `<img src="${userCustomPhotos[index + 1]}" alt="${item.tag}">`;
-      } else {
-        imgBox.innerHTML = wrap ? wrap.innerHTML : '';
-      }
-
-      document.getElementById('lightboxTitle').textContent = `Memory #${index + 1 < 10 ? '0' + (index + 1) : index + 1} — ${item.tag}`;
-      document.getElementById('lightboxDesc').textContent = item.desc;
-      modal.classList.add('active');
-      audio.playWhoosh();
-    }
-
-    function closeLightbox() {
-      document.getElementById('lightboxModal').classList.remove('active');
-    }
-
-    function nextLightboxPhoto() {
-      currentLightboxIndex = (currentLightboxIndex + 1) % memoriesData.length;
-      openLightbox(currentLightboxIndex);
-    }
-
-    function prevLightboxPhoto() {
-      currentLightboxIndex = (currentLightboxIndex - 1 + memoriesData.length) % memoriesData.length;
-      openLightbox(currentLightboxIndex);
-    }
-
-    /* Envelope & Typewriter Letter */
-    const letterText = `Dearest Dino,
-
-Happy Birthday! 🎂✨
-
-Another incredible year around the sun, and another year of having the most wonderful, thoughtful, and hilarious person by my side.
-
-From every spontaneous road trip and late-night conversation, to every quiet moment of laughter—you bring an energy into the world that is truly unmatched. You make ordinary days feel extraordinary.
-
-Today is all about celebrating YOU: your kindness, your boundless ambition, and that infectious smile that brightens any room.
-
-May this new chapter bring you everything your heart desires. Keep shining, keep dreaming big, and never forget how deeply loved and appreciated you are.
-
-With infinite love and admiration,
-Always and forever yours 💖`;
-
-    let typewriterIndex = 0;
-    let typewriterTimer = null;
-
-    function openEnvelopeLetter() {
-      const envelope = document.getElementById('envelopeBox');
-      const letter = document.getElementById('parchmentLetter');
-
-      envelope.style.display = "none";
-      letter.classList.add('active');
-      audio.playTone(700, 'sine', 0.25, 0.3);
-      startTypewriterStream();
-      launchConfettiBurst(60);
-    }
-
-    function startTypewriterStream() {
-      const body = document.getElementById('typewriterBody');
-      body.innerHTML = '';
-      typewriterIndex = 0;
-      clearInterval(typewriterTimer);
-
-      typewriterTimer = setInterval(() => {
-        if (typewriterIndex < letterText.length) {
-          const char = letterText.charAt(typewriterIndex);
-          if (char === '\n') {
-            body.innerHTML += '<br>';
-            audio.playTypewriterDing();
-          } else {
-            body.innerHTML += char;
-            if (char !== ' ') audio.playTypewriterKey();
-          }
-          typewriterIndex++;
-        } else {
-          clearInterval(typewriterTimer);
-          document.getElementById('typewriterCursor').style.display = 'none';
-          audio.playTypewriterDing();
-        }
-      }, 35);
-    }
-
-    function restartTypewriter() {
-      document.getElementById('typewriterCursor').style.display = 'inline-block';
-      startTypewriterStream();
-    }
-
-    /* Ambient Starfield */
-    (function initAmbientStars() {
-      const canvas = document.getElementById('ambientCanvas');
-      const ctx = canvas.getContext('2d');
-      let stars = [];
-
-      function resize() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        stars = [];
-        for (let i = 0; i < 80; i++) {
-          stars.push({
-            x: Math.random() * canvas.width,
-            y: Math.random() * canvas.height,
-            radius: Math.random() * 1.5,
-            alpha: Math.random(),
-            speed: 0.005 + Math.random() * 0.015
-          });
-        }
-      }
-      window.addEventListener('resize', resize);
-      resize();
-
-      function animate() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        stars.forEach(s => {
-          s.alpha += s.speed;
-          if (s.alpha > 1 || s.alpha < 0) s.speed = -s.speed;
-          ctx.fillStyle = `rgba(255, 255, 255, ${Math.abs(s.alpha)})`;
-          ctx.beginPath();
-          ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
-          ctx.fill();
-        });
-        requestAnimationFrame(animate);
-      }
-      animate();
-    })();
-
-    /* Confetti Burst */
-    let confettiParticles = [];
-    function launchConfettiBurst(count = 70) {
-      const colors = ['#f43f5e', '#ec4899', '#8b5cf6', '#06b6d4', '#10b981', '#f59e0b'];
+    function initParticles() {
+      particles.length = 0;
+      const count = window.innerWidth < 640 ? 35 : 60;
       for (let i = 0; i < count; i++) {
-        confettiParticles.push({
-          x: window.innerWidth / 2,
-          y: window.innerHeight / 2,
-          vx: (Math.random() - 0.5) * 22,
-          vy: (Math.random() - 0.7) * 24,
-          size: 6 + Math.random() * 8,
-          color: colors[Math.floor(Math.random() * colors.length)],
-          rotation: Math.random() * 360,
-          rotationSpeed: (Math.random() - 0.5) * 12,
-          gravity: 0.35,
-          opacity: 1
+        particles.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          size: Math.random() * 10 + 8,
+          speedY: Math.random() * 0.9 + 0.35,
+          speedX: (Math.random() - 0.5) * 0.5,
+          opacity: Math.random() * 0.6 + 0.25,
+          color: heartColors[Math.floor(Math.random() * heartColors.length)],
+          isHeart: Math.random() > 0.35
         });
       }
     }
 
-    (function runConfettiLoop() {
-      const canvas = document.getElementById('confettiCanvas');
-      const ctx = canvas.getContext('2d');
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+    function drawMiniHeart(ctx, x, y, size, color, alpha) {
+      ctx.save();
+      ctx.globalAlpha = alpha;
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      const topCurveHeight = size * 0.3;
+      ctx.moveTo(x, y + topCurveHeight);
+      ctx.bezierCurveTo(x, y, x - size / 2, y, x - size / 2, y + topCurveHeight);
+      ctx.bezierCurveTo(x - size / 2, y + (size + topCurveHeight) / 2, x, y + (size + topCurveHeight) / 1.4, x, y + size);
+      ctx.bezierCurveTo(x, y + (size + topCurveHeight) / 1.4, x + size / 2, y + (size + topCurveHeight) / 2, x + size / 2, y + topCurveHeight);
+      ctx.bezierCurveTo(x + size / 2, y, x, y, x, y + topCurveHeight);
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+    }
 
-      window.addEventListener('resize', () => {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-      });
+    function animateAmbient() {
+      ctx.clearRect(0, 0, width, height);
+      for (const p of particles) {
+        p.y -= p.speedY;
+        p.x += p.speedX;
+        if (p.y < -20) {
+          p.y = height + 20;
+          p.x = Math.random() * width;
+        }
 
-      function loop() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        for (let i = confettiParticles.length - 1; i >= 0; i--) {
-          const p = confettiParticles[i];
-          p.x += p.vx;
-          p.y += p.vy;
-          p.vy += p.gravity;
-          p.rotation += p.rotationSpeed;
-          p.opacity -= 0.008;
-
-          if (p.opacity <= 0 || p.y > canvas.height + 50) {
-            confettiParticles.splice(i, 1);
-            continue;
-          }
-
+        if (p.isHeart) {
+          drawMiniHeart(ctx, p.x, p.y, p.size, p.color, p.opacity);
+        } else {
           ctx.save();
-          ctx.translate(p.x, p.y);
-          ctx.rotate((p.rotation * Math.PI) / 180);
-          ctx.fillStyle = p.color;
-          ctx.globalAlpha = p.opacity;
-          ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+          ctx.fillStyle = '#ffffff';
+          ctx.globalAlpha = p.opacity * 0.8;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size * 0.15, 0, Math.PI * 2);
+          ctx.fill();
           ctx.restore();
         }
-        requestAnimationFrame(loop);
       }
-      loop();
-    })();
+      requestAnimationFrame(animateAmbient);
+    }
+    initParticles();
+    animateAmbient();
+
+    /* ==========================================================
+       4.5 MICROPHONE BLOW DETECTION, CANDLES & BALLOONS
+       ========================================================== */
+    let candlesExtinguished = [false, false, false];
+    let allCandlesBlown = false;
+    let micStream = null;
+
+    function extinguishCandleManually(index) {
+      if (candlesExtinguished[index]) return;
+      candlesExtinguished[index] = true;
+      const flame = document.getElementById(`flame-${index}`);
+      if (flame) flame.classList.add('extinguished');
+      playSoftTone(420 + index * 80, 0.2, 'triangle', 0.1);
+      checkAllCandlesBlown();
+    }
+
+    function blowAllCandles() {
+      candlesExtinguished.forEach((_, i) => extinguishCandleManually(i));
+    }
+
+    function checkAllCandlesBlown() {
+      if (allCandlesBlown) return;
+      if (candlesExtinguished.every(c => c)) {
+        allCandlesBlown = true;
+        document.getElementById('cakeMessage').innerText = "Wishes Made! Happy Birthday Dino! 🎈✨";
+        document.getElementById('cakeNextArea').classList.remove('hidden');
+        document.getElementById('manualBlowBtn').classList.add('hidden');
+
+        // Confetti burst
+        confetti({
+          particleCount: 100,
+          spread: 80,
+          origin: { y: 0.6 },
+          colors: ['#ff5277', '#c084fc', '#4ade80', '#fde047']
+        });
+
+        // Trigger massive balloon release
+        spawnMassiveBalloons();
+      }
+    }
+
+    function spawnMassiveBalloons() {
+      const balloonOverlay = document.getElementById('balloon-overlay');
+      const colors = [
+        'radial-gradient(circle at 30% 30%, #ff719a, #e11d48)',
+        'radial-gradient(circle at 30% 30%, #c084fc, #7e22ce)',
+        'radial-gradient(circle at 30% 30%, #6ee7b7, #059669)',
+        'radial-gradient(circle at 30% 30%, #fde047, #d97706)',
+        'radial-gradient(circle at 30% 30%, #67e8f9, #0284c7)'
+      ];
+
+      for (let i = 0; i < 40; i++) {
+        setTimeout(() => {
+          const balloon = document.createElement('div');
+          balloon.className = 'floating-balloon';
+          balloon.style.left = `${Math.random() * 95}vw`;
+          balloon.style.background = colors[Math.floor(Math.random() * colors.length)];
+          const scale = 0.7 + Math.random() * 0.6;
+          balloon.style.transform = `scale(${scale})`;
+          const duration = 4.5 + Math.random() * 3.5;
+          balloon.style.animationDuration = `${duration}s`;
+          balloonOverlay.appendChild(balloon);
+
+          setTimeout(() => balloon.remove(), duration * 1000);
+        }, i * 90);
+      }
+    }
+
+    async function initMicrophoneBlowDetection() {
+      const statusText = document.getElementById('micStatusText');
+      const volumeBar = document.getElementById('micVolumeBar');
+
+      try {
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+          if (statusText) statusText.innerText = 'Tap candles to blow';
+          return;
+        }
+
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+        micStream = stream;
+        const ctx = getAudioContext();
+        const micSource = ctx.createMediaStreamSource(stream);
+        const analyser = ctx.createAnalyser();
+        analyser.fftSize = 256;
+        micSource.connect(analyser);
+
+        const dataArray = new Uint8Array(analyser.frequencyBinCount);
+        if (statusText) statusText.innerText = 'Mic ready! Phoonk maro 💨';
+
+        let blowSustainCount = 0;
+
+        function checkMicLoop() {
+          if (allCandlesBlown) {
+            // Clean up microphone stream after completion
+            stream.getTracks().forEach(t => t.stop());
+            return;
+          }
+
+          analyser.getByteFrequencyData(dataArray);
+          let sum = 0;
+          for (let i = 0; i < dataArray.length; i++) {
+            sum += dataArray[i];
+          }
+          const avg = sum / dataArray.length;
+          const percentage = Math.min(100, Math.round((avg / 85) * 100));
+
+          if (volumeBar) {
+            volumeBar.style.width = `${percentage}%`;
+          }
+
+          // Blow threshold detection
+          if (avg > 45) {
+            blowSustainCount++;
+            if (blowSustainCount >= 3) {
+              blowAllCandles();
+            }
+          } else {
+            blowSustainCount = Math.max(0, blowSustainCount - 1);
+          }
+
+          requestAnimationFrame(checkMicLoop);
+        }
+
+        checkMicLoop();
+      } catch (err) {
+        if (statusText) statusText.innerText = 'Tap candle to blow';
+      }
+    }
+
+    /* ==========================================================
+       5. CAPSULE GASHAPON COMPLIMENT DISPENSER
+       ========================================================== */
+    const dinoCompliments = [
+      "Your laugh is my absolute favorite sound in the world, Dino.",
+      "You have the gentlest soul, even when you try to act tough and macho.",
+      "Holding your hand makes any stressful day disappear completely.",
+      "How are you so effortlessly handsome and such an adorable nerd at the same time?",
+      "Thank you for being my anchor whenever my mind gets chaotic.",
+      "The way your eyes crinkle when you smile for real gives me butterflies.",
+      "I love how passionate you get when you talk about things you care about.",
+      "You make even simple grocery runs feel like the sweetest date.",
+      "I feel safer around you than anywhere else in the entire universe.",
+      "You're not just my boyfriend; you're my best friend and favorite teammate.",
+      "Nobody else understands my humor or quirks quite like you do.",
+      "I am endlessly proud of how hard you work toward your goals.",
+      "Thank you for always listening to my long rants without judgment.",
+      "Even in a crowded room, my eyes will always find you first.",
+      "Your hugs have healing powers, and no one can convince me otherwise.",
+      "You make me want to become a better person every single day.",
+      "Every love song makes 100% sense now because of you.",
+      "Happy Birthday my Dino! Here's to 100 more birthdays together. 🦖❤️"
+    ];
+
+    const capsulePalettes = [
+      'from-pink-500 to-rose-600',
+      'from-purple-500 to-indigo-600',
+      'from-emerald-400 to-teal-600',
+      'from-amber-400 to-orange-500',
+      'from-cyan-400 to-blue-600'
+    ];
+
+    let openedScrolls = 0;
+    let drawnList = [];
+
+    function dispenseLoveCapsule() {
+      const dial = document.getElementById('machineDial');
+      const card = document.getElementById('complimentCard');
+      const text = document.getElementById('scrollText');
+      const badge = document.getElementById('scrollBadge');
+      const counter = document.getElementById('openedScrollsCount');
+      const ball = document.getElementById('activeCapsuleBall');
+
+      // Spin dial
+      dial.classList.add('turning');
+      setTimeout(() => dial.classList.remove('turning'), 600);
+
+      // Select random unread compliment
+      if (drawnList.length >= dinoCompliments.length) drawnList = [];
+      let idx;
+      do {
+        idx = Math.floor(Math.random() * dinoCompliments.length);
+      } while (drawnList.includes(idx) && drawnList.length < dinoCompliments.length);
+
+      drawnList.push(idx);
+      openedScrolls++;
+      counter.innerText = openedScrolls;
+
+      const randomColor = capsulePalettes[openedScrolls % capsulePalettes.length];
+      ball.className = `dispensed-capsule flex items-center justify-center bg-gradient-to-tr ${randomColor} text-white text-2xl font-bold`;
+
+      badge.innerText = `Dino Capsule #${openedScrolls}`;
+      text.innerText = `"${dinoCompliments[idx]}"`;
+
+      card.classList.remove('opacity-0', 'translate-y-3', 'pointer-events-none');
+      card.classList.add('opacity-100', 'translate-y-0');
+
+      // Chime note sound
+      playSoftTone(600 + (openedScrolls % 6) * 60, 0.4, 'sine', 0.1);
+
+      // Unlock Next step button
+      document.getElementById('jarNextArea').classList.remove('hidden');
+
+      confetti({
+        particleCount: 30,
+        spread: 50,
+        origin: { y: 0.7 },
+        colors: ['#ff5277', '#c084fc', '#fde047']
+      });
+    }
+
+    /* ==========================================================
+       6. 18 MOMENTS PICTURE SECTION
+       ========================================================== */
+    const momentsData = [
+      { id: 1, title: "Day We Began", cap: "Where our journey sparked", img: "https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=600&q=80" },
+      { id: 2, title: "Midnight Drives", cap: "Singing terribly with you", img: "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&w=600&q=80" },
+      { id: 3, title: "That Big Smile", cap: "Your authentic goofy grin", img: "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&w=600&q=80" },
+      { id: 4, title: "Coffee Dates", cap: "You memorizing my order", img: "https://images.unsplash.com/photo-1517256064527-09c73fc73e38?auto=format&fit=crop&w=600&q=80" },
+      { id: 5, title: "Our Quiet Spot", cap: "Watching the sun dip low", img: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80" },
+      { id: 6, title: "Dino's Focus", cap: "When you get super focused", img: "https://images.unsplash.com/photo-1488190211105-8b0e65b80b4e?auto=format&fit=crop&w=600&q=80" },
+      { id: 7, title: "3 AM Talks", cap: "Speaking without any filters", img: "https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?auto=format&fit=crop&w=600&q=80" },
+      { id: 8, title: "Rainy Days", cap: "Hot tea, warm blankets", img: "https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?auto=format&fit=crop&w=600&q=80" },
+      { id: 9, title: "Sharing Food", cap: "Giving me the last bite", img: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=600&q=80" },
+      { id: 10, title: "Golden Hour", cap: "Looking like a prince", img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=600&q=80" },
+      { id: 11, title: "Long Strolls", cap: "Holding hands in the cold", img: "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=600&q=80" },
+      { id: 12, title: "Inside Jokes", cap: "Only we know why this was funny", img: "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=600&q=80" },
+      { id: 13, title: "Lazy Sundays", cap: "Doing nothing together", img: "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=600&q=80" },
+      { id: 14, title: "Proud of You", cap: "When you aced that challenge", img: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=600&q=80" },
+      { id: 15, title: "Sunset Silhouette", cap: "My whole view right here", img: "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=600&q=80" },
+      { id: 16, title: "Sweet Surprise", cap: "That unforgettable expression", img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80" },
+      { id: 17, title: "City Lights", cap: "Walking through neon nights", img: "https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=600&q=80" },
+      { id: 18, title: "Happy Birthday Dino", cap: "Forever in your corner 🦖", img: "https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?auto=format&fit=crop&w=600&q=80" }
+    ];
+
+    const polaroidGrid = document.getElementById('polaroidGrid');
+    momentsData.forEach(item => {
+      const card = document.createElement('div');
+      card.className = 'polaroid-card';
+      card.onclick = () => openPhotoModal(item);
+      card.innerHTML = `
+        <div class="relative w-full aspect-square bg-slate-900 rounded-lg overflow-hidden mb-1.5">
+          <img src="${item.img}" alt="${item.title}" loading="lazy" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/400x400/1e1633/ff5277?text=Dino+Moment+%23${item.id}'">
+          <span class="absolute top-1 left-1 px-1.5 py-0.5 rounded-full bg-black/70 text-[9px] font-bold text-pink-300 border border-pink-500/30">#${item.id}</span>
+        </div>
+        <div class="text-left px-0.5">
+          <h5 class="text-xs font-bold text-white truncate font-cute">${item.title}</h5>
+          <p class="font-hand text-sm text-pink-300 truncate">${item.cap}</p>
+        </div>
+      `;
+      polaroidGrid.appendChild(card);
+    });
+
+    function openPhotoModal(item) {
+      document.getElementById('lightboxImg').src = item.img;
+      document.getElementById('lightboxTitle').innerText = `#${item.id} — ${item.title}`;
+      document.getElementById('lightboxCaption').innerText = `"${item.cap}"`;
+      document.getElementById('photoLightbox').classList.remove('hidden');
+    }
+
+    function closePhotoModal() {
+      document.getElementById('photoLightbox').classList.add('hidden');
+    }
+
+    /* ==========================================================
+       7. LETTER WITH URDU HAMZA "ء" WAX SEAL
+       ========================================================== */
+    const dinoLetterFull = "Happy Birthday Dino! I don't always say all the mushy stuff out loud, but having you in my life has made everything softer, brighter, and a million times more fun. Thank you for your warmth, your goofy laughs, for calming me down whenever I stress over little things, and for being someone I can always count on without hesitation. I hope this new year brings you all the huge milestones you've been working so hard for. Whatever happens, I'm right here cheering for you in every corner. Have the happiest birthday, my Dino. 🦖❤️";
+
+    let letterTypewriterTimer = null;
+
+    function runTypewriter() {
+      if (letterTypewriterTimer) clearInterval(letterTypewriterTimer);
+      let charIdx = 0;
+      const target = document.getElementById('typedLetterText');
+      const cursor = document.getElementById('letterBlinkCursor');
+      if (cursor) cursor.classList.remove('hidden');
+      target.innerText = '';
+
+      letterTypewriterTimer = setInterval(() => {
+        if (charIdx < dinoLetterFull.length) {
+          target.innerText += dinoLetterFull.charAt(charIdx);
+          charIdx++;
+        } else {
+          clearInterval(letterTypewriterTimer);
+          if (cursor) cursor.classList.add('hidden');
+        }
+      }, 28);
+    }
+
+    function breakHamzaSeal() {
+      document.getElementById('sealedEnvelope').classList.add('hidden');
+      const letterBox = document.getElementById('unfoldedLetter');
+      letterBox.classList.remove('hidden');
+      letterBox.classList.add('step-fade-in');
+
+      runTypewriter();
+
+      confetti({
+        particleCount: 70,
+        spread: 80,
+        origin: { y: 0.6 },
+        colors: ['#ff5277', '#b91c1c', '#fde047']
+      });
+      playSoftTone(660, 0.6);
+      lucide.createIcons();
+    }
+
+    function replayLetterTypewriter() {
+      runTypewriter();
+      playSoftTone(580, 0.3);
+    }
+
+    function triggerLoveShower() {
+      confetti({
+        particleCount: 90,
+        spread: 90,
+        origin: { y: 0.8 },
+        colors: ['#ff5277', '#c084fc', '#4ade80']
+      });
+      playSoftTone(740, 0.5);
+    }
   </script>
 </body>
 </html>
